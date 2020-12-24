@@ -1,0 +1,82 @@
+/*
+ * Team はチームに関する情報を操作します。
+ */
+syntax = "proto3";
+
+option go_package = "github.com/SpiralMindJP/at-server/pb/core";
+
+package at_core_service;
+
+import "common.proto";
+
+/*
+ * チームを表します。
+ */
+message Team {
+  int64  team_id = 1; // チームID。
+  string name    = 2; // チーム名。
+}
+
+/*
+ * チームの作成要求を表します。
+ */
+message TeamCreateRequest {
+  string name = 1; // チーム名。
+}
+
+/*
+ * チームの更新要求を表します。
+ */
+message TeamUpdateRequest {
+  int64  team_id = 1; // チームID。
+  string name    = 2; // チーム名。
+}
+
+/*
+ * チームを取得する際のリクエストを表します。
+ */
+message TeamRequest {
+  int64 team_id = 1; // チームID。
+}
+
+/*
+ * チームのリストを取得する際のリクエストを表します。
+ */
+message TeamListRequest {
+}
+
+/*
+ * チームのリストを表します。
+ */
+message Teams {
+  repeated Team teams = 1; // チームのリスト。
+}
+
+/*
+ * チームを操作するAPIを提供します。
+ */
+service TeamService {
+  // チームを取得します。
+  // TeamListRequest を渡します。
+  // チームのリストが設定された Teams が返ります。
+  rpc List(TeamListRequest) returns (Teams);
+
+  // チームを取得します。
+  // 取得するチームのチームIDを指定した TeamRequest を渡します。
+  // チームが存在する場合、Team が返ります。
+  rpc Get(TeamRequest) returns (Team);
+
+  // 新しくチームを作成します。
+  // チーム名を指定した TeamCreateRequest を渡します。
+  // チームの作成に成功すると、チームIDが設定さた Team が返ります。
+  rpc Create(TeamCreateRequest) returns (Team);
+
+  // チームを更新します。
+  // 更新するチームのチームIDと、新しいチーム名を指定した TeamUpdateRequest を渡します。
+  // チームの作成に成功すると、Team が返ります。
+  rpc Update(TeamUpdateRequest) returns (Team);
+
+  // チームを削除します。
+  // 削除するチームのチームIDを指定した TeamRequest を渡します。
+  rpc Delete(TeamRequest) returns (google.protobuf.Empty);
+}

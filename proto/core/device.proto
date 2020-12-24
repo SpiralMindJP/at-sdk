@@ -1,0 +1,112 @@
+/*
+ * Device はデバイスに関する情報を操作します。
+ */
+syntax = "proto3";
+
+option go_package = "github.com/SpiralMindJP/at-server/pb/core";
+
+package at_core_service;
+
+import "common.proto";
+
+/*
+ * デバイスのタイプを表します。
+ */
+enum DeviceType {
+  DEVICE_TYPE_OPERATOR = 0; // オペレーターデバイスを表します。
+  DEVICE_TYPE_CUSTOMER = 1; // カスタマーデバイスを表します。
+}
+
+/*
+ * デバイスを表します。
+ */
+message Device {
+  int64      team_id   = 1; // チームID。
+  int64      device_id = 2; // デバイスID。
+  string     name      = 3; // デバイス名。
+  DeviceType type      = 4; // デバイスのタイプ。
+  int64      room_id   = 5; // デバイスが登録されているルームID。デバイスのタイプがカスタマーの場合のみ設定。
+
+}
+
+/*
+ * デバイスの更新要求を表します。
+ */
+message DeviceUpdateRequest {
+  int64  team_id   = 1; // チームID。
+  int64  device_id = 2; // デバイスID。
+  string name      = 3; // デバイス名。
+}
+
+/*
+ * デバイスを取得する際のリクエストを表します。
+ */
+message DeviceRequest {
+  int64 team_id   = 1; // チームID。
+  int64 device_id = 2; // デバイスID。
+}
+
+/*
+ * デバイスのリストを取得する際のリクエストを表します。
+ */
+message DeviceListRequest {
+  int64 team_id = 1; // チームID。
+}
+
+/*
+ * デバイスタイプを指定したデバイスのリストを取得する際のリクエストを表します。
+ */
+message DeviceListByTypeRequest {
+  int64      team_id = 1; // チームID。
+  DeviceType type    = 2; // デバイスのタイプ。
+}
+
+/*
+ * デバイスのリストを表します。
+ */
+message Devices {
+  repeated Device devices = 1; // デバイスのリスト。
+}
+
+/*
+ * デバイスの登録要求を表します。
+ */
+message DeviceRegistrationRequest {
+  int64  team_id = 1; // チームID。
+  string name    = 2; // デバイス名。
+  int32  otp     = 3; // ワンタイムパスワード。
+}
+
+/*
+ * デバイスを操作するAPIを提供します。
+ */
+service DeviceService {
+  // デバイスのリストを取得します。
+  // 取得するデバイスのチームIDを指定した DeviceListRequest を渡します。
+  // 指定されたチームIDのデバイスのリストが設定された Devices が返ります。
+  rpc List(DeviceListRequest) returns (Devices);
+
+  // 指定されたデバイスタイプのデバイスのリストを取得します。
+  // 取得するデバイスのチームIDとデバイスタイプを指定した DeviceListByTypeRequest を渡します。
+  // 指定されたチームIDのデバイスのリストが設定された Devices が返ります。
+  rpc ListByType(DeviceListByTypeRequest) returns (Devices);
+
+  // デバイスを取得します。
+  // 取得するデバイスのデバイスIDを指定した DeviceRequest を渡します。
+  // デバイスが存在する場合、Device が返ります。
+  rpc Get(DeviceRequest) returns (Device);
+
+  // 新しくデバイスを登録します。
+  // チームID、デバイス名、ワンタイムパスワードを指定した DeviceRegistrationRequest を渡します。
+  // デバイスの作成に成功すると、デバイスID、デバイスタイプが設定さた Device が返ります。
+  rpc Register(DeviceRegistrationRequest) returns (Device);
+
+  // デバイスを更新します。
+  // 更新するデバイスのデバイスIDと、新しいデバイス名を指定した DeviceUpdateRequest を渡します。
+  // デバイスの作成に成功すると、Device が返ります。
+  rpc Update(DeviceUpdateRequest) returns (Device);
+
+  // デバイスを削除します。
+  // 削除するデバイスのデバイスIDを指定した DeviceRequest を渡します。
+  rpc Delete(DeviceRequest) returns (google.protobuf.Empty);
+}

@@ -1,0 +1,110 @@
+/*
+ * Room はルームに関する情報を操作します。
+ */
+syntax = "proto3";
+
+option go_package = "github.com/SpiralMindJP/at-server/pb/core";
+
+package at_core_service;
+
+import "common.proto";
+
+/*
+ * ルームを表します。
+ */
+message Room {
+  int64  team_id = 1; // チームID。
+  int64  room_id = 2; // ルームID。
+  string name    = 3; // ルーム名。
+
+  int64  device_id   = 11; // デバイスID。
+  string device_name = 12; // デバイス名。
+}
+
+/*
+ * ルームの作成要求を表します。
+ */
+message RoomCreateRequest {
+  int64  team_id = 1; // チームID。
+  string name    = 2; // ルーム名。
+}
+
+/*
+ * ルームの更新要求を表します。
+ */
+message RoomUpdateRequest {
+  int64  team_id = 1; // チームID。
+  int64  room_id = 2; // ルームID。
+  string name    = 3; // ルーム名。
+}
+
+/*
+ * ルームへのデバイス設定要求を表します。
+ */
+message RoomDeviceRequest {
+  int64 team_id   = 1; // チームID。
+  int64 room_id   = 2; // ルームID。
+  int64 device_id = 3; // デバイスID。
+  bool  force     = 4; // 強制的にデバイスを設定するかどうか。True の場合、他のルームに既に設定されているデバイスであっても、登録します。(optional)
+}
+
+/*
+ * ルームを取得する際のリクエストを表します。
+ */
+message RoomRequest {
+  int64 team_id = 1; // チームID。
+  int64 room_id = 2; // ルームID。
+}
+
+/*
+ * ルームのリストを取得する際のリクエストを表します。
+ */
+message RoomListRequest {
+  int64 team_id = 1; // チームID。
+}
+
+/*
+ * ルームのリストを表します。
+ */
+message Rooms {
+  repeated Room rooms = 1; // ルームのリスト。
+}
+
+/*
+ * ルームを操作するAPIを提供します。
+ */
+service RoomService {
+  // ルームを取得します。
+  // 取得するルームのチームIDを指定した RoomListRequest を渡します。
+  // 指定されたチームIDのルームのリストが設定された Rooms が返ります。
+  rpc List(RoomListRequest) returns (Rooms);
+
+  // ルームを取得します。
+  // 取得するルームのルームIDを指定した RoomRequest を渡します。
+  // ルームが存在する場合、Room が返ります。
+  rpc Get(RoomRequest) returns (Room);
+
+  // 新しくルームを作成します。
+  // ルーム名とチームIDを指定した RoomCreateRequest を渡します。
+  // ルームの作成に成功すると、ルームIDが設定さた Room が返ります。
+  rpc Create(RoomCreateRequest) returns (Room);
+
+  // ルームを更新します。
+  // 更新するルームのルームIDと、新しいルーム名を指定した RoomUpdateRequest を渡します。
+  // ルームの作成に成功すると、Room が返ります。
+  rpc Update(RoomUpdateRequest) returns (Room);
+
+  // ルームにカスタマーデバイスを設定します。
+  // 設定するルームのルームIDと、設定するカスタマーデバイスのデバイスIDを指定した RoomDeviceRequest を渡します。
+  // RoomDeviceRequest の force に True を指定すると、他のルームに既に設定されているデバイスであっても、設定します。
+  // カスタマーデバイスの設定に成功すると、Room が返ります。
+  rpc SetDevice(RoomDeviceRequest) returns (Room);
+  // ルームに設定されたカスタマーデバイスを削除します。
+  // カスタマーデバイスを削除するルームのルームIDを指定した RoomRequest を渡します。
+  // カスタマーデバイスの削除に成功すると、Room が返ります。
+  rpc DeleteDevice(RoomRequest) returns (Room);
+
+  // ルームを削除します。
+  // 削除するルームのルームIDを指定した RoomRequest を渡します。
+  rpc Delete(RoomRequest) returns (google.protobuf.Empty);
+}

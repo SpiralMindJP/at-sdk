@@ -1,0 +1,138 @@
+/*
+ * Content はコンテンツに関する情報を操作します。
+ */
+syntax = "proto3";
+
+option go_package = "github.com/SpiralMindJP/at-server/pb/core";
+
+package at_core_service;
+
+import "common.proto";
+
+/*
+ * コンテンツのタイプを表します。
+ */
+enum ContentType {
+  CONTENT_TYPE_IMAGE = 0;   // 画像コンテンツ。
+  CONTENT_TYPE_VIDEO = 1;   // ビデオコンテンツ。
+  CONTENT_TYPE_ASSET = 2;   // アセットコンテンツ。
+  CONTENT_TYPE_OTHER = 999; // その他のコンテンツ。
+}
+
+/*
+ * コンテンツを表します。
+ */
+message Content {
+  int64       team_id    = 1; // チームID。
+  int64       content_id = 2; // コンテンツID。
+  string      name       = 3; // コンテンツ名。
+  ContentType type       = 4; // コンテンツタイプ。
+  int64       size       = 5; // コンテンツのサイズ。
+  string      mime_type  = 6; // コンテンツのMIMEタイプ。
+  bytes       md5        = 7; // MD5ハッシュ。
+}
+
+/*
+ * コンテンツの更新要求を表します。
+ */
+message ContentUpdateRequest {
+  int64  team_id    = 1; // チームID。
+  int64  content_id = 2; // コンテンツID。
+  string name       = 3; // コンテンツ名。
+}
+
+/*
+ * コンテンツを取得する際のリクエストを表します。
+ */
+message ContentRequest {
+  int64 team_id    = 1; // チームID。
+  int64 content_id = 2; // コンテンツID。
+}
+
+/*
+ * コンテンツのリストを取得する際のリクエストを表します。
+ */
+message ContentListRequest {
+  int64 team_id = 1; // チームID。
+}
+
+/*
+ * コンテンツタイプを指定したコンテンツのリストを取得する際のリクエストを表します。
+ */
+message ContentListByTypeRequest {
+  int64       team_id = 1; // チームID。
+  ContentType type    = 2; // コンテンツのタイプ。
+}
+
+/*
+ * コンテンツのリストを表します。
+ */
+message Contents {
+  repeated Content contents = 1; // コンテンツのリスト。
+}
+
+/*
+ * コンテンツのアップロード要求を表します。
+ */
+message ContentUploadRequest {
+  int64       team_id   = 1; // チームID。
+  string      name      = 2; // コンテンツ名。
+  ContentType type      = 3; // コンテンツタイプ。
+  string      file_name = 4; // コンテンツのファイル名。
+}
+
+/*
+ * コンテンツをアップロードするためのURLを表します。
+ */
+message ContentUploadURL {
+  int64  content_id = 1; // コンテンツID。
+  string url        = 2; // コンテンツをアップロードするURL。
+}
+
+/*
+ * コンテンツをアップロード終了要求を表します。
+ */
+message FinishUploadRequest {
+  int64       team_id    = 1; // チームID。
+  int64       content_id = 2; // コンテンツID。
+  bytes       md5        = 3; // MD5ハッシュ。
+}
+
+/*
+ * コンテンツを操作するAPIを提供します。
+ */
+service ContentService {
+  // コンテンツのリストを取得します。
+  // 取得するコンテンツのチームIDを指定した ContentListRequest を渡します。
+  // 指定されたチームIDのコンテンツのリストが設定された Contents が返ります。
+  rpc List(ContentListRequest) returns (Contents);
+
+  // 指定されたコンテンツタイプのコンテンツのリストを取得します。
+  // 取得するコンテンツのチームIDとコンテンツタイプを指定した ContentListByTypeRequest を渡します。
+  // 指定されたチームIDとコンテンツタイプのコンテンツのリストが設定された Contents が返ります。
+  rpc ListContentType(ContentListByTypeRequest) returns (Contents);
+
+  // コンテンツを取得します。
+  // 取得するコンテンツのコンテンツIDを指定した ContentRequest を渡します。
+  // コンテンツが存在する場合、Content が返ります。
+  rpc Get(ContentRequest) returns (Content);
+
+  // コンテンツをアップロードします。
+  // チームID、アップロードするコンテンツのコンテンツ名とコンテンツタイプを指定した ContentUploadRequest を渡します。
+  // アップロードを行うための URL が設定された ContentUploadURL が返ります。
+  // このURLにコンテンツデータをHTTP POSTメソッドで転送することで、アップロードが行われます。
+  // アップロード完了後、FinishUpload メソッドでアップロードの完了を登録します。
+  rpc Upload(ContentUploadRequest) returns (ContentUploadURL);
+  // コンテンツのアップロード完了を登録します。
+  // チームID、コンテンツID、アップロードしたコンテンツのMD5ハッシュを指定した FinishUploadRequest を渡します。
+  // 登録に成功すると Content が返ります。
+  rpc FinishUpload(FinishUploadRequest) returns (Content);
+
+  // コンテンツを更新します。
+  // 更新するコンテンツのコンテンツIDと、新しいコンテンツ名を指定した ContentUpdateRequest を渡します。
+  // コンテンツの作成に成功すると、Content が返ります。
+  rpc Update(ContentUpdateRequest) returns (Content);
+  // コンテンツを削除します。
+  // 削除するコンテンツのコンテンツIDを指定した ContentRequest を渡します。
+  rpc Delete(ContentRequest) returns (google.protobuf.Empty);
+}
