@@ -2,3 +2,7 @@
 
 Avatar Teleporter サービスの SDK を利用するための情報を提供します。
 
+== Documents
+
+* link:docs/at-core-server-api.pdf[AT Core Server API Reference]
+
