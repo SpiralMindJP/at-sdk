@@ -7,6 +7,8 @@ Avatar Teleporter のサーバーは、Core サーバー、State サーバー、
 これらのサーバーアプリケーションは、Docker イメージとして提供します。
 データベースについては、Docker イメージの使用は任意です。
 
+AT サーバーの動作や、サーバーイメージの取得には、Google Cloud Platform のアカウントが必須ですので、事前にアカウントの用意をお願いします。
+
 == AT SDK サーバー Docker イメージ
 
 === AT SDK サーバー Docker イメージについて
