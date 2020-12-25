@@ -2,6 +2,15 @@
 
 Avatar Teleporter サービスの SDK を利用するための情報を提供します。
 
+== How to use
+
+* AT Teleporter サービスの概要を知りたい
+** link:docs/avatar-teleporter-sdk.pdf[Avatar Teleporter SDK] のドキュメントを確認してください。
+
+* AT Core Servers について知りたい
+** link:docs/at-servers.adoc[Avatar Teleporter SDK サーバー] のドキュメントを確認してください。
+
+
 == Documents
 
 * link:docs/avatar-teleporter-sdk.pdf[Avatar Teleporter SDK]
