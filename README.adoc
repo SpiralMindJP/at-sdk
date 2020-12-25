@@ -4,5 +4,7 @@ Avatar Teleporter サービスの SDK を利用するための情報を提供し
 
 == Documents
 
+* link:docs/avatar-teleporter-sdk.pdf[Avatar Teleporter SDK]
 * link:docs/at-core-server-api.adoc[AT Core Server API Reference]
 * link:docs/at-servers.adoc[Avatar Teleporter SDK サーバー]
+
