@@ -9,7 +9,8 @@ Avatar Teleporter のサーバーは、Core サーバー、State サーバー、
 
 == AT SDK サーバー Docker イメージ
 
-AT SDK の各サーバーアプリケーションの Docker イメージは、GitHub Container Registry にて提供しています。
+=== AT SDK サーバー Docker イメージについて
+AT SDK の各サーバーアプリケーションの Docker イメージは、Google Container Registry (GCR) にて提供しています。
 
 各イメージは以下の通りです。
 
@@ -18,23 +19,68 @@ AT SDK の各サーバーアプリケーションの Docker イメージは、Gi
 | サーバー名 | Docker イメージ名
 
 | Core サーバー
-| ghcr.io/spiralmindjp/at-core-server 
+| asia.gcr.io/at-sdk/at-core-server:1.0-rc1
 
 | ATP サーバー 
-| ghcr.io/spiralmindjp/at-atp-server  
+| asia.gcr.io/at-sdk/at-atp-server:1.0-rc1
 
 | State サーバー 
-| ghcr.io/spiralmindjp/at-state-server
+| asia.gcr.io/at-sdk/at-state-server:1.0-rc1
 
 |===
 
-GitHub Container Registry を利用するために Docker を設定する方法は、以下を参照してください。
+各イメージには、バージョンごとにタグが付与されます。
+`latest` タグを指定すると、最新のイメージが取得できますが、開発途中の安定していないバージョンが取得される可能性がありますので、厳密なバージョンを指定してイメージを取得してください。
 
-https://docs.github.com/free-pro-team@latest/packages/guides/configuring-docker-for-use-with-github-packages
+=== Docker イメージの取得
 
-== Core サーバー
+Google Container Registry (GCR) からイメージの取得を行うには、アクセス権を付与した Google アカウントによって Docker を構成する必要があります。
+Google アカウントへのアクセス権の付加については、SpiralMind の担当者にご連絡ください。
 
-=== Core サーバー概要
+また、`docker pull` コマンドを使用してイメージを取得するために Docker を構成する必要があります。
+アクセス権を付与した Google アカウントで `gcloud auth login` コマンドでログインを行なった後以下のコマンドを実行することで、Docker を構成することができます。
+
+[source, console]
+----
+$ gcloud auth configure-docker asia.gcr.io
+----
+
+Docker の構成についての詳細は、以下を参照してください。
+
+https://cloud.google.com/container-registry/docs/advanced-authentication
+
+=== Docker イメージの実行
+
+各 Docker イメージは、`docker run` コマンドや Docker Compose で実行することができます。
+この時、Core サーバー及び ATP サーバーは、コンテナー外部からアクセスする必要があるので、ポートを公開する必要があります。
+`docerk run` コマンドでポートを公開するには、`-p` オプションを使用します。
+
+公開するポートについては、内部ポートとは別に任意のポートを公開することが可能です。
+
+=== Docker Compose
+
+Docker Compose を使用すると、必要なサーバー一式をまとめて起動することができます。
+
+サンプルの link:../docker/docker-compose.yaml[`docker-compose.yaml`] を参考に、自身の環境に合わせて使用してください。
+
+`docker-compose.yaml` が配置してあるディレクトリにて、以下を実行することで、ローカルで動作するサーバーを起動することができます。
+
+[source, console]
+----
+$ mkdir -p data/redis data/mysql # データベースのデータ保存先のディレクトリを作成する
+$ GCS_BUCKET_NAME=[バケット名] docker compose up
+----
+
+事前に、Google Cloud Storage の API アクセスの認証に使用するための証明書が格納された JSON ファイルを、`./credentials/gcs-credentials.json` に配置しておいてください。
+詳細は、link:#google_cloud_storage[Google Cloud Storage] セクションを参照してください。
+
+また、GCS のバケット名を、環境変数 `GCS_BUCKET_NAME` で指定します。
+
+== 各サーバーについて
+
+=== Core サーバー
+
+==== Core サーバー概要
 
 Core サーバーは、AT サービスの中核のサーバーです。
 フロント Web サーバーからアクセスする API は、Core サーバーが提供します。
@@ -48,7 +94,7 @@ Core API については、フロント Web サーバーのみ使用します。
 セキュリティーのために、フロント Web サーバー以外からのアクセスを遮断するよう構成してください。
 App API は、クライアントアプケーションが使用する API なので、外部からアクセスできるよう構成する必要があります。
 
-=== Core サーバーの設定
+==== Core サーバーの設定
 
 Core サーバーの Docker イメージは、サーバーの設定を環境変数で指定することができます。
 
@@ -114,7 +160,7 @@ Core サーバーの Docker イメージは、サーバーの設定を環境変�
 
 |===
 
-=== データベースのマイグレーション
+==== データベースのマイグレーション
 
 Core サーバーの Docker イメージには、データベースのマイグレーションを行うための、マイグレーションツールが含まれます。
 
@@ -126,7 +172,8 @@ Core サーバーの Docker イメージは、デフォルトでサーバーア�
 Core サーバーのコンテナーを起動する際に、コマンドとして `-migraion` オプションを付加すると、サーバー起動時にマイグレーションが実行されます。
 実際に `docker run` コマンドでオプションを指定する場合は、`"-c", "config.toml", "-migrate"` と付加してください。
 
-=== Google Cloud Storage
+[[google_cloud_storage]]
+==== Google Cloud Storage
 
 Core サーバーがコンテンツファイルを保存するストレージとして、Google Cloud Storage (GCS) を使用します。
 Google Cloud Platform にて、Google Cloud Storage を有効にし、コンテンツファイルを保存する Bucket を作成します。
@@ -138,9 +185,9 @@ Google Cloud Platform にて、Google Cloud Storage を有効にし、コンテ�
 
 また、Core サーバーの Docker コンテナーに環境変数にて Bucket 名を指定します。
 
-== State サーバー
+=== State サーバー
 
-=== State サーバー概要
+==== State サーバー概要
 
 State サーバーは、ルームやデバイスの状態を管理するサーバーです。
 Core サーバー及び ATP サーバーは、State サーバーを介してルームやデバイスの状態の変更や状態の取得を行います。
@@ -148,7 +195,7 @@ Core サーバー及び ATP サーバーは、State サーバーを介してル�
 State サーバーの起動には、Redis が必要です。
 State サーバーが管理するルームやデバイスの状態は、Redis によって永続化されます。
 
-=== State サーバーの設定
+==== State サーバーの設定
 
 State サーバーの Docker イメージは、サーバーの設定を環境変数で指定することができます。
 
@@ -182,9 +229,9 @@ State サーバーの Docker イメージは、サーバーの設定を環境変
 
 |===
 
-== ATP サーバー
+=== ATP サーバー
 
-=== ATP サーバー概要
+==== ATP サーバー概要
 
 ATP サーバーは、クライアントアプケーションから送信される音声データや表情データの転送を行うサーバーです。
 State サーバーで管理されるルームやデバイスの状態をもとに、クライアントアプリケーション間のデータ転送の制御を行います。
@@ -193,7 +240,7 @@ Core サーバーの起動には、State サーバーが必要です。
 
 ATP サーバーは、UDP による通信を行います。
 
-=== ATP サーバーの設定
+==== ATP サーバーの設定
 
 ATP サーバーの Docker イメージは、サーバーの設定を環境変数で指定することができます。
 
