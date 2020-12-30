@@ -4,16 +4,19 @@ Avatar Teleporter サービスの SDK を利用するための情報を提供し
 
 == How to use
 
-* AT Teleporter サービスの概要を知りたい
-** link:docs/avatar-teleporter-sdk.pdf[Avatar Teleporter SDK] のドキュメントを確認してください。
+AT Teleporter サービスの概要を知りたい::
+link:docs/avatar-teleporter-sdk.pdf[Avatar Teleporter SDK] のドキュメントを確認してください。
 
-* AT Core Servers について知りたい
-** link:docs/at-servers.adoc[Avatar Teleporter SDK サーバー] のドキュメントを確認してください。
+AT Core Servers について知りたい::
+link:docs/at-servers.adoc[Avatar Teleporter SDK サーバー] のドキュメントを確認してください。
 
+AT Customer Client の使い方を知りたい::
+link:docs/how-to-embed-at-customer-client.adoc[AT Customer Client をネイティブアプリに埋め込む手順] のドキュメントを確認してください。
 
 == Documents
 
 * link:docs/avatar-teleporter-sdk.pdf[Avatar Teleporter SDK]
 * link:docs/at-core-server-api.adoc[AT Core Server API Reference]
 * link:docs/at-servers.adoc[Avatar Teleporter SDK サーバー]
+* link:docs/how-to-embed-at-customer-client.adoc[AT Customer Client をネイティブアプリに埋め込む手順]
 
