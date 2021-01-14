@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  {{template "htmlheader" .}}
+  <body>
+    {{template "header" .}}
+
+    <div class="contents">
+      {{if .Data}}
+        <ul class="itemlist">
+          {{range .Data}}
+            <li>{{.Name}}
+              <div class="right">
+                <p>{{if .Device }}{{.Device.Name}}{{else}}&nbsp;{{end}}</p>
+                <ul>
+                  <li><a href="/settings/rooms/{{.ID}}"><i class="material-icons">edit</i>編集</a></li>
+                  <li><a href="/settings/rooms/{{.ID}}/devices"><i class="material-icons">smartphone</i>デバイス登録</a></li>
+                  <li><a href="/settings/rooms/{{.ID}}/delete"><i class="material-icons">delete</i>削除</a></li>
+                </ul>
+              </div>
+            </li>
+          {{end}}
+        </ul>
+      {{end}}
+    </div>
+  </body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  {{template "htmlheader" .}}
+  <body>
+    {{template "header" .}}
+
+    <div class="contents">
+      <form class="inputform" action="/settings/rooms/{{.Data.ID}}/devices" method="post">
+        <p>
+          現在ルームに設定されている端末は「★」マークが表示されています。<br />
+          他のルームやユーザーに設定されている端末は「●」マークが表示されています。
+        </p>
+        {{if .ErrMessage }}
+          <p class="errormsg">{{ .ErrMessage }}</p>
+        {{end}}
+        <p class="input">
+          <select name="device">
+            <option value="0">選択解除</option>
+            {{range .Data.Devices}}
+              {{if gt .RoomID 0 }}
+                {{if eq .RoomID $.Data.ID }}
+                  <option value="{{.ID}}" selected>{{.Name}} ★</option>
+                {{else}}
+                  <option value="{{.ID}}">{{.Name}} ●</option>
+                {{end}}
+              {{else}}
+                <option value="{{.ID}}">{{.Name}}</option>
+              {{end}}
+            {{end}}
+          </select>
+        </p>
+        <p class="submit"><input type="submit" value="登録"></p>
+      </form>
+    </div>
+  </body>
+</html>

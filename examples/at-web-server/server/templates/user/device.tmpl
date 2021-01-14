@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  {{template "htmlheader" .}}
+  <body>
+    {{template "header" .}}
+
+    <div class="contents">
+      <form class="inputform" action="/settings/user/device" method="post">
+        {{if .ErrMessage }}
+          <p class="errormsg">{{ .ErrMessage }}</p>
+        {{end}}
+        <p class="input"><input type="text" name="name" value="{{.Data.Name}}" placeholder="デバイス名" required></p>
+        <p class="input"><input type="number" name="otp" placeholder="ワンタイムパスワード" required></p>
+        <p class="submit"><input type="submit" value="登録"></p>
+      </form>
+    </div>
+  </body>
+</html>

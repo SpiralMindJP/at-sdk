@@ -1,0 +1,277 @@
+@import color
+
+html
+  font-size: 12pt
+  height: 100vh
+
+body
+  color: $color-black01
+  background: $color-white03
+  font-size: 1rem
+
+  height: 100vh
+  //min-height: 100vh
+
+  margin: 0
+  padding: 0
+
+header
+  width: 100vw
+  position: fixed
+  margin: 0
+  padding: 0
+
+input
+  color: $color-black01
+  background: $color-white00
+  font-size: 1rem
+
+  border: solid 1px $color-black02
+  border-radius: 0.5rem
+
+  margin: 0
+  padding: 0.5rem
+
+input[type=submit], input[type=button]
+  color: $color-white01
+  background: $color-base-l01
+
+input[type=submit]:hover, input[type=button]:hover
+  background: $color-base-l02
+
+select
+  color: $color-black01
+  background: $color-white00
+  font-size: 1rem
+
+  border: solid 1px $color-black02
+  border-radius: 0.5rem
+
+  height: 2rem
+  margin: 0
+  padding: 0
+
+// top bar
+.topbar
+  color: $color-white01
+  background: $color-base
+
+  display: flex
+  width: 100%
+  height: 3rem
+  margin: 0
+  padding: 0
+
+  // app title
+  h1
+    font-size: 1.5rem
+
+    margin: auto 0.74rem
+    padding: 0
+
+  // common list item
+  li
+    list-style: none
+
+    position: relative
+
+    a
+      color: $color-white01
+
+      display: flex
+      justify-content: center
+      align-items: center
+      width: 10em
+      height: 3rem
+      margin: 0
+      line-height: 1rem
+
+      text-align: center
+      text-decoration: none
+
+  // menu list
+  > ul
+    margin: 0 0 0 auto
+    padding: 0
+    display: flex
+
+    > li:hover > a
+      background: $color-base-l01
+
+  // popup
+  ul.popup
+    top: 3rem
+    left: 0
+    margin: 0
+    padding: 0
+    position: absolute
+    z-index: 1
+
+    > li
+      background: $color-base-l01
+
+      overflow: hidden
+      height: 0
+
+    > li:hover a
+      background: $color-base-l02
+
+  // show popup
+  li:hover > ul.popup > li
+    overflow: visible
+    height: 3rem
+
+// title bar
+.titlebar
+  color: $color-black01
+  background: $color-white02
+  border-bottom: 1px solid $color-white04
+
+  display: flex
+  width: 100%
+  height: 3rem
+  margin: 0
+  padding: 0
+
+  // app title
+  h1
+    font-size: 1.2rem
+
+    margin: auto 0.5rem
+    padding: 0
+
+  ul
+    margin: 0 0 0 auto
+    padding: 0
+    display: flex
+
+    li
+      list-style: none
+
+      position: relative
+
+      a
+        font-size: 1rem
+        color: $color-black01
+        background: $color-white02
+        border: 1px solid $color-white03
+        border-radius: 0.5rem
+
+        display: flex
+        justify-content: center
+        align-items: center
+        box-sizing: border-box
+        height: 2.4rem
+        margin: 0.3rem
+        padding: 0 0.5rem
+        line-height: 1em
+
+        text-decoration: none
+
+      a:hover
+        box-shadow: 0.1rem 0.1rem 0.5rem $color-white04
+
+      a:active
+        box-shadow: none
+
+// contents area
+.contents
+  color: $color-black01
+  background: $color-white01
+
+  border-left: 1px solid $color-white04
+  border-right: 1px solid $color-white04
+  border-bottom: 1px solid $color-white04
+
+  box-sizing: border-box
+  width: 64em
+  height: 100vh
+  margin: 0 auto
+  padding: 6.05rem 0 0
+
+// item list
+ul.itemlist
+  list-style: none
+
+  margin: 2rem
+  padding: 0
+
+  > li
+    color: $color-black01
+    background: $color-white01
+    border-bottom: 1px solid $color-white02
+
+    display: flex
+    height: 3rem
+    padding: 0 0 0 1rem
+    align-items: center
+
+    .right
+      margin: 0 0 0 auto
+      display: flex
+
+      p
+        display: flex
+        justify-content: start
+        align-items: center
+
+        height: 3.0rem
+        margin: 0
+        padding: 0 0.5rem
+        line-height: 1em
+
+
+      ul
+        list-style: none
+        margin: 0
+        padding: 0
+        display: flex
+
+        a
+          font-size: 1rem
+          color: $color-black01
+          background: $color-white01
+          border: 1px solid $color-white02
+          border-radius: 0.5rem
+
+          display: flex
+          justify-content: center
+          align-items: center
+
+          box-sizing: border-box
+          height: 2.4rem
+          margin: 0.3rem
+          padding: 0 0.5rem
+          line-height: 1em
+
+          text-decoration: none
+
+        a:hover
+          box-shadow: 0.1rem 0.1rem 0.5rem $color-white03
+
+        a:active
+          box-shadow: none
+
+table.showinfo
+  margin: 2rem auto
+  width: 40em
+  padding: 0
+
+  border: none
+
+  th
+    font-size: 1rem
+    font-weight: bold
+    margin: 0
+    padding: 0.5rem
+    text-align: left
+
+  td
+    font-size: 1rem
+    margin: 0
+    padding: 0.5rem
+    text-align: left
+
+// error message
+.errormsg
+  color: $color-error

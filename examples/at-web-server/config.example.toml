@@ -1,0 +1,21 @@
+bind_host = "localhost"
+bind_port = 8888
+server_host = "localhost"
+server_port = 8888
+
+enable_tls = false
+tls_cert_file = ""
+tls_key_file = ""
+
+[firebase]
+credentials = "firebase-credentials.json"
+api_key = ""
+auth_domain = ""
+project_id = ""
+storage_bucket = ""
+messaging_sender_id = ""
+app_id = ""
+
+[core]
+host = "localhost"
+port = 8080

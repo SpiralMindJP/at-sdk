@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  {{template "htmlheader" .}}
+  <body>
+    {{template "header" .}}
+
+    <div class="contents">
+      <table class="showinfo">
+        <tr>
+          <th>Eメールアドレス</th>
+          <td>{{.Data.Email}}</td>
+        </tr>
+        <tr>
+          <th>名前</th>
+          <td>{{.Data.Name}}</td>
+        </tr>
+        <tr>
+          <th>使用デバイス</th>
+          <td>{{if .Data.DeviceName}}{{.Data.DeviceName}}{{else}}なし{{end}}</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  {{template "htmlheader" .}}
+  <body>
+    {{template "header" .}}
+
+    <div class="contents">
+      <form class="inputform" action="/settings/rooms/{{.Data.ID}}/delete" method="post">
+        <p>ルーム「{{.Data.Name}}」を削除します。
+        {{if .ErrMessage }}
+          <p class="errormsg">{{ .ErrMessage }}</p>
+        {{end}}
+        <p class="submit"><input type="submit" value="削除"></p>
+      </form>
+    </div>
+  </body>
+</html>

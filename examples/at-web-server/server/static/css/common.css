@@ -1,0 +1,426 @@
+html {
+  font-size: 12pt;
+  height: 100vh;
+}
+
+body {
+  color: #444444;
+  background: #dbdbdb;
+  font-size: 1rem;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  width: 100vw;
+  position: fixed;
+  margin: 0;
+  padding: 0;
+}
+
+input {
+  color: #444444;
+  background: #ffffff;
+  font-size: 1rem;
+  border: solid 1px #555555;
+  border-radius: 0.5rem;
+  margin: 0;
+  padding: 0.5rem;
+}
+
+input[type=submit], input[type=button] {
+  color: #f3f3f3;
+  background: #005ac8;
+}
+
+input[type=submit]:hover, input[type=button]:hover {
+  background: #006df1;
+}
+
+select {
+  color: #444444;
+  background: #ffffff;
+  font-size: 1rem;
+  border: solid 1px #555555;
+  border-radius: 0.5rem;
+  height: 2rem;
+  margin: 0;
+  padding: 0;
+}
+
+.topbar {
+  color: #f3f3f3;
+  background: #00489f;
+  display: flex;
+  width: 100%;
+  height: 3rem;
+  margin: 0;
+  padding: 0;
+}
+.topbar h1 {
+  font-size: 1.5rem;
+  margin: auto 0.74rem;
+  padding: 0;
+}
+.topbar li {
+  list-style: none;
+  position: relative;
+}
+.topbar li a {
+  color: #f3f3f3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 10em;
+  height: 3rem;
+  margin: 0;
+  line-height: 1rem;
+  text-align: center;
+  text-decoration: none;
+}
+.topbar > ul {
+  margin: 0 0 0 auto;
+  padding: 0;
+  display: flex;
+}
+.topbar > ul > li:hover > a {
+  background: #005ac8;
+}
+.topbar ul.popup {
+  top: 3rem;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  z-index: 1;
+}
+.topbar ul.popup > li {
+  background: #005ac8;
+  overflow: hidden;
+  height: 0;
+}
+.topbar ul.popup > li:hover a {
+  background: #006df1;
+}
+.topbar li:hover > ul.popup > li {
+  overflow: visible;
+  height: 3rem;
+}
+
+.titlebar {
+  color: #444444;
+  background: #e7e7e7;
+  border-bottom: 1px solid #cfcfcf;
+  display: flex;
+  width: 100%;
+  height: 3rem;
+  margin: 0;
+  padding: 0;
+}
+.titlebar h1 {
+  font-size: 1.2rem;
+  margin: auto 0.5rem;
+  padding: 0;
+}
+.titlebar ul {
+  margin: 0 0 0 auto;
+  padding: 0;
+  display: flex;
+}
+.titlebar ul li {
+  list-style: none;
+  position: relative;
+}
+.titlebar ul li a {
+  font-size: 1rem;
+  color: #444444;
+  background: #e7e7e7;
+  border: 1px solid #dbdbdb;
+  border-radius: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  height: 2.4rem;
+  margin: 0.3rem;
+  padding: 0 0.5rem;
+  line-height: 1em;
+  text-decoration: none;
+}
+.titlebar ul li a:hover {
+  box-shadow: 0.1rem 0.1rem 0.5rem #cfcfcf;
+}
+.titlebar ul li a:active {
+  box-shadow: none;
+}
+
+.contents {
+  color: #444444;
+  background: #f3f3f3;
+  border-left: 1px solid #cfcfcf;
+  border-right: 1px solid #cfcfcf;
+  border-bottom: 1px solid #cfcfcf;
+  box-sizing: border-box;
+  width: 64em;
+  height: 100vh;
+  margin: 0 auto;
+  padding: 6.05rem 0 0;
+}
+
+ul.itemlist {
+  list-style: none;
+  margin: 2rem;
+  padding: 0;
+}
+ul.itemlist > li {
+  color: #444444;
+  background: #f3f3f3;
+  border-bottom: 1px solid #e7e7e7;
+  display: flex;
+  height: 3rem;
+  padding: 0 0 0 1rem;
+  align-items: center;
+}
+ul.itemlist > li .right {
+  margin: 0 0 0 auto;
+  display: flex;
+}
+ul.itemlist > li .right p {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  height: 3rem;
+  margin: 0;
+  padding: 0 0.5rem;
+  line-height: 1em;
+}
+ul.itemlist > li .right ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+ul.itemlist > li .right ul a {
+  font-size: 1rem;
+  color: #444444;
+  background: #f3f3f3;
+  border: 1px solid #e7e7e7;
+  border-radius: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  height: 2.4rem;
+  margin: 0.3rem;
+  padding: 0 0.5rem;
+  line-height: 1em;
+  text-decoration: none;
+}
+ul.itemlist > li .right ul a:hover {
+  box-shadow: 0.1rem 0.1rem 0.5rem #dbdbdb;
+}
+ul.itemlist > li .right ul a:active {
+  box-shadow: none;
+}
+
+table.showinfo {
+  margin: 2rem auto;
+  width: 40em;
+  padding: 0;
+  border: none;
+}
+table.showinfo th {
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 0;
+  padding: 0.5rem;
+  text-align: left;
+}
+table.showinfo td {
+  font-size: 1rem;
+  margin: 0;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.errormsg {
+  color: #dd2222;
+}
+
+.inputform {
+  margin: 2rem auto;
+  width: 40em;
+  padding: 0;
+}
+.inputform p {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  padding: 1em;
+}
+.inputform .input input[type=text], .inputform .input input[type=email], .inputform .input input[type=password], .inputform .input input[type=number], .inputform .input input[type=file] {
+  box-sizing: border-box;
+  width: 100%;
+  margin: auto;
+}
+.inputform .input select {
+  box-sizing: border-box;
+  width: 100%;
+  margin: auto;
+}
+.inputform .submit {
+  text-align: center;
+}
+.inputform .submit input[type=submit] {
+  width: 10em;
+}
+
+.dashboard {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+.dashboard p {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0;
+  padding: 0;
+}
+.dashboard .mainbox {
+  flex: auto;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  margin: 0;
+}
+.dashboard .mainbox input[type=button] {
+  font-size: 1.2rem;
+  font-weight: bold;
+  min-width: 10rem;
+  margin-right: 1rem;
+}
+.dashboard .mainbox h2 {
+  flex: none;
+  font-size: 2rem;
+  line-height: 1;
+  margin: 0;
+  padding: 1rem;
+  border-bottom: 1px solid #cfcfcf;
+}
+.dashboard .mainbox .roominfo {
+  flex: initial;
+  margin: 0;
+  padding: 1rem;
+}
+.dashboard .mainbox .operation {
+  flex: auto;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid #cfcfcf;
+  overflow-y: hidden;
+}
+.dashboard .mainbox .operation h3 {
+  flex: none;
+  font-size: 1.2rem;
+  line-height: 1;
+  margin: 0;
+  padding: 0.6rem;
+  border-bottom: 1px solid #cfcfcf;
+}
+.dashboard .mainbox .operation .contentslist {
+  flex: auto;
+  margin: 0;
+  overflow-y: scroll;
+}
+.dashboard .mainbox .operation .contentslist table {
+  width: 100%;
+  border: none;
+  border-collapse: collapse;
+}
+.dashboard .mainbox .operation .contentslist table tr {
+  border-left: 0.5rem solid transparent;
+  cursor: pointer;
+}
+.dashboard .mainbox .operation .contentslist table tr.selected {
+  border-left: 0.5rem solid #4398ff;
+}
+.dashboard .mainbox .operation .contentslist table tr:hover, .dashboard .mainbox .operation .contentslist table tr:hover.selected {
+  border-left: 0.5rem solid #1a82ff;
+}
+.dashboard .mainbox .operation .contentslist table td {
+  font-size: 1rem;
+  line-height: 1;
+  border: none;
+  border-bottom: 1px solid #cfcfcf;
+  padding: 1rem;
+}
+.dashboard .roombox {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  width: 20rem;
+  margin: 0;
+  border-left: 1px solid #cfcfcf;
+  overflow-y: hidden;
+}
+.dashboard .roombox h2 {
+  flex: none;
+  font-size: 1.2rem;
+  line-height: 1;
+  margin: 0;
+  padding: 0.6rem;
+  border-bottom: 1px solid #cfcfcf;
+}
+.dashboard .roombox .roomlist {
+  flex: auto;
+  margin: 0;
+  overflow-y: scroll;
+}
+.dashboard .roombox .roomlist table {
+  width: 100%;
+  border: none;
+  border-collapse: collapse;
+}
+.dashboard .roombox .roomlist table tr {
+  border-left: 0.5rem solid transparent;
+  cursor: pointer;
+}
+.dashboard .roombox .roomlist table tr.selected {
+  border-left: 0.5rem solid #4398ff;
+}
+.dashboard .roombox .roomlist table tr:hover, .dashboard .roombox .roomlist table tr:hover.selected {
+  border-left: 0.5rem solid #1a82ff;
+}
+.dashboard .roombox .roomlist table td {
+  font-size: 1rem;
+  line-height: 1;
+  border: none;
+  border-bottom: 1px solid #cfcfcf;
+  padding: 1rem;
+}
+.dashboard .roombox .roomlist table td.status {
+  width: 1em;
+}
+.dashboard .icon-operating {
+  color: #00cd00;
+}
+.dashboard .icon-others-operating {
+  color: #cdcd00;
+}
+.dashboard .icon-not-operating {
+  color: #666666;
+}
+
+/*# sourceMappingURL=common.css.map */
