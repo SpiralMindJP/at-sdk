@@ -3,11 +3,11 @@
  */
 syntax = "proto3";
 
-option go_package = "github.com/SpiralMindJP/at-server/pb/core";
+option go_package = "github.com/SpiralMindJP/at-sdk/go/pb/core";
 
 package at_core_service;
 
-import "common.proto";
+import "google/protobuf/empty.proto";
 
 /*
  * デバイスのタイプを表します。
