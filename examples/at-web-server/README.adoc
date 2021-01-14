@@ -1,0 +1,48 @@
+= at-web-server
+
+Avatar Teleporter SDK を使用した Web アプリケーションのサンプルです。
+
+== 必要環境
+
+* Go 1.16beta1
+
+== ビルド方法
+
+`cmd/at-web-server` にカンレントディレクトリを移動し、`go build` を実行します。
+
+[source, console]
+----
+$ cd cmd/at-web-server
+$ go build
+----
+
+また、以下のコマンドを実行することで、直接インストールすることができます。
+ビルドされた実行ファイルは、`$GOPATH/bin` にインストールされます。
+
+[source, console]
+----
+$ go install github.com/SpiralMindJP/at-sdk/examples/at-web-server/cmd/at-web-server
+----
+
+== 実行方法
+
+サンプルアプリケーションでは、ユーザー認証に Firebase を使用しています。
+Firebase のプロジェクトを作成し、メールとパスワードによる認証を有効にします。
+
+Firebase Admin SDK のサービスアカウントを作成し、秘密鍵が格納された JSON ファイルをダウンロードします。
+
+Firebase プロジェクトに Web App を追加し、Firebase に Web からアクセスするために必要な構成を取得します。
+
+Admin SDK サービスアカウントの秘密鍵を格納した JSON ファイルと、Web App からアクセスするための構成は、Web アプリケーションの構成ファイルで設定します。
+
+link:config.example.toml[config.toml のサンプル]を参考に、設定ファイルを作成してください。
+
+設定ファイルを作成したら、以下のようにアプリケーションを起動できます。
+
+[source, console]
+----
+$ /path/to/at-web-server -c config.toml
+----
+
+`-c` オプションで、設定ファイルのパスを指定します。
+
