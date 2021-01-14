@@ -23,13 +23,13 @@ AT SDK の各サーバーアプリケーションの Docker イメージは、Go
 | サーバー名 | Docker イメージ名
 
 | Core サーバー
-| asia.gcr.io/at-sdk/at-core-server:1.0-rc1
+| asia.gcr.io/at-sdk/at-core-server:1.0
 
 | ATP サーバー 
-| asia.gcr.io/at-sdk/at-atp-server:1.0-rc1
+| asia.gcr.io/at-sdk/at-atp-server:1.0
 
 | State サーバー 
-| asia.gcr.io/at-sdk/at-state-server:1.0-rc1
+| asia.gcr.io/at-sdk/at-state-server:1.0
 
 |===
 
