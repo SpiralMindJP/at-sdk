@@ -1965,5 +1965,6 @@ image::images/content_delete.png[ContentService.Delete]
 
 == 改訂履歴
 
+* v1.0, 2021-01-15  Release
 * v1.0, 2020-12-25  Release Candidate 1
 * v0.2, 2020-10-20  Closed Alpha2
