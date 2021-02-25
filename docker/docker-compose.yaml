@@ -18,13 +18,13 @@ services:
     volumes:
       - ./data/redis:/data
   state:
-    image: asia.gcr.io/at-sdk/at-state-server:1.0-rc1
+    image: asia.gcr.io/at-sdk/at-state-server:1.1
     links:
       - redis
     environment:
       STATE_SERVER_INSECURE: "true"
   core:
-    image: asia.gcr.io/at-sdk/at-core-server:1.0-rc1
+    image: asia.gcr.io/at-sdk/at-core-server:1.1
     command: ["-c", "config.toml", "-migrate"]
     links:
       - mysql
@@ -39,7 +39,7 @@ services:
       MYSQL_PASSWORD: p@ssword
       GCS_BUCKET_NAME: ${GCS_BUCKET_NAME}
   atp:
-    image: asia.gcr.io/at-sdk/at-atp-server:1.0-rc1
+    image: asia.gcr.io/at-sdk/at-atp-server:1.1
     links:
       - state
     ports:
