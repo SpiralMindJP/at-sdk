@@ -50,9 +50,11 @@ func EventStreamHandler() http.HandlerFunc {
 		defer client.CloseSend()
 
 		logger := log.FromContext(ctx).With("method", "dashboard.EventStreamHandler")
+	loop:
 		for {
 			select {
 			case <-ctx.Done():
+				break loop
 			default:
 			}
 

@@ -36,7 +36,18 @@ func (s *Server) NewRouter() (http.Handler, error) {
 	mux.Group(func(r chi.Router) {
 		r.Use(auth.UserProfileContext(s.client, s))
 
-		r.Get("/dashboard", dashboard.Handler(s))
+		// dashboard
+		r.Route("/dashboard", func(r chi.Router) {
+			r.Get("/", dashboard.Handler(s))
+
+			r.Route("/rooms", func(r chi.Router) {
+				r.Route("/{roomID}", func(r chi.Router) {
+					r.Use(middleware.RoomContext)
+
+					r.Get("/video", dashboard.VideoStreamHandler())
+				})
+			})
+		})
 
 		// settings
 		r.Route("/settings", func(r chi.Router) {

@@ -42,6 +42,9 @@
         </div>
         <div class="roombox">
           <h2>ルーム</h2>
+          <div class="roomvideo">
+            <room-image v-bind:room-id="currentRoomId" />
+          </div>
           <div class="roomlist">
             <table>
               <tr is="room-item" v-for="room in rooms" :key="room.id" v-bind:room="room" v-bind:current-room-id="currentRoomId" v-on:select="selectRoom(room.id)"></tr>
@@ -81,6 +84,21 @@
         `<tr v-bind:class="{selected: content.id == currentContentId}" v-on:click="$emit('select')">` +
           `<td>{{`{{content.name}}`}}</td>` +
         `</tr>`
+    })
+    Vue.component('room-image', {
+      props: ['roomId'],
+      computed: {
+        url: function() {
+          if (!this.roomId) {
+            return ''
+          }
+          if (this.roomId <= 0) {
+            return ''
+          }
+          return '/dashboard/rooms/' + this.roomId + '/video'
+        }
+      },
+      template: `<img v-bind:src="url" alt="room video">`
     })
     var app = new Vue({
       el: '#app',
