@@ -2,6 +2,10 @@
 
 Avatar Teleporter サービスの SDK を利用するための情報を提供します。
 
+== License
+
+link:LICENSE.pdf[Avatar Teleporter SDK 利用規約]
+
 == How to use
 
 AT Teleporter サービスの概要を知りたい::
@@ -21,10 +25,10 @@ AT Operator アプリについて知りたい::
 
 == Documents
 
+* link:docs/at-sdk-terms-of-use.pdf[Avatar Teleporter SDK 利用規約]
 * link:docs/avatar-teleporter-sdk.pdf[Avatar Teleporter SDK]
 * link:docs/at-core-server-api.adoc[AT Core Server API Reference]
 * link:docs/at-servers.adoc[Avatar Teleporter SDK サーバー]
 * link:docs/how-to-embed-at-customer-client.adoc[AT Customer Client をネイティブアプリに埋め込む手順]
 * link:examples/at-web-server[AT SDK 使用サンプル Web アプリケーション]
 * link:docs/at-operator-app.adoc[Avatar Telrporter Operator アプリケーションについて]
-
