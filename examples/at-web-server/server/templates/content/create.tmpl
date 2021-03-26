@@ -11,6 +11,13 @@
         {{end}}
         <p class="input"><input type="text" name="name" value="{{.Data.Name}}" placeholder="コンテンツ名" required></p>
         <p class="input"><input type="file" name="file" placeholder="アップロードファイル" required></p>
+        <p class="input">
+          <select name="type">
+            <option value="1" selected>動画</option>
+            <option value="0">静止画</option>
+            <option value="2">アバターモデル</option>
+          </select>
+        </p>
         <p class="submit"><input type="submit" value="登録"></p>
       </form>
     </div>

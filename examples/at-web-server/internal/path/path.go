@@ -10,6 +10,8 @@ const (
 	NewDevice            = "/settings/devices/new"
 	Content              = "/settings/contents"
 	NewContent           = "/settings/contents/new"
+	Avatar               = "/settings/avatars"
+	NewAvatar            = "/settings/avatars/new"
 	Team                 = "/admin/teams"
 	DashboardEventStream = "/api/dashboard/event"
 )

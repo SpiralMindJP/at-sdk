@@ -15,6 +15,12 @@ import (
 	"google.golang.org/grpc/codes"
 )
 
+type contentList struct {
+	Videos  []*contentData
+	Images  []*contentData
+	Avatars []*contentData
+}
+
 type contentData struct {
 	ID   int64
 	Name string
@@ -50,9 +56,19 @@ func ListPageHandler() http.HandlerFunc {
 				return
 			}
 		}
-		contents := make([]*contentData, len(result.GetContents()))
-		for i, room := range result.GetContents() {
-			contents[i] = newContentData(room)
+
+		var list contentList
+		for _, room := range result.GetContents() {
+			switch room.GetType() {
+			case pb.ContentType_CONTENT_TYPE_IMAGE:
+				list.Images = append(list.Images, newContentData(room))
+			case pb.ContentType_CONTENT_TYPE_VIDEO:
+				list.Videos = append(list.Videos, newContentData(room))
+			case pb.ContentType_CONTENT_TYPE_AVATAR:
+				list.Avatars = append(list.Avatars, newContentData(room))
+			default:
+				continue
+			}
 		}
 
 		data := template.NewData(r)
@@ -60,7 +76,7 @@ func ListPageHandler() http.HandlerFunc {
 		data.PageCommands = []*template.PageCommand{
 			{Path: "/settings/contents/new", Name: "コンテンツ登録", Icon: "add_circle"},
 		}
-		data.Data = contents
+		data.Data = list
 
 		template.WriteTemplate(w, r, "content", "list.tmpl", data)
 	}

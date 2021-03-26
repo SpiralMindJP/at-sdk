@@ -3,7 +3,6 @@ package team
 import (
 	"net/http"
 
-	"github.com/SpiralMindJP/at-sdk/examples/at-web-server/internal/auth"
 	"github.com/SpiralMindJP/at-sdk/examples/at-web-server/internal/middleware"
 	"github.com/SpiralMindJP/at-sdk/examples/at-web-server/internal/template"
 	"github.com/SpiralMindJP/at-sdk/examples/at-web-server/internal/webutil"
@@ -25,7 +24,6 @@ func EditPageHandler() http.HandlerFunc {
 func EditHandler(s Server) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
-		user := auth.UserFromContext(ctx)
 		team := middleware.TeamFromContext(ctx)
 		conn := middleware.GRPCConnFromContext(ctx)
 
@@ -42,7 +40,7 @@ func EditHandler(s Server) http.HandlerFunc {
 		}
 
 		_, err := service.Update(ctx, &pb.TeamUpdateRequest{
-			TeamId: user.TeamID(),
+			TeamId: team.GetTeamId(),
 			Name:   name,
 		})
 		if err != nil {

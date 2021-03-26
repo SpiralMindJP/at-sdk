@@ -15,17 +15,42 @@ import (
 	"google.golang.org/grpc/codes"
 )
 
+type deviceListData struct {
+	Operators []*deviceData
+	Customers []*deviceData
+}
+
 type deviceData struct {
 	ID     int64
 	Name   string
 	RoomID int64
+
+	Avatar *avatarData
 }
 
-func newDeviceData(device *pb.Device) *deviceData {
+type avatarData struct {
+	ID   int64
+	Name string
+}
+
+func newDeviceData(device *pb.Device, avatar *pb.Avatar) *deviceData {
+	var a *avatarData
+	if avatar != nil {
+		a = newAvatarData(avatar)
+	}
+
 	return &deviceData{
 		ID:     device.GetDeviceId(),
 		Name:   device.GetName(),
 		RoomID: device.GetRoomId(),
+		Avatar: a,
+	}
+}
+
+func newAvatarData(avatar *pb.Avatar) *avatarData {
+	return &avatarData{
+		ID:   avatar.GetAvatarId(),
+		Name: avatar.GetName(),
 	}
 }
 
@@ -41,10 +66,13 @@ func ListPageHandler() http.HandlerFunc {
 		user := auth.UserFromContext(ctx)
 		conn := middleware.GRPCConnFromContext(ctx)
 
+		teamID := user.TeamID()
+
 		service := pb.NewDeviceServiceClient(conn)
+		avatarService := pb.NewAvatarServiceClient(conn)
 
 		result, err := service.List(ctx, &pb.DeviceListRequest{
-			TeamId: user.TeamID(),
+			TeamId: teamID,
 		})
 		if err != nil {
 			if grpc.Code(err) != codes.NotFound {
@@ -52,9 +80,53 @@ func ListPageHandler() http.HandlerFunc {
 				return
 			}
 		}
-		devices := make([]*deviceData, len(result.GetDevices()))
-		for i, device := range result.GetDevices() {
-			devices[i] = newDeviceData(device)
+
+		avatars, err := avatarService.List(ctx, &pb.AvatarListRequest{
+			TeamId: teamID,
+		})
+		if err != nil {
+			if grpc.Code(err) != codes.NotFound {
+				webutil.WriteError(w, r, "failed to get avatars", err, http.StatusInternalServerError)
+				return
+			}
+		}
+
+		opAvatars, err := avatarService.ListOperatorAvatar(ctx, &pb.OperatorAvatarListRequest{
+			TeamId: teamID,
+		})
+		if err != nil {
+			if grpc.Code(err) != codes.NotFound {
+				webutil.WriteError(w, r, "failed to get operator avatars", err, http.StatusInternalServerError)
+				return
+			}
+		}
+
+		var devAvatarMap map[int64]*pb.Avatar
+		if len(opAvatars.GetOperatorAvatars()) > 0 {
+			avatarMap := map[int64]*pb.Avatar{}
+			for _, avatar := range avatars.GetAvatars() {
+				avatarMap[avatar.GetAvatarId()] = avatar
+			}
+
+			devAvatarMap = map[int64]*pb.Avatar{}
+			for _, opAvatar := range opAvatars.GetOperatorAvatars() {
+				avatar, ok := avatarMap[opAvatar.GetAvatarId()]
+				if !ok {
+					continue
+				}
+				devAvatarMap[opAvatar.GetDeviceId()] = avatar
+			}
+		}
+
+		var list deviceListData
+		for _, device := range result.GetDevices() {
+			switch device.GetType() {
+			case pb.DeviceType_DEVICE_TYPE_OPERATOR:
+				avatar := devAvatarMap[device.GetDeviceId()]
+				list.Operators = append(list.Operators, newDeviceData(device, avatar))
+			case pb.DeviceType_DEVICE_TYPE_CUSTOMER:
+				list.Customers = append(list.Customers, newDeviceData(device, nil))
+			}
 		}
 
 		data := template.NewData(r)
@@ -62,7 +134,7 @@ func ListPageHandler() http.HandlerFunc {
 		data.PageCommands = []*template.PageCommand{
 			{Path: "/settings/devices/new", Name: "デバイス登録", Icon: "add_circle"},
 		}
-		data.Data = devices
+		data.Data = list
 
 		template.WriteTemplate(w, r, "device", "list.tmpl", data)
 	}

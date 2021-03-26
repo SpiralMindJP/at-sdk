@@ -16,7 +16,7 @@ func EditPageHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		device := middleware.DeviceFromRequest(r)
 
-		writeEditPage(w, r, newDeviceData(device), "")
+		writeEditPage(w, r, newDeviceData(device, nil), "")
 	}
 }
 

@@ -1,4 +1,4 @@
-package device
+package avatar
 
 import (
 	"net/http"
@@ -11,54 +11,54 @@ import (
 )
 
 // DeletePageHandler は、以下のリクエストを処理するハンドラーです。
-// GET /settings/devices/:id/delete
+// GET /settings/avatars/:id/delete
 func DeletePageHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		device := middleware.DeviceFromRequest(r)
+		avatar := middleware.AvatarFromRequest(r)
 
-		writeDeletePage(w, r, newDeviceData(device, nil), "")
+		writeDeletePage(w, r, newAvatarData(avatar, nil), "")
 	}
 }
 
 // DeleteHandler は、以下のリクエストを処理するハンドラーです。
-// POST /settings/devices/:id/delete
+// POST /settings/avatars/:id/delete
 func DeleteHandler(s Server) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		user := auth.UserFromContext(ctx)
-		device := middleware.DeviceFromRequest(r)
+		avatar := middleware.AvatarFromRequest(r)
 		conn := middleware.GRPCConnFromContext(ctx)
 
-		service := pb.NewDeviceServiceClient(conn)
+		service := pb.NewAvatarServiceClient(conn)
 
-		_, err := service.Delete(ctx, &pb.DeviceRequest{
+		_, err := service.Delete(ctx, &pb.AvatarRequest{
 			TeamId:   user.TeamID(),
-			DeviceId: device.GetDeviceId(),
+			AvatarId: avatar.GetAvatarId(),
 		})
 		if err != nil {
-			webutil.WriteError(w, r, "failed to delete the device", err, http.StatusInternalServerError)
+			webutil.WriteError(w, r, "failed to delete the avatar", err, http.StatusInternalServerError)
 			return
 		}
 
-		// redirect to /settings/devices
+		// redirect to /settings/avatars
 		redirectToListPage(w, s)
 	}
 }
 
-func writeDeletePage(w http.ResponseWriter, r *http.Request, device *deviceData, errMessage string) {
+func writeDeletePage(w http.ResponseWriter, r *http.Request, avatar *avatarData, errMessage string) {
 	// input not valid
 
-	if device == nil {
-		device = new(deviceData)
+	if avatar == nil {
+		avatar = new(avatarData)
 	}
 
 	data := template.NewData(r)
-	data.Title = "デバイス削除"
+	data.Title = "アバター削除"
 	data.PageCommands = []*template.PageCommand{
-		{Path: "/settings/devices", Name: "デバイス設定に戻る", Icon: "chevron_left"},
+		{Path: "/settings/avatars", Name: "アバター設定に戻る", Icon: "chevron_left"},
 	}
-	data.Data = device
+	data.Data = avatar
 	data.ErrMessage = errMessage
 
-	template.WriteTemplate(w, r, "device", "delete.tmpl", data)
+	template.WriteTemplate(w, r, "avatar", "delete.tmpl", data)
 }

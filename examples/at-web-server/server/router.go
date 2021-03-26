@@ -5,6 +5,7 @@ import (
 
 	"github.com/SpiralMindJP/at-sdk/examples/at-web-server/internal/admin/team"
 	"github.com/SpiralMindJP/at-sdk/examples/at-web-server/internal/auth"
+	"github.com/SpiralMindJP/at-sdk/examples/at-web-server/internal/avatar"
 	"github.com/SpiralMindJP/at-sdk/examples/at-web-server/internal/content"
 	"github.com/SpiralMindJP/at-sdk/examples/at-web-server/internal/dashboard"
 	"github.com/SpiralMindJP/at-sdk/examples/at-web-server/internal/device"
@@ -94,6 +95,8 @@ func (s *Server) NewRouter() (http.Handler, error) {
 
 					r.Get("/", device.EditPageHandler())
 					r.Post("/", device.EditHandler(s))
+					r.Get("/avatar", device.SetAvatarPageHandler())
+					r.Post("/avatar", device.SetAvatarHandler(s))
 					r.Get("/delete", device.DeletePageHandler())
 					r.Post("/delete", device.DeleteHandler(s))
 				})
@@ -112,6 +115,22 @@ func (s *Server) NewRouter() (http.Handler, error) {
 					r.Post("/", content.EditHandler(s))
 					r.Get("/delete", content.DeletePageHandler())
 					r.Post("/delete", content.DeleteHandler(s))
+				})
+			})
+
+			r.Route("/avatars", func(r chi.Router) {
+				// avatar settings
+				r.Get("/", avatar.ListPageHandler())
+				r.Get("/new", avatar.CreatePageHandler())
+				r.Post("/new", avatar.CreateHandler(s))
+
+				r.Route("/{avatarID}", func(r chi.Router) {
+					r.Use(middleware.AvatarContext)
+
+					r.Get("/", avatar.EditPageHandler())
+					r.Post("/", avatar.EditHandler(s))
+					r.Get("/delete", avatar.DeletePageHandler())
+					r.Post("/delete", avatar.DeleteHandler(s))
 				})
 			})
 		})
@@ -155,7 +174,7 @@ func (s *Server) NewRouter() (http.Handler, error) {
 					r.Route("/{contentID}", func(r chi.Router) {
 						r.Use(middleware.ContentContext)
 
-						r.Post("/play", dashboard.StopAPIHandler())
+						r.Post("/play", dashboard.PlayAPIHandler())
 					})
 				})
 			})

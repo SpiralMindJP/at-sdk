@@ -2,16 +2,18 @@ package content
 
 import (
 	"crypto/md5"
+	"errors"
 	"fmt"
 	"io"
-	"mime"
 	"net/http"
 	"path"
 	"path/filepath"
 	"strconv"
+	"strings"
 
 	"github.com/SpiralMindJP/at-sdk/examples/at-web-server/internal/auth"
 	"github.com/SpiralMindJP/at-sdk/examples/at-web-server/internal/middleware"
+	"github.com/SpiralMindJP/at-sdk/examples/at-web-server/internal/mime"
 	"github.com/SpiralMindJP/at-sdk/examples/at-web-server/internal/template"
 	"github.com/SpiralMindJP/at-sdk/examples/at-web-server/internal/webutil"
 	pb "github.com/SpiralMindJP/at-sdk/go/pb/core"
@@ -31,83 +33,26 @@ func CreatePageHandler() http.HandlerFunc {
 // POST /settings/contents/new
 func CreateHandler(s Server) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		ctx := r.Context()
-		user := auth.UserFromContext(ctx)
-		conn := middleware.GRPCConnFromContext(ctx)
-
-		service := pb.NewContentServiceClient(conn)
-
-		if !webutil.ParseMultipartForm(w, r) {
-			return
-		}
-
-		name := r.PostForm.Get("name")
-		if name == "" {
-			writeCreatePage(w, r, &contentData{Name: name}, "コンテンツ名が入力されていません。")
-			return
-		}
-
-		file, header, err := r.FormFile("file")
+		err := HandleUploadContent(w, r, pb.ContentType_CONTENT_TYPE_IMAGE, pb.ContentType_CONTENT_TYPE_VIDEO, pb.ContentType_CONTENT_TYPE_AVATAR)
 		if err != nil {
-			webutil.WriteError(w, r, "failed to open upload file", err, http.StatusInternalServerError)
-			return
-		}
-		defer file.Close()
+			var upErr *UploadError
+			if errors.As(err, &upErr) {
+				switch upErr.Code {
+				case InvalidForm:
+				case InvalidName:
+					writeCreatePage(w, r, nil, "コンテンツ名が入力されていません。")
+				case InvalidType:
+					writeCreatePage(w, r, nil, "コンテンツタイプが選択されていません。")
+				case InvalidFile:
+					webutil.WriteError(w, r, upErr.Msg, err, http.StatusInternalServerError)
+				case FailedUpload:
+					webutil.WriteError(w, r, upErr.Msg, err, http.StatusInternalServerError)
+				default:
+					webutil.WriteError(w, r, upErr.Msg, err, http.StatusInternalServerError)
+				}
+				return
+			}
 
-		filename := header.Filename
-
-		uploadURL, err := service.Upload(ctx, &pb.ContentUploadRequest{
-			TeamId:   user.TeamID(),
-			Name:     name,
-			Type:     pb.ContentType_CONTENT_TYPE_VIDEO,
-			FileName: filename,
-		})
-		if err != nil {
-			webutil.WriteError(w, r, "failed to upload a new content", err, http.StatusInternalServerError)
-			return
-		}
-
-		hash := md5.New()
-		tr := io.TeeReader(file, hash)
-
-		mediaType := mime.TypeByExtension(filepath.Ext(filename))
-		if mediaType == "" {
-			mediaType = "application/octet-stream"
-		}
-
-		req, err := http.NewRequest("PUT", uploadURL.GetUrl(), tr)
-		if err != nil {
-			err = fmt.Errorf("failed to post file [%s]: %w", filename, err)
-			webutil.WriteError(w, r, "failed to upload a new content", err, http.StatusInternalServerError)
-			return
-		}
-
-		req.Header.Set("Content-Type", mediaType)
-		res, err := http.DefaultClient.Do(req)
-		if err != nil {
-			err = fmt.Errorf("failed to post file [%s]: %w", filename, err)
-			webutil.WriteError(w, r, "failed to upload a new content", err, http.StatusInternalServerError)
-			return
-		}
-
-		if res.StatusCode != http.StatusOK {
-			err = fmt.Errorf("failed to post file [%s]: status %s", filename, res.Status)
-			webutil.WriteError(w, r, "failed to upload a new content", err, http.StatusInternalServerError)
-			return
-		}
-
-		md5Hash := hash.Sum(nil)
-
-		_, err = service.FinishUpload(ctx, &pb.FinishUploadRequest{
-			TeamId:    user.TeamID(),
-			ContentId: uploadURL.GetContentId(),
-			Md5:       md5Hash,
-		})
-		if grpc.Code(err) == codes.NotFound || grpc.Code(err) == codes.FailedPrecondition {
-			writeCreatePage(w, r, &contentData{Name: name}, "コンテンツのアップロードに失敗しました。再度アップロードを試してください。")
-		}
-		if err != nil {
-			err = fmt.Errorf("failed to finish upload content: %w", err)
 			webutil.WriteError(w, r, "failed to upload a new content", err, http.StatusInternalServerError)
 			return
 		}
@@ -115,6 +60,154 @@ func CreateHandler(s Server) http.HandlerFunc {
 		// redirect to /settings/contents
 		redirectToListPage(w, s)
 	}
+}
+
+type ErrorCode int
+
+const (
+	Unknown ErrorCode = iota
+	InvalidForm
+	InvalidName
+	InvalidFile
+	InvalidType
+	FailedUpload
+)
+
+type UploadError struct {
+	Code ErrorCode
+	Msg  string
+	Err  error
+}
+
+func (err *UploadError) Error() string {
+	if err == nil {
+		return ""
+	}
+
+	var s strings.Builder
+	if err.Msg == "" {
+		s.WriteString("failed to upload")
+	} else {
+		s.WriteString(err.Msg)
+	}
+
+	switch err.Code {
+	case InvalidForm:
+		s.WriteString(": invalid form")
+	case InvalidName:
+		s.WriteString(": invalid name")
+	case InvalidFile:
+		s.WriteString(": invalid file")
+	case InvalidType:
+		s.WriteString(": invalid type")
+	case FailedUpload:
+		s.WriteString(": failed to upload")
+	}
+
+	if err.Err != nil {
+		s.WriteString(": ")
+		s.WriteString(err.Err.Error())
+	}
+
+	return s.String()
+}
+
+func (err *UploadError) Unwrap() error {
+	if err == nil {
+		return nil
+	}
+
+	return err.Err
+}
+
+func HandleUploadContent(w http.ResponseWriter, r *http.Request, acceptedTypes ...pb.ContentType) error {
+	ctx := r.Context()
+	user := auth.UserFromContext(ctx)
+	conn := middleware.GRPCConnFromContext(ctx)
+
+	service := pb.NewContentServiceClient(conn)
+
+	if !webutil.ParseMultipartForm(w, r) {
+		// Bad Request
+		return &UploadError{Code: InvalidForm}
+	}
+
+	name := r.PostForm.Get("name")
+	if name == "" {
+		return &UploadError{Code: InvalidName}
+	}
+
+	file, header, err := r.FormFile("file")
+	if err != nil {
+		return &UploadError{Code: InvalidFile, Msg: "failed to open upload file", Err: err}
+	}
+	defer file.Close()
+
+	ctype, err := webutil.PostFormInt(r, "type")
+	if err != nil {
+		return &UploadError{Code: InvalidType, Err: err}
+	} else {
+		validType := false
+		ctype := pb.ContentType(ctype)
+		for _, tp := range acceptedTypes {
+			if ctype == tp {
+				validType = true
+				break
+			}
+		}
+		if !validType {
+			return &UploadError{Code: InvalidType}
+		}
+	}
+
+	filename := header.Filename
+
+	uploadURL, err := service.Upload(ctx, &pb.ContentUploadRequest{
+		TeamId:   user.TeamID(),
+		Name:     name,
+		Type:     pb.ContentType(ctype),
+		FileName: filename,
+	})
+	if err != nil {
+		return &UploadError{Code: Unknown, Msg: "failed to upload a new content", Err: err}
+	}
+
+	hash := md5.New()
+	tr := io.TeeReader(file, hash)
+
+	req, err := http.NewRequest("PUT", uploadURL.GetUrl(), tr)
+	if err != nil {
+		err = fmt.Errorf("failed to post file [%s]: %w", filename, err)
+		return &UploadError{Code: Unknown, Msg: "failed to upload a new content", Err: err}
+	}
+
+	req.Header.Set("Content-Type", mime.TypeByExtension(filepath.Ext(filename)))
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		err = fmt.Errorf("failed to post file [%s]: %w", filename, err)
+		return &UploadError{Code: Unknown, Msg: "failed to upload a new content", Err: err}
+	}
+
+	if res.StatusCode != http.StatusOK {
+		err = fmt.Errorf("failed to post file [%s]: status %s", filename, res.Status)
+		return &UploadError{Code: Unknown, Msg: "failed to upload a new content", Err: err}
+	}
+
+	md5Hash := hash.Sum(nil)
+
+	_, err = service.FinishUpload(ctx, &pb.FinishUploadRequest{
+		TeamId:    user.TeamID(),
+		ContentId: uploadURL.GetContentId(),
+		Md5:       md5Hash,
+	})
+	if grpc.Code(err) == codes.NotFound || grpc.Code(err) == codes.FailedPrecondition {
+		return &UploadError{Code: FailedUpload, Err: err}
+	}
+	if err != nil {
+		return &UploadError{Code: Unknown, Msg: "failed to finish upload content", Err: err}
+	}
+
+	return nil
 }
 
 func objectName(spaceID uint64, key, ext string) string {

@@ -29,6 +29,12 @@ func DeleteHandler(s Server) http.HandlerFunc {
 		content := middleware.ContentFromRequest(r)
 		conn := middleware.GRPCConnFromContext(ctx)
 
+		switch content.GetType() {
+		case pb.ContentType_CONTENT_TYPE_IMAGE, pb.ContentType_CONTENT_TYPE_VIDEO, pb.ContentType_CONTENT_TYPE_AVATAR:
+		default:
+			http.NotFound(w, r)
+			return
+		}
 		service := pb.NewContentServiceClient(conn)
 
 		_, err := service.Delete(ctx, &pb.ContentRequest{

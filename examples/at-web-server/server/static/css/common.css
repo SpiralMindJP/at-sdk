@@ -167,6 +167,11 @@ select {
   margin: 0 auto;
   padding: 6.05rem 0 0;
 }
+.contents h2.listtitle {
+  margin: 0;
+  padding: 0.2em 0.5em;
+  border-bottom: 1px solid #e7e7e7;
+}
 
 ul.itemlist {
   list-style: none;

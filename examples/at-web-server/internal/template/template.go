@@ -45,6 +45,7 @@ func LoadTemplate(tmplFS fs.FS) {
 	loadTemplate(tmplFS, "room")
 	loadTemplate(tmplFS, "device")
 	loadTemplate(tmplFS, "content")
+	loadTemplate(tmplFS, "avatar")
 	loadTemplate(tmplFS, "user")
 	loadTemplate(tmplFS, "admin/team")
 }

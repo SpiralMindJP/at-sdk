@@ -5,13 +5,32 @@
     {{template "header" .}}
 
     <div class="contents">
-      {{if .Data}}
+      <h2 class="listtitle">カスタマーデバイス</h2>
+      {{if .Data.Customers}}
         <ul class="itemlist">
-          {{range .Data}}
+          {{range .Data.Customers}}
             <li>{{.Name}}
               <div class="right">
                 <ul>
                   <li><a href="/settings/devices/{{.ID}}"><i class="material-icons">edit</i>編集</a></li>
+                  <li><a href="/settings/devices/{{.ID}}/delete"><i class="material-icons">delete</i>削除</a></li>
+                </ul>
+              </div>
+            </li>
+          {{end}}
+        </ul>
+      {{end}}
+
+      <h2 class="listtitle">オペレーターデバイス</h2>
+      {{if .Data.Operators}}
+        <ul class="itemlist">
+          {{range .Data.Operators}}
+            <li>{{.Name}}
+              <div class="right">
+                <p>{{if .Avatar }}{{.Avatar.Name}}{{else}}&nbsp;{{end}}</p>
+                <ul>
+                  <li><a href="/settings/devices/{{.ID}}"><i class="material-icons">edit</i>編集</a></li>
+                  <li><a href="/settings/devices/{{.ID}}/avatar"><i class="material-icons">face</i>アバター設定</a></li>
                   <li><a href="/settings/devices/{{.ID}}/delete"><i class="material-icons">delete</i>削除</a></li>
                 </ul>
               </div>
