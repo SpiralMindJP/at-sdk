@@ -1,5 +1,5 @@
 = AT Core Server API Reference
-v1.1, 2021-02-25
+v1.2, 2021-03-26
 :toc:
 :toclevels: 4
 :toc-title: 目次
@@ -900,6 +900,10 @@ Content はコンテンツに関する情報を操作します。
 | <<bytes,bytes>>
 | 
 | MD5ハッシュ。
+| ext
+| <<string,string>>
+| 
+| コンテンツの拡張子。
 
 // end range fields
 |===
@@ -1184,9 +1188,12 @@ Content はコンテンツに関する情報を操作します。
 | CONTENT_TYPE_VIDEO
 | 1
 | ビデオコンテンツ。
-| CONTENT_TYPE_ASSET
+| CONTENT_TYPE_AVATAR
 | 2
-| アセットコンテンツ。
+| アバターVRMコンテンツ。
+| CONTENT_TYPE_ANIMATION
+| 3
+| アニメーションコンテンツ。
 | CONTENT_TYPE_OTHER
 | 999
 | その他のコンテンツ。
@@ -1245,6 +1252,448 @@ a| コンテンツを更新します。 更新するコンテンツのコンテ�
 | <<at_core_service.ContentRequest,ContentRequest>>
 | <<google.protobuf.Empty,.google.protobuf.Empty>>
 a| コンテンツを削除します。 削除するコンテンツのコンテンツIDを指定した ContentRequest を渡します。
+
+// end range methods
+|===
+
+// end range services
+
+
+// end if has services
+
+
+
+
+[[avatar.proto]]
+
+== avatar.proto
+
+Avatar はアバターに関する情報を操作します。
+
+
+=== Messages
+
+
+
+[[at_core_service.Avatar]]
+
+==== Avatar
+
+アバターを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| avatar_id
+| <<int64,int64>>
+| 
+| アバターID。
+| name
+| <<string,string>>
+| 
+| アバター名称。
+| avatar_content_id
+| <<int64,int64>>
+| 
+| アバターのコンテンツID。
+| animation_content_id
+| <<int64,int64>>
+| 
+| アニメーションのコンテンツID。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at_core_service.AvatarCreateRequest]]
+
+==== AvatarCreateRequest
+
+アバターの作成要求を表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| name
+| <<string,string>>
+| 
+| アバター名称。
+| avatar_content_id
+| <<int64,int64>>
+| 
+| アバターのコンテンツID。
+| animation_content_id
+| <<int64,int64>>
+| 
+| アニメーションのコンテンツID。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at_core_service.AvatarListRequest]]
+
+==== AvatarListRequest
+
+アバターのリストを取得する際のリクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at_core_service.AvatarRequest]]
+
+==== AvatarRequest
+
+アバターを取得する際のリクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| avatar_id
+| <<int64,int64>>
+| 
+| アバターID。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at_core_service.AvatarUpdateRequest]]
+
+==== AvatarUpdateRequest
+
+アバターの更新要求を表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| avatar_id
+| <<int64,int64>>
+| 
+| アバターID。
+| name
+| <<string,string>>
+| 
+| アバター名称。
+| avatar_content_id
+| <<int64,int64>>
+| 
+| アバターのコンテンツID。
+| animation_content_id
+| <<int64,int64>>
+| 
+| アニメーションのコンテンツID。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at_core_service.Avatars]]
+
+==== Avatars
+
+アバターのリストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| avatars
+| <<at_core_service.Avatar,Avatar>>
+| repeated
+| アバターのリスト。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at_core_service.OperatorAvatar]]
+
+==== OperatorAvatar
+
+オペレーターが使用するアバターを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| device_id
+| <<int64,int64>>
+| 
+| オペレーターデバイスのデバイスID。
+| avatar_id
+| <<int64,int64>>
+| 
+| アバターID。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at_core_service.OperatorAvatarListRequest]]
+
+==== OperatorAvatarListRequest
+
+オペレーターアバターを取得する際のリクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at_core_service.OperatorAvatarRequest]]
+
+==== OperatorAvatarRequest
+
+オペレーターアバターを取得する際のリクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| device_id
+| <<int64,int64>>
+| 
+| オペレーターデバイスのデバイスID。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at_core_service.OperatorAvatarSetRequest]]
+
+==== OperatorAvatarSetRequest
+
+オペレーターデバイスへのアバター設定要求を表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| device_id
+| <<int64,int64>>
+| 
+| オペレーターデバイスのデバイスID。
+| avatar_id
+| <<int64,int64>>
+| 
+| アバターID。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at_core_service.OperatorAvatars]]
+
+==== OperatorAvatars
+
+オペレーターアバターのリストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| operator_avatars
+| <<at_core_service.OperatorAvatar,OperatorAvatar>>
+| repeated
+| オペレーターアバターのリスト。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+// end range messages
+
+
+// end if has messages
+
+
+// end if has enums
+
+
+// end if has extensions
+
+
+=== Services
+
+
+
+[[at_core_service.AvatarService]]
+
+==== AvatarService
+
+アバター設定に関する情報を操作するAPIを提供します。
+
+[%autowidth.stretch]
+|===
+| Method Name | Request Type | Response Type | Description
+
+| List
+| <<at_core_service.AvatarListRequest,AvatarListRequest>>
+| <<at_core_service.Avatars,Avatars>>
+a| アバターリストを取得します。 取得するアバターのチームIDを指定した AvatarListRequest を渡します。 指定されたチームIDのアバターのリストが設定された Avatars が返ります。
+| Get
+| <<at_core_service.AvatarRequest,AvatarRequest>>
+| <<at_core_service.Avatar,Avatar>>
+a| アバターを取得します。 取得するアバターのアバターIDとチームIDを指定した AvatarRequest を渡します。 アバターが存在する場合、Avatar が返ります。
+| Create
+| <<at_core_service.AvatarCreateRequest,AvatarCreateRequest>>
+| <<at_core_service.Avatar,Avatar>>
+a| 新しくアバターを作成します。 アバター名とアバターのコンテンツID、アニメーションのコンテンツID、チームIDを指定した AvatarCreateRequest を渡します。 アバターの作成に成功すると、アバターIDが設定さた Avatar が返ります。
+| Update
+| <<at_core_service.AvatarUpdateRequest,AvatarUpdateRequest>>
+| <<at_core_service.Avatar,Avatar>>
+a| アバターを更新します。 更新するアバターのアバターIDとチームID、新しいアバター名、アバターのコンテンツID、アニメーションのコンテンツIDを指定した AvatarUpdateRequest を渡します。 アバターの作成に成功すると、Avatar が返ります。
+| GetByOperator
+| <<at_core_service.OperatorAvatarRequest,OperatorAvatarRequest>>
+| <<at_core_service.Avatar,Avatar>>
+a| オペレーターデバイスのアバターを取得します。 取得するオペレーターデバイスのデバイスIDを指定した OperatorAvatarRequest を渡します。 デバイスのアバターが設定されている場合、Avatar が返ります。
+| Delete
+| <<at_core_service.AvatarRequest,AvatarRequest>>
+| <<google.protobuf.Empty,.google.protobuf.Empty>>
+a| アバターを削除します。 削除するアバターのアバターIDとチームIDを指定した AvatarRequest を渡します。
+| ListOperatorAvatar
+| <<at_core_service.OperatorAvatarListRequest,OperatorAvatarListRequest>>
+| <<at_core_service.OperatorAvatars,OperatorAvatars>>
+a| オペレーターアバターリストを取得します。 取得するオペレーターアバターのチームIDを指定した OperatorAvatarListRequest を渡します。 指定されたチームIDのオペレーターアバターのリストが設定された OperatorAvatars が返ります。
+| GetOperatorAvatar
+| <<at_core_service.OperatorAvatarRequest,OperatorAvatarRequest>>
+| <<at_core_service.OperatorAvatar,OperatorAvatar>>
+a| オペレーターアバターを取得します。 取得するオペレーターアバターのデバイスIDとチームIDを指定した OperatorAvatarRequest を渡します。 デバイスにオペレーターが設定されている場合、OperatorAvatar が返ります。
+| SetOperatorAvatar
+| <<at_core_service.OperatorAvatarSetRequest,OperatorAvatarSetRequest>>
+| <<at_core_service.OperatorAvatar,OperatorAvatar>>
+a| オペレーターデバイスにアバターを設定します。 設定するアバターのアバターIDと、設定するオペレーターデバイスのデバイスIDとチームIDを指定した OperatorAvatarSetRequest を渡します。 オペレーターデバイスへのアバターの設定に成功すると、OperatorAvatar が返ります。
+| DeleteOperatorAvatar
+| <<at_core_service.OperatorAvatarRequest,OperatorAvatarRequest>>
+| <<google.protobuf.Empty,.google.protobuf.Empty>>
+a| オペレーターデバイスに設定されたアバターを削除します。 削除するオペレーターデバイスのデバイスIDとチームIDを指定した OperatorAvatarRequest を渡します。
 
 // end range methods
 |===
@@ -1490,6 +1939,44 @@ Dashboard はダッシュボードに関する情報を操作します。
 
 
 
+[[at_core_service.PlayAnimationRequest]]
+
+==== PlayAnimationRequest
+
+アニメーション再生のリクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| device_id
+| <<int64,int64>>
+| 
+| アニメーションを再生するルームに入室しているデバイスのデバイスID。
+| content_id
+| <<int64,int64>>
+| 
+| 再生するアニメーションのコンテンツID。
+| animation_no
+| <<int32,int32>>
+| 
+| 再生するアニメーション番号。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
 [[at_core_service.PlayContentRequest]]
 
 ==== PlayContentRequest
@@ -1543,10 +2030,44 @@ Dashboard はダッシュボードに関する情報を操作します。
 | <<int64,int64>>
 | 
 | ルームに登録されたデバイスのデバイスID。
+| device_state
+| <<at_core_service.DeviceState,DeviceState>>
+| 
+| ルームに登録されたデバイスの状態。
 | operators
 | <<at_core_service.OperatorDevice,OperatorDevice>>
 | repeated
 | オペレーション中のオペレーターデバイスのリスト。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at_core_service.StopAnimationRequest]]
+
+==== StopAnimationRequest
+
+アニメーション停止のリクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| device_id
+| <<int64,int64>>
+| 
+| アニメーションを停止するルームに入室しているデバイスのデバイスID。
 
 // end range fields
 |===
@@ -1676,6 +2197,36 @@ Dashboard はダッシュボードに関する情報を操作します。
 | LEAVE_ROOM
 | 2
 | 何れかのオペレーターがルームから退室した。
+| DEVICE_OFFLINE
+| 11
+| 何れかのカスタマーデバイスがオフラインになった。
+| DEVICE_ONLINE
+| 12
+| 何れかのカスタマーデバイスがオンラインになった。
+
+// end range values
+|===
+
+
+[[at_core_service.DeviceState]]
+
+==== DeviceState
+
+デバイスの状態を表します。
+
+[%autowidth.stretch]
+|===
+| Name | Number | Description
+
+| NO_DEVICE
+| 0
+| デバイスが登録されていない。
+| OFFLINE
+| 1
+| デバイスはオフライン。
+| ONLINE
+| 2
+| デバイスはオンライン。
 
 // end range values
 |===
@@ -1748,6 +2299,14 @@ a| コンテンツを再生します。 コンテンツを再生するコンテ�
 | <<at_core_service.StopContentRequest,StopContentRequest>>
 | <<google.protobuf.Empty,.google.protobuf.Empty>>
 a| コンテンツを停止します。 コンテンツを停止するルームに入室しているデバイスのデバイスIDを設定した StopContentRequest を渡します。
+| PlayAnimation
+| <<at_core_service.PlayAnimationRequest,PlayAnimationRequest>>
+| <<google.protobuf.Empty,.google.protobuf.Empty>>
+a| アニメーションを再生します。 再生するアニメーションコンテンツのコンテンツIDとアニメーション番号、ルームに入室しているデバイスのデバイスIDを設定した PlayAnimationRequest を渡します。
+| StopAnimation
+| <<at_core_service.StopAnimationRequest,StopAnimationRequest>>
+| <<google.protobuf.Empty,.google.protobuf.Empty>>
+a| アニメーションを停止します。 アニメーションを停止するルームに入室しているデバイスのデバイスIDを設定した StopAnimationRequest を渡します。
 | VideoStream
 | <<at_core_service.VideoStreamRequest,VideoStreamRequest>>
 | <<at_core_service.VideoFrame,VideoFrame>> stream
@@ -1965,6 +2524,7 @@ image::images/content_delete.png[ContentService.Delete]
 
 == 改訂履歴
 
+* v1.2, 2021-03-26  Release
 * v1.1, 2021-02-25  Release
 * v1.0, 2021-01-15  Release
 * v1.0, 2020-12-25  Release Candidate 1

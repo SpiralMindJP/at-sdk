@@ -23,13 +23,13 @@ AT SDK の各サーバーアプリケーションの Docker イメージは、Go
 | サーバー名 | Docker イメージ名
 
 | Core サーバー
-| asia.gcr.io/at-sdk/at-core-server:1.1
+| asia.gcr.io/at-sdk/at-core-server:1.2
 
 | ATP サーバー 
-| asia.gcr.io/at-sdk/at-atp-server:1.1
+| asia.gcr.io/at-sdk/at-atp-server:1.2
 
 | State サーバー 
-| asia.gcr.io/at-sdk/at-state-server:1.1
+| asia.gcr.io/at-sdk/at-state-server:1.2
 
 |===
 
@@ -121,6 +121,18 @@ Core サーバーの Docker イメージは、サーバーの設定を環境変�
 | CORE_SERVER_APP_BIND_PORT
 | 8081
 | Core サーバーの App API サービスがバインドするポートを指定します。
+
+| CORE_SERVER_APP_ENABLE_TLS
+| false
+| Core サーバーの App API サービスにて TLS を有効にするかどうかを指定します。有効にした場合は、`CORE_SERVER_APP_TLS_CERT_FILE` 及び `CORE_SERVER_APP_TLS_KEY_FILE` を設定する必要があります。
+
+| CORE_SERVER_APP_TLS_CERT_FILE
+|
+| Core サーバーの App API サービスで TLS を使用するために必要な、TLS 証明書ファイルのパスを指定します。
+
+| CORE_SERVER_APP_TLS_KEY_FILE
+|
+| Core サーバーの App API サービスで TLS を使用するために必要な、TLS 秘密鍵ファイルのパスを指定します。
 
 | MYSQL_HOST
 | mysql
