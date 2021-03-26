@@ -1,0 +1,157 @@
+/*
+ * Avatar はアバターに関する情報を操作します。
+ */
+syntax = "proto3";
+
+option go_package = "github.com/SpiralMindJP/at-sdk/go/pb/core";
+
+package at_core_service;
+
+import "google/protobuf/empty.proto";
+
+/*
+ * アバターを表します。
+ */
+message Avatar {
+  int64  team_id              = 1; // チームID。
+  int64  avatar_id            = 2; // アバターID。
+  string name                 = 3; // アバター名称。
+  int64  avatar_content_id    = 4; // アバターのコンテンツID。
+  int64  animation_content_id = 5; // アニメーションのコンテンツID。
+}
+
+/*
+ * アバターを取得する際のリクエストを表します。
+ */
+message AvatarRequest {
+  int64 team_id   = 1; // チームID。
+  int64 avatar_id = 2; // アバターID。
+}
+
+/*
+ * アバターのリストを取得する際のリクエストを表します。
+ */
+message AvatarListRequest {
+  int64 team_id = 1; // チームID。
+}
+
+/*
+ * アバターのリストを表します。
+ */
+message Avatars {
+  repeated Avatar avatars = 1; // アバターのリスト。
+}
+
+/*
+ * アバターの作成要求を表します。
+ */
+message AvatarCreateRequest {
+  int64  team_id              = 1; // チームID。
+  string name                 = 2; // アバター名称。
+  int64  avatar_content_id    = 3; // アバターのコンテンツID。
+  int64  animation_content_id = 4; // アニメーションのコンテンツID。
+}
+
+/*
+ * アバターの更新要求を表します。
+ */
+message AvatarUpdateRequest {
+  int64  team_id              = 1; // チームID。
+  int64  avatar_id            = 2; // アバターID。
+  string name                 = 3; // アバター名称。
+  int64  avatar_content_id    = 4; // アバターのコンテンツID。
+  int64  animation_content_id = 5; // アニメーションのコンテンツID。
+}
+
+/*
+ * オペレーターが使用するアバターを表します。
+ */
+message OperatorAvatar {
+  int64 team_id   = 1; // チームID。
+  int64 device_id = 2; // オペレーターデバイスのデバイスID。
+  int64 avatar_id = 3; // アバターID。
+}
+
+/*
+ * オペレーターアバターのリストを表します。
+ */
+message OperatorAvatars {
+  repeated OperatorAvatar operator_avatars = 1; // オペレーターアバターのリスト。
+}
+
+/*
+ * オペレーターアバターを取得する際のリクエストを表します。
+ */
+message OperatorAvatarRequest {
+  int64 team_id   = 1; // チームID。
+  int64 device_id = 2; // オペレーターデバイスのデバイスID。
+}
+
+/*
+ * オペレーターアバターを取得する際のリクエストを表します。
+ */
+message OperatorAvatarListRequest {
+  int64 team_id   = 1; // チームID。
+}
+
+/*
+ * オペレーターデバイスへのアバター設定要求を表します。
+ */
+message OperatorAvatarSetRequest {
+  int64 team_id   = 1; // チームID。
+  int64 device_id = 2; // オペレーターデバイスのデバイスID。
+  int64 avatar_id = 3; // アバターID。
+}
+
+/*
+ * アバター設定に関する情報を操作するAPIを提供します。
+ */
+service AvatarService {
+  // アバターリストを取得します。
+  // 取得するアバターのチームIDを指定した AvatarListRequest を渡します。
+  // 指定されたチームIDのアバターのリストが設定された Avatars が返ります。
+  rpc List(AvatarListRequest) returns (Avatars);
+
+  // アバターを取得します。
+  // 取得するアバターのアバターIDとチームIDを指定した AvatarRequest を渡します。
+  // アバターが存在する場合、Avatar が返ります。
+  rpc Get(AvatarRequest) returns (Avatar);
+
+  // 新しくアバターを作成します。
+  // アバター名とアバターのコンテンツID、アニメーションのコンテンツID、チームIDを指定した AvatarCreateRequest を渡します。
+  // アバターの作成に成功すると、アバターIDが設定さた Avatar が返ります。
+  rpc Create(AvatarCreateRequest) returns (Avatar);
+
+  // アバターを更新します。
+  // 更新するアバターのアバターIDとチームID、新しいアバター名、アバターのコンテンツID、アニメーションのコンテンツIDを指定した AvatarUpdateRequest を渡します。
+  // アバターの作成に成功すると、Avatar が返ります。
+  rpc Update(AvatarUpdateRequest) returns (Avatar);
+
+  // オペレーターデバイスのアバターを取得します。
+  // 取得するオペレーターデバイスのデバイスIDを指定した OperatorAvatarRequest を渡します。
+  // デバイスのアバターが設定されている場合、Avatar が返ります。
+  rpc GetByOperator(OperatorAvatarRequest) returns (Avatar);
+
+  // アバターを削除します。
+  // 削除するアバターのアバターIDとチームIDを指定した AvatarRequest を渡します。
+  rpc Delete(AvatarRequest) returns (google.protobuf.Empty);
+
+  // オペレーターアバターリストを取得します。
+  // 取得するオペレーターアバターのチームIDを指定した OperatorAvatarListRequest を渡します。
+  // 指定されたチームIDのオペレーターアバターのリストが設定された OperatorAvatars が返ります。
+  rpc ListOperatorAvatar(OperatorAvatarListRequest) returns (OperatorAvatars);
+
+  // オペレーターアバターを取得します。
+  // 取得するオペレーターアバターのデバイスIDとチームIDを指定した OperatorAvatarRequest を渡します。
+  // デバイスにオペレーターが設定されている場合、OperatorAvatar が返ります。
+  rpc GetOperatorAvatar(OperatorAvatarRequest) returns (OperatorAvatar);
+
+  // オペレーターデバイスにアバターを設定します。
+  // 設定するアバターのアバターIDと、設定するオペレーターデバイスのデバイスIDとチームIDを指定した OperatorAvatarSetRequest を渡します。
+  // オペレーターデバイスへのアバターの設定に成功すると、OperatorAvatar が返ります。
+  rpc SetOperatorAvatar(OperatorAvatarSetRequest) returns (OperatorAvatar);
+
+  // オペレーターデバイスに設定されたアバターを削除します。
+  // 削除するオペレーターデバイスのデバイスIDとチームIDを指定した OperatorAvatarRequest を渡します。
+  rpc DeleteOperatorAvatar(OperatorAvatarRequest) returns (google.protobuf.Empty);
+}

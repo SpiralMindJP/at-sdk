@@ -41,6 +41,12 @@ type DashboardServiceClient interface {
 	// コンテンツを停止します。
 	// コンテンツを停止するルームに入室しているデバイスのデバイスIDを設定した StopContentRequest を渡します。
 	StopContent(ctx context.Context, in *StopContentRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// アニメーションを再生します。
+	// 再生するアニメーションコンテンツのコンテンツIDとアニメーション番号、ルームに入室しているデバイスのデバイスIDを設定した PlayAnimationRequest を渡します。
+	PlayAnimation(ctx context.Context, in *PlayAnimationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// アニメーションを停止します。
+	// アニメーションを停止するルームに入室しているデバイスのデバイスIDを設定した StopAnimationRequest を渡します。
+	StopAnimation(ctx context.Context, in *StopAnimationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// ビデオストリームを取得します。
 	// ビデオストリームを取得するルームのルームIDを指定した VideoStreamRequest を渡します。
 	// 各フレームを格納した VideoFrame が返ります。
@@ -132,6 +138,24 @@ func (c *dashboardServiceClient) StopContent(ctx context.Context, in *StopConten
 	return out, nil
 }
 
+func (c *dashboardServiceClient) PlayAnimation(ctx context.Context, in *PlayAnimationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/at_core_service.DashboardService/PlayAnimation", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dashboardServiceClient) StopAnimation(ctx context.Context, in *StopAnimationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/at_core_service.DashboardService/StopAnimation", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *dashboardServiceClient) VideoStream(ctx context.Context, in *VideoStreamRequest, opts ...grpc.CallOption) (DashboardService_VideoStreamClient, error) {
 	stream, err := c.cc.NewStream(ctx, &_DashboardService_serviceDesc.Streams[1], "/at_core_service.DashboardService/VideoStream", opts...)
 	if err != nil {
@@ -191,6 +215,12 @@ type DashboardServiceServer interface {
 	// コンテンツを停止します。
 	// コンテンツを停止するルームに入室しているデバイスのデバイスIDを設定した StopContentRequest を渡します。
 	StopContent(context.Context, *StopContentRequest) (*emptypb.Empty, error)
+	// アニメーションを再生します。
+	// 再生するアニメーションコンテンツのコンテンツIDとアニメーション番号、ルームに入室しているデバイスのデバイスIDを設定した PlayAnimationRequest を渡します。
+	PlayAnimation(context.Context, *PlayAnimationRequest) (*emptypb.Empty, error)
+	// アニメーションを停止します。
+	// アニメーションを停止するルームに入室しているデバイスのデバイスIDを設定した StopAnimationRequest を渡します。
+	StopAnimation(context.Context, *StopAnimationRequest) (*emptypb.Empty, error)
 	// ビデオストリームを取得します。
 	// ビデオストリームを取得するルームのルームIDを指定した VideoStreamRequest を渡します。
 	// 各フレームを格納した VideoFrame が返ります。
@@ -219,6 +249,12 @@ func (UnimplementedDashboardServiceServer) PlayContent(context.Context, *PlayCon
 }
 func (UnimplementedDashboardServiceServer) StopContent(context.Context, *StopContentRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method StopContent not implemented")
+}
+func (UnimplementedDashboardServiceServer) PlayAnimation(context.Context, *PlayAnimationRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PlayAnimation not implemented")
+}
+func (UnimplementedDashboardServiceServer) StopAnimation(context.Context, *StopAnimationRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method StopAnimation not implemented")
 }
 func (UnimplementedDashboardServiceServer) VideoStream(*VideoStreamRequest, DashboardService_VideoStreamServer) error {
 	return status.Errorf(codes.Unimplemented, "method VideoStream not implemented")
@@ -347,6 +383,42 @@ func _DashboardService_StopContent_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DashboardService_PlayAnimation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PlayAnimationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DashboardServiceServer).PlayAnimation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/at_core_service.DashboardService/PlayAnimation",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DashboardServiceServer).PlayAnimation(ctx, req.(*PlayAnimationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DashboardService_StopAnimation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StopAnimationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DashboardServiceServer).StopAnimation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/at_core_service.DashboardService/StopAnimation",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DashboardServiceServer).StopAnimation(ctx, req.(*StopAnimationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _DashboardService_VideoStream_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(VideoStreamRequest)
 	if err := stream.RecvMsg(m); err != nil {
@@ -391,6 +463,14 @@ var _DashboardService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "StopContent",
 			Handler:    _DashboardService_StopContent_Handler,
+		},
+		{
+			MethodName: "PlayAnimation",
+			Handler:    _DashboardService_PlayAnimation_Handler,
+		},
+		{
+			MethodName: "StopAnimation",
+			Handler:    _DashboardService_StopAnimation_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

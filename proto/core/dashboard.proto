@@ -8,6 +8,7 @@ option go_package = "github.com/SpiralMindJP/at-sdk/go/pb/core";
 package at_core_service;
 
 import "google/protobuf/empty.proto";
+
 import "room.proto";
 import "content.proto";
 
@@ -21,12 +22,22 @@ message Dashboard {
 }
 
 /*
+ * デバイスの状態を表します。
+ */
+enum DeviceState {
+  NO_DEVICE   = 0; // デバイスが登録されていない。
+  OFFLINE     = 1; // デバイスはオフライン。
+  ONLINE      = 2; // デバイスはオンライン。
+}
+
+/*
  * ルームの状態を表します。
  */
 message RoomState {
   int64 room_id = 1; // ルームID。
 
-  int64 device_id = 11; // ルームに登録されたデバイスのデバイスID。
+  int64       device_id    = 11; // ルームに登録されたデバイスのデバイスID。
+  DeviceState device_state = 12; // ルームに登録されたデバイスの状態。
 
   repeated OperatorDevice operators = 21; // オペレーション中のオペレーターデバイスのリスト。
 }
@@ -52,6 +63,9 @@ enum DashboardEventType {
   NO_EVENT   = 0; // なにもないイベント。
   JOIN_ROOM  = 1; // 何れかのオペレーターがルームに入室した。
   LEAVE_ROOM = 2; // 何れかのオペレーターがルームから退室した。
+
+  DEVICE_OFFLINE = 11; // 何れかのカスタマーデバイスがオフラインになった。
+  DEVICE_ONLINE  = 12; // 何れかのカスタマーデバイスがオンラインになった。
 }
 
 /*
@@ -112,6 +126,24 @@ message StopContentRequest {
 }
 
 /*
+ * アニメーション再生のリクエストを表します。
+ */
+message PlayAnimationRequest {
+  int64 team_id      = 1; // チームID。
+  int64 device_id    = 2; // アニメーションを再生するルームに入室しているデバイスのデバイスID。
+  int64 content_id   = 3; // 再生するアニメーションのコンテンツID。
+  int32 animation_no = 4; // 再生するアニメーション番号。
+}
+
+/*
+ * アニメーション停止のリクエストを表します。
+ */
+message StopAnimationRequest {
+  int64 team_id   = 1; // チームID。
+  int64 device_id = 2; // アニメーションを停止するルームに入室しているデバイスのデバイスID。
+}
+
+/*
  * ビデオストリームを取得するリクエストを表します。
  */
 message VideoStreamRequest {
@@ -167,6 +199,14 @@ service DashboardService {
   // コンテンツを停止します。
   // コンテンツを停止するルームに入室しているデバイスのデバイスIDを設定した StopContentRequest を渡します。
   rpc StopContent(StopContentRequest) returns (google.protobuf.Empty);
+
+  // アニメーションを再生します。
+  // 再生するアニメーションコンテンツのコンテンツIDとアニメーション番号、ルームに入室しているデバイスのデバイスIDを設定した PlayAnimationRequest を渡します。
+  rpc PlayAnimation(PlayAnimationRequest) returns (google.protobuf.Empty);
+
+  // アニメーションを停止します。
+  // アニメーションを停止するルームに入室しているデバイスのデバイスIDを設定した StopAnimationRequest を渡します。
+  rpc StopAnimation(StopAnimationRequest) returns (google.protobuf.Empty);
 
   // ビデオストリームを取得します。
   // ビデオストリームを取得するルームのルームIDを指定した VideoStreamRequest を渡します。

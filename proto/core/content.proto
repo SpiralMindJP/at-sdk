@@ -13,10 +13,11 @@ import "google/protobuf/empty.proto";
  * コンテンツのタイプを表します。
  */
 enum ContentType {
-  CONTENT_TYPE_IMAGE = 0;   // 画像コンテンツ。
-  CONTENT_TYPE_VIDEO = 1;   // ビデオコンテンツ。
-  CONTENT_TYPE_ASSET = 2;   // アセットコンテンツ。
-  CONTENT_TYPE_OTHER = 999; // その他のコンテンツ。
+  CONTENT_TYPE_IMAGE     = 0;   // 画像コンテンツ。
+  CONTENT_TYPE_VIDEO     = 1;   // ビデオコンテンツ。
+  CONTENT_TYPE_AVATAR    = 2;   // アバターVRMコンテンツ。
+  CONTENT_TYPE_ANIMATION = 3;   // アニメーションコンテンツ。
+  CONTENT_TYPE_OTHER     = 999; // その他のコンテンツ。
 }
 
 /*
@@ -30,6 +31,7 @@ message Content {
   int64       size       = 5; // コンテンツのサイズ。
   string      mime_type  = 6; // コンテンツのMIMEタイプ。
   bytes       md5        = 7; // MD5ハッシュ。
+  string      ext        = 8; // コンテンツの拡張子。
 }
 
 /*
