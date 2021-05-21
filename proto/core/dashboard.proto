@@ -9,6 +9,9 @@ package at_core_service;
 
 import "google/protobuf/empty.proto";
 
+import "common.proto";
+import "event.proto";
+
 import "room.proto";
 import "content.proto";
 
@@ -22,34 +25,6 @@ message Dashboard {
 }
 
 /*
- * デバイスの状態を表します。
- */
-enum DeviceState {
-  NO_DEVICE   = 0; // デバイスが登録されていない。
-  OFFLINE     = 1; // デバイスはオフライン。
-  ONLINE      = 2; // デバイスはオンライン。
-}
-
-/*
- * ルームの状態を表します。
- */
-message RoomState {
-  int64 room_id = 1; // ルームID。
-
-  int64       device_id    = 11; // ルームに登録されたデバイスのデバイスID。
-  DeviceState device_state = 12; // ルームに登録されたデバイスの状態。
-
-  repeated OperatorDevice operators = 21; // オペレーション中のオペレーターデバイスのリスト。
-}
-
-/*
- * オペレーターのデバイスを表します。
- */
-message OperatorDevice {
-  int64  device_id = 1; // デバイスID。
-}
-
-/*
  * ダッシュボードを取得する際のリクエストを表します。
  */
 message DashboardRequest {
@@ -60,12 +35,10 @@ message DashboardRequest {
  * ダッシュボードのイベントのイベントタイプを表します。
  */
 enum DashboardEventType {
-  NO_EVENT   = 0; // なにもないイベント。
-  JOIN_ROOM  = 1; // 何れかのオペレーターがルームに入室した。
-  LEAVE_ROOM = 2; // 何れかのオペレーターがルームから退室した。
+  DASHBOARD_NO_EVENT                = 0; // なにもないイベント。
+  DASHBOARD_EVENT_ROOM_EVENT        = 1; // ルームイベント。
 
-  DEVICE_OFFLINE = 11; // 何れかのカスタマーデバイスがオフラインになった。
-  DEVICE_ONLINE  = 12; // 何れかのカスタマーデバイスがオンラインになった。
+  DASHBOARD_EVENT_PING        = 999; // ping
 }
 
 /*
@@ -75,8 +48,8 @@ message DashboardEvent {
   DashboardEventType type = 1; // イベントタイプ
 
   // イベントデータ。
-  oneof event_data {
-    RoomState room_state = 11; // 入室または退室したルームの状態。
+  oneof data {
+    RoomEvent room_event = 10; // ルームイベント。
   }
 }
 
@@ -129,10 +102,9 @@ message StopContentRequest {
  * アニメーション再生のリクエストを表します。
  */
 message PlayAnimationRequest {
-  int64 team_id      = 1; // チームID。
-  int64 device_id    = 2; // アニメーションを再生するルームに入室しているデバイスのデバイスID。
-  int64 content_id   = 3; // 再生するアニメーションのコンテンツID。
-  int32 animation_no = 4; // 再生するアニメーション番号。
+  int64 team_id         = 1; // チームID。
+  int64 device_id       = 2; // アニメーションを再生するルームに入室しているデバイスのデバイスID。
+  int32 animation_index = 3; // 再生するアニメーションのインデックス。
 }
 
 /*
@@ -149,22 +121,6 @@ message StopAnimationRequest {
 message VideoStreamRequest {
   int64 team_id = 1; // チームID。
   int64 room_id = 2; // ストリームを取得するルームのルームID。
-}
-
-/*
- * ビデオストリームのビデオフレームを表します。
- */
-message VideoFrame {
-  VideoFrameType type    = 1; // ビデオフレームのタイプ。
-  bytes          payload = 2; // ビデオフレームのペイロード。
-}
-
-/*
- * ビデオフレームのタイプを表します。
- */
-enum VideoFrameType {
-  VIDEO_FRAME_UNKOWN = 0; // 不明なフレーム
-  VIDEO_FRAME_JPEG   = 1; // JPEG フレーム。
 }
 
 /*
@@ -201,7 +157,7 @@ service DashboardService {
   rpc StopContent(StopContentRequest) returns (google.protobuf.Empty);
 
   // アニメーションを再生します。
-  // 再生するアニメーションコンテンツのコンテンツIDとアニメーション番号、ルームに入室しているデバイスのデバイスIDを設定した PlayAnimationRequest を渡します。
+  // 再生するアニメーションコンテンツのコンテンツIDとアニメーションのインデックス、ルームに入室しているデバイスのデバイスIDを設定した PlayAnimationRequest を渡します。
   rpc PlayAnimation(PlayAnimationRequest) returns (google.protobuf.Empty);
 
   // アニメーションを停止します。

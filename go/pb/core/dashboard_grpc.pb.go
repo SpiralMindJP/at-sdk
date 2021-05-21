@@ -42,7 +42,7 @@ type DashboardServiceClient interface {
 	// コンテンツを停止するルームに入室しているデバイスのデバイスIDを設定した StopContentRequest を渡します。
 	StopContent(ctx context.Context, in *StopContentRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// アニメーションを再生します。
-	// 再生するアニメーションコンテンツのコンテンツIDとアニメーション番号、ルームに入室しているデバイスのデバイスIDを設定した PlayAnimationRequest を渡します。
+	// 再生するアニメーションコンテンツのコンテンツIDとアニメーションのインデックス、ルームに入室しているデバイスのデバイスIDを設定した PlayAnimationRequest を渡します。
 	PlayAnimation(ctx context.Context, in *PlayAnimationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// アニメーションを停止します。
 	// アニメーションを停止するルームに入室しているデバイスのデバイスIDを設定した StopAnimationRequest を渡します。
@@ -216,7 +216,7 @@ type DashboardServiceServer interface {
 	// コンテンツを停止するルームに入室しているデバイスのデバイスIDを設定した StopContentRequest を渡します。
 	StopContent(context.Context, *StopContentRequest) (*emptypb.Empty, error)
 	// アニメーションを再生します。
-	// 再生するアニメーションコンテンツのコンテンツIDとアニメーション番号、ルームに入室しているデバイスのデバイスIDを設定した PlayAnimationRequest を渡します。
+	// 再生するアニメーションコンテンツのコンテンツIDとアニメーションのインデックス、ルームに入室しているデバイスのデバイスIDを設定した PlayAnimationRequest を渡します。
 	PlayAnimation(context.Context, *PlayAnimationRequest) (*emptypb.Empty, error)
 	// アニメーションを停止します。
 	// アニメーションを停止するルームに入室しているデバイスのデバイスIDを設定した StopAnimationRequest を渡します。

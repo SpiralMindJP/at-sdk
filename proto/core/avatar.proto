@@ -13,11 +13,12 @@ import "google/protobuf/empty.proto";
  * アバターを表します。
  */
 message Avatar {
-  int64  team_id              = 1; // チームID。
-  int64  avatar_id            = 2; // アバターID。
-  string name                 = 3; // アバター名称。
-  int64  avatar_content_id    = 4; // アバターのコンテンツID。
-  int64  animation_content_id = 5; // アニメーションのコンテンツID。
+  int64    team_id              = 1; // チームID。
+  int64    avatar_id            = 2; // アバターID。
+  string   name                 = 3; // アバター名称。
+  int64    avatar_content_id    = 4; // アバターのコンテンツID。
+  int64    animation_content_id = 5; // アニメーションのコンテンツID。
+  repeated Animation animations = 6; // アニメーションのリスト。
 }
 
 /*
@@ -46,21 +47,23 @@ message Avatars {
  * アバターの作成要求を表します。
  */
 message AvatarCreateRequest {
-  int64  team_id              = 1; // チームID。
-  string name                 = 2; // アバター名称。
-  int64  avatar_content_id    = 3; // アバターのコンテンツID。
-  int64  animation_content_id = 4; // アニメーションのコンテンツID。
+  int64    team_id              = 1; // チームID。
+  string   name                 = 2; // アバター名称。
+  int64    avatar_content_id    = 3; // アバターのコンテンツID。
+  int64    animation_content_id = 4; // アニメーションのコンテンツID。
+  repeated Animation animations = 5; // アニメーションのリスト。
 }
 
 /*
  * アバターの更新要求を表します。
  */
 message AvatarUpdateRequest {
-  int64  team_id              = 1; // チームID。
-  int64  avatar_id            = 2; // アバターID。
-  string name                 = 3; // アバター名称。
-  int64  avatar_content_id    = 4; // アバターのコンテンツID。
-  int64  animation_content_id = 5; // アニメーションのコンテンツID。
+  int64    team_id              = 1; // チームID。
+  int64    avatar_id            = 2; // アバターID。
+  string   name                 = 3; // アバター名称。
+  int64    avatar_content_id    = 4; // アバターのコンテンツID。
+  int64    animation_content_id = 5; // アニメーションのコンテンツID。
+  repeated Animation animations = 6; // アニメーションのリスト。
 }
 
 /*
@@ -101,6 +104,13 @@ message OperatorAvatarSetRequest {
   int64 team_id   = 1; // チームID。
   int64 device_id = 2; // オペレーターデバイスのデバイスID。
   int64 avatar_id = 3; // アバターID。
+}
+
+/*
+ * アバターのアニメーションを表します。
+ */
+message Animation {
+  string name  = 1; // アニメーション名称。
 }
 
 /*
