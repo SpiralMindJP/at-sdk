@@ -12,7 +12,7 @@
         <p class="input"><input type="text" name="name" value="{{.Data.Name}}" placeholder="アバター名" required></p>
         <p class="input">
           <select name="avatar_content">
-            {{range .Data.Contents}}
+            {{range .Data.AvatarContents}}
               {{if eq .ID $.Data.AvatarContentID }}
                 <option value="{{.ID}}" selected>{{.Name}}</option>
               {{else}}
@@ -21,6 +21,22 @@
             {{end}}
           </select>
         </p>
+        <p class="input">
+          <select name="animation_content">
+            {{range .Data.AnimationContents}}
+              {{if eq .ID $.Data.AnimationContentID }}
+                <option value="{{.ID}}" selected>{{.Name}}</option>
+              {{else}}
+                <option value="{{.ID}}">{{.Name}}</option>
+              {{end}}
+            {{end}}
+          </select>
+        </p>
+
+        {{range $index, $animation := .Data.Animations}}
+        <p class="input"><input type="text" name="animation{{$index}}" value="{{$animation.Name}}" placeholder="アニメーション名"></p>
+        {{end}}
+
         <p class="submit"><input type="submit" value="登録"></p>
       </form>
     </div>

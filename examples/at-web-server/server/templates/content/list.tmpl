@@ -52,6 +52,22 @@
           {{end}}
         </ul>
       {{end}}
+
+      <h2 class="listtitle">アバターアニメーション</h2>
+      {{if .Data.Animations}}
+        <ul class="itemlist">
+          {{range .Data.Animations}}
+            <li>{{.Name}}
+              <div class="right">
+                <ul>
+                  <li><a href="/settings/contents/{{.ID}}"><i class="material-icons">edit</i>編集</a></li>
+                  <li><a href="/settings/contents/{{.ID}}/delete"><i class="material-icons">delete</i>削除</a></li>
+                </ul>
+              </div>
+            </li>
+          {{end}}
+        </ul>
+      {{end}}
     </div>
   </body>
 </html>

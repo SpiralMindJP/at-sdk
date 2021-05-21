@@ -11,6 +11,7 @@
             <li>{{.Name}}
               <div class="right">
                 <p>{{if .Avatar }}{{.Avatar.Name}}{{else}}&nbsp;{{end}}</p>
+                <p>{{if .Animation }}{{.Animation.Name}}{{else}}&nbsp;{{end}}</p>
                 <ul>
                   <li><a href="/settings/avatars/{{.ID}}"><i class="material-icons">edit</i>編集</a></li>
                   <li><a href="/settings/avatars/{{.ID}}/delete"><i class="material-icons">delete</i>削除</a></li>

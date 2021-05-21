@@ -16,9 +16,10 @@ import (
 )
 
 type contentList struct {
-	Videos  []*contentData
-	Images  []*contentData
-	Avatars []*contentData
+	Videos     []*contentData
+	Images     []*contentData
+	Avatars    []*contentData
+	Animations []*contentData
 }
 
 type contentData struct {
@@ -66,6 +67,8 @@ func ListPageHandler() http.HandlerFunc {
 				list.Videos = append(list.Videos, newContentData(room))
 			case pb.ContentType_CONTENT_TYPE_AVATAR:
 				list.Avatars = append(list.Avatars, newContentData(room))
+			case pb.ContentType_CONTENT_TYPE_ANIMATION:
+				list.Animations = append(list.Animations, newContentData(room))
 			default:
 				continue
 			}

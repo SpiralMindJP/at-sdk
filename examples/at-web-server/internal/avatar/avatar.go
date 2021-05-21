@@ -19,7 +19,8 @@ type avatarData struct {
 	ID   int64
 	Name string
 
-	Avatar *contentData
+	Avatar    *contentData
+	Animation *contentData
 }
 
 type contentData struct {
@@ -27,19 +28,28 @@ type contentData struct {
 	Name string
 }
 
-func newAvatarData(avatar *pb.Avatar, avatarContent *pb.Content) *avatarData {
-	var ac *contentData
+func newAvatarData(avatar *pb.Avatar, avatarContent *pb.Content, animationContent *pb.Content) *avatarData {
+	var avc *contentData
 	if avatarContent != nil {
-		ac = &contentData{
+		avc = &contentData{
 			ID:   avatarContent.GetContentId(),
 			Name: avatarContent.GetName(),
 		}
 	}
 
+	var anc *contentData
+	if animationContent != nil {
+		anc = &contentData{
+			ID:   animationContent.GetContentId(),
+			Name: animationContent.GetName(),
+		}
+	}
+
 	return &avatarData{
-		ID:     avatar.GetAvatarId(),
-		Name:   avatar.GetName(),
-		Avatar: ac,
+		ID:        avatar.GetAvatarId(),
+		Name:      avatar.GetName(),
+		Avatar:    avc,
+		Animation: anc,
 	}
 }
 
@@ -69,9 +79,8 @@ func ListPageHandler() http.HandlerFunc {
 				return
 			}
 		}
-		contents, err := contentService.ListContentType(ctx, &pb.ContentListByTypeRequest{
+		contents, err := contentService.List(ctx, &pb.ContentListRequest{
 			TeamId: teamID,
-			Type:   pb.ContentType_CONTENT_TYPE_AVATAR,
 		})
 		if err != nil {
 			if grpc.Code(err) != codes.NotFound {
@@ -91,8 +100,9 @@ func ListPageHandler() http.HandlerFunc {
 
 		avatars := make([]*avatarData, len(result.GetAvatars()))
 		for i, avatar := range result.GetAvatars() {
-			content := contentMap[avatar.GetAvatarContentId()]
-			avatars[i] = newAvatarData(avatar, content)
+			avatarContent := contentMap[avatar.GetAvatarContentId()]
+			animationContent := contentMap[avatar.GetAnimationContentId()]
+			avatars[i] = newAvatarData(avatar, avatarContent, animationContent)
 		}
 
 		data := template.NewData(r)

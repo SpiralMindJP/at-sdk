@@ -33,7 +33,7 @@ func CreatePageHandler() http.HandlerFunc {
 // POST /settings/contents/new
 func CreateHandler(s Server) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		err := HandleUploadContent(w, r, pb.ContentType_CONTENT_TYPE_IMAGE, pb.ContentType_CONTENT_TYPE_VIDEO, pb.ContentType_CONTENT_TYPE_AVATAR)
+		err := HandleUploadContent(w, r, pb.ContentType_CONTENT_TYPE_IMAGE, pb.ContentType_CONTENT_TYPE_VIDEO, pb.ContentType_CONTENT_TYPE_AVATAR, pb.ContentType_CONTENT_TYPE_ANIMATION)
 		if err != nil {
 			var upErr *UploadError
 			if errors.As(err, &upErr) {

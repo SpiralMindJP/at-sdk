@@ -46,12 +46,19 @@ func SetDeviceHandler(s Server) http.HandlerFunc {
 			return
 		}
 
-		_, err = service.SetDevice(ctx, &pb.RoomDeviceRequest{
-			TeamId:   user.TeamID(),
-			RoomId:   room.GetRoomId(),
-			DeviceId: deviceID,
-			Force:    true,
-		})
+		if deviceID > 0 {
+			_, err = service.SetDevice(ctx, &pb.RoomDeviceRequest{
+				TeamId:   user.TeamID(),
+				RoomId:   room.GetRoomId(),
+				DeviceId: deviceID,
+				Force:    true,
+			})
+		} else {
+			_, err = service.DeleteDevice(ctx, &pb.RoomRequest{
+				TeamId: user.TeamID(),
+				RoomId: room.GetRoomId(),
+			})
+		}
 		if grpc.Code(err) == codes.NotFound {
 			writeSetDevicePage(w, r, "ルームまたは選択されたデバイスが見つかりません。再度選択してください。")
 			return

@@ -16,6 +16,7 @@ import (
 	"firebase.google.com/go/v4/auth"
 	webauth "github.com/SpiralMindJP/at-sdk/examples/at-web-server/internal/auth"
 	"github.com/SpiralMindJP/at-sdk/examples/at-web-server/internal/config"
+	"github.com/SpiralMindJP/at-sdk/examples/at-web-server/internal/keepalive"
 	"github.com/SpiralMindJP/at-sdk/examples/at-web-server/internal/log"
 	"github.com/SpiralMindJP/at-sdk/examples/at-web-server/internal/path"
 	"github.com/SpiralMindJP/at-sdk/examples/at-web-server/internal/template"
@@ -51,6 +52,7 @@ func NewServer(ctx context.Context, config *config.Config, opts ...ServerOption)
 
 	grpcOpts := []grpc.DialOption{
 		grpc.WithBlock(),
+		grpc.WithKeepaliveParams(keepalive.ClientParameters()),
 	}
 	if config.Core.Secure {
 		creds := credentials.NewTLS(&tls.Config{})

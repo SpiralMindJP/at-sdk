@@ -7,6 +7,7 @@ import (
 
 	"github.com/SpiralMindJP/at-sdk/examples/at-web-server/internal/auth"
 	"github.com/SpiralMindJP/at-sdk/examples/at-web-server/internal/dashboard/jsondata"
+	"github.com/SpiralMindJP/at-sdk/examples/at-web-server/internal/enum"
 	"github.com/SpiralMindJP/at-sdk/examples/at-web-server/internal/log"
 	"github.com/SpiralMindJP/at-sdk/examples/at-web-server/internal/middleware"
 	"github.com/SpiralMindJP/at-sdk/examples/at-web-server/internal/path"
@@ -253,6 +254,7 @@ func newRoom(room *pb.Room, state *pb.RoomState) *jsondata.Room {
 		ID:               room.GetRoomId(),
 		Name:             room.GetName(),
 		OperatorDeviceID: opDeviceID,
+		ConnectionState:  enum.DeviceConnectionState(state.GetDeviceState()),
 	}
 }
 

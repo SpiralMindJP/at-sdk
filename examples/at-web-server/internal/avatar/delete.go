@@ -16,7 +16,7 @@ func DeletePageHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		avatar := middleware.AvatarFromRequest(r)
 
-		writeDeletePage(w, r, newAvatarData(avatar, nil), "")
+		writeDeletePage(w, r, newAvatarData(avatar, nil, nil), "")
 	}
 }
 

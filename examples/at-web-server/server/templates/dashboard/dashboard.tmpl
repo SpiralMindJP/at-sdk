@@ -179,13 +179,47 @@
           socket.addEventListener('message', (event) => {
             let data = JSON.parse(event.data);
             console.log(data);
-            if (data.type == 1 || data.type == 2) {
-              this.updateRoom(data.room);
+            switch (data.type) {
+              case 0: // room created
+                this.addRoom(data.room);
+                break;
+              case 1: // room deleted
+                this.deleteRoom(data.room);
+                break;
+              case 10: // device joined
+                this.updateRoom(data.room);
+                break;
+              case 11: // device leaved
+                this.updateRoom(data.room);
+                break;
+              case 12: // device deleted
+                break;
+              case 20: // device offline
+                break;
+              case 21: // device online
             }
           });
           socket.addEventListener('error', function(event) {
             console.log('WebSocket error : ', event);
           });
+        },
+        addRoom: function(room) {
+          if (this.rooms) {
+            this.rooms.push(room);
+          }
+        },
+        deleteRoom: function(room) {
+          if (this.rooms) {
+            for (let i = 0; i < this.rooms.length; i++) {
+              if (this.rooms[i].id == room.id) {
+                this.rooms.splice(i, 1);
+                break;
+              }
+            }
+          }
+          if (this.room != null && this.room.id == room.id) {
+            this.room = room;
+          }
         },
         updateRoom: function(room) {
           if (this.rooms) {

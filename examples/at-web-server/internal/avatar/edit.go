@@ -45,10 +45,12 @@ func EditHandler(s Server) http.HandlerFunc {
 		}
 
 		_, err := service.Update(ctx, &pb.AvatarUpdateRequest{
-			TeamId:          user.TeamID(),
-			AvatarId:        avatar.GetAvatarId(),
-			Name:            postAvatar.Name,
-			AvatarContentId: postAvatar.AvatarContentID,
+			TeamId:             user.TeamID(),
+			AvatarId:           avatar.GetAvatarId(),
+			Name:               postAvatar.Name,
+			AvatarContentId:    postAvatar.AvatarContentID,
+			AnimationContentId: postAvatar.AnimationContentID,
+			Animations:         newPBAnimations(postAvatar.Animations),
 		})
 		if err != nil {
 			webutil.WriteError(w, r, "failed to update the avatar", err, http.StatusInternalServerError)
@@ -67,14 +69,15 @@ func writeEditPage(w http.ResponseWriter, r *http.Request, avatar *editAvatarDat
 		avatar = new(editAvatarData)
 	}
 
-	contents, err := getContents(ctx)
+	avatarContents, animationContents, err := getContents(ctx)
 	if err != nil {
 		if grpc.Code(err) != codes.NotFound {
 			webutil.WriteError(w, r, "failed to get contents", err, http.StatusInternalServerError)
 			return
 		}
 	}
-	avatar.Contents = contents
+	avatar.AvatarContents = avatarContents
+	avatar.AnimationContents = animationContents
 
 	data := template.NewData(r)
 	data.Title = "アバター編集"

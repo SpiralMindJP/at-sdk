@@ -30,7 +30,7 @@ func EditHandler(s Server) http.HandlerFunc {
 		conn := middleware.GRPCConnFromContext(ctx)
 
 		switch content.GetType() {
-		case pb.ContentType_CONTENT_TYPE_IMAGE, pb.ContentType_CONTENT_TYPE_VIDEO, pb.ContentType_CONTENT_TYPE_AVATAR:
+		case pb.ContentType_CONTENT_TYPE_IMAGE, pb.ContentType_CONTENT_TYPE_VIDEO, pb.ContentType_CONTENT_TYPE_AVATAR, pb.ContentType_CONTENT_TYPE_ANIMATION:
 		default:
 			http.NotFound(w, r)
 			return

@@ -2,6 +2,7 @@ package avatar
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -14,27 +15,74 @@ import (
 	"google.golang.org/grpc/codes"
 )
 
-type editAvatarData struct {
-	ID              int64
-	Name            string
-	AvatarContentID int64
+const maxAnimations = 10
 
-	Contents []*contentData
+type editAvatarData struct {
+	ID                 int64
+	Name               string
+	AvatarContentID    int64
+	AnimationContentID int64
+
+	AvatarContents    []*contentData
+	AnimationContents []*contentData
+
+	Animations []*animationData
+}
+
+type animationData struct {
+	Name string
 }
 
 func newEditAvatarData(avatar *pb.Avatar) *editAvatarData {
-	return &editAvatarData{
-		ID:              avatar.GetAvatarId(),
-		Name:            avatar.GetName(),
-		AvatarContentID: avatar.GetAvatarContentId(),
+	animations := make([]*animationData, maxAnimations)
+	for i := 0; i < maxAnimations; i++ {
+		var animation *animationData
+
+		if i < len(avatar.GetAnimations()) {
+			animation = newAnimationData(avatar.GetAnimations()[i])
+		}
+
+		if animation == nil {
+			animation = &animationData{}
+		}
+
+		animations[i] = animation
 	}
+
+	return &editAvatarData{
+		ID:                 avatar.GetAvatarId(),
+		Name:               avatar.GetName(),
+		AvatarContentID:    avatar.GetAvatarContentId(),
+		AnimationContentID: avatar.GetAnimationContentId(),
+		Animations:         animations,
+	}
+}
+
+func newAnimationData(animation *pb.Animation) *animationData {
+	return &animationData{
+		Name: animation.GetName(),
+	}
+}
+
+func newPBAnimation(animation *animationData) *pb.Animation {
+	return &pb.Animation{
+		Name: animation.Name,
+	}
+}
+
+func newPBAnimations(animations []*animationData) []*pb.Animation {
+	var list []*pb.Animation
+	for _, animation := range animations {
+		list = append(list, newPBAnimation(animation))
+	}
+	return list
 }
 
 // CreatePageHandler は、以下のリクエストを処理するハンドラーです。
 // GET /settings/avatars/new
 func CreatePageHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		writeCreatePage(w, r, nil, "")
+		writeCreatePage(w, r, newEditAvatarData(nil), "")
 	}
 }
 
@@ -59,9 +107,11 @@ func CreateHandler(s Server) http.HandlerFunc {
 		}
 
 		_, err := service.Create(ctx, &pb.AvatarCreateRequest{
-			TeamId:          user.TeamID(),
-			Name:            avatar.Name,
-			AvatarContentId: avatar.AvatarContentID,
+			TeamId:             user.TeamID(),
+			Name:               avatar.Name,
+			AvatarContentId:    avatar.AvatarContentID,
+			AnimationContentId: avatar.AnimationContentID,
+			Animations:         newPBAnimations(avatar.Animations),
 		})
 		if err != nil {
 			webutil.WriteError(w, r, "failed to create new avatar", err, http.StatusInternalServerError)
@@ -86,27 +136,45 @@ func verifyPost(r *http.Request) (*editAvatarData, []string) {
 		errMessages = append(errMessages, "アバターコンテンツが選択されていません。")
 	}
 
+	animationContentID, err := webutil.PostFormInt64(r, "animation_content")
+	if err != nil || avatarContentID <= 0 {
+		errMessages = append(errMessages, "アニメーションコンテンツが選択されていません。")
+	}
+
+	animations := getAnimations(r)
+
 	return &editAvatarData{
-		Name:            name,
-		AvatarContentID: avatarContentID,
+		Name:               name,
+		AvatarContentID:    avatarContentID,
+		AnimationContentID: animationContentID,
+		Animations:         animations,
 	}, errMessages
+}
+
+func getAnimations(r *http.Request) []*animationData {
+	animations := make([]*animationData, maxAnimations)
+	for i := 0; i < maxAnimations; i++ {
+		name := r.PostForm.Get(fmt.Sprintf("animation%d", i))
+		animations[i] = &animationData{
+			Name: name,
+		}
+	}
+
+	return animations
 }
 
 func writeCreatePage(w http.ResponseWriter, r *http.Request, avatar *editAvatarData, errMessage string) {
 	ctx := r.Context()
 
-	if avatar == nil {
-		avatar = new(editAvatarData)
-	}
-
-	contents, err := getContents(ctx)
+	avatarContents, animationContents, err := getContents(ctx)
 	if err != nil {
 		if grpc.Code(err) != codes.NotFound {
 			webutil.WriteError(w, r, "failed to get contents", err, http.StatusInternalServerError)
 			return
 		}
 	}
-	avatar.Contents = contents
+	avatar.AvatarContents = avatarContents
+	avatar.AnimationContents = animationContents
 
 	data := template.NewData(r)
 	data.Title = "アバター登録"
@@ -119,29 +187,37 @@ func writeCreatePage(w http.ResponseWriter, r *http.Request, avatar *editAvatarD
 	template.WriteTemplate(w, r, "avatar", "create.tmpl", data)
 }
 
-func getContents(ctx context.Context) ([]*contentData, error) {
+func getContents(ctx context.Context) ([]*contentData, []*contentData, error) {
 	user := auth.UserFromContext(ctx)
 	conn := middleware.GRPCConnFromContext(ctx)
 
 	service := pb.NewContentServiceClient(conn)
 
-	result, err := service.ListContentType(ctx, &pb.ContentListByTypeRequest{
+	result, err := service.List(ctx, &pb.ContentListRequest{
 		TeamId: user.TeamID(),
-		Type:   pb.ContentType_CONTENT_TYPE_AVATAR,
 	})
 	if err != nil {
 		if grpc.Code(err) != codes.NotFound {
-			return nil, err
+			return nil, nil, err
 		}
 	}
 
-	contents := make([]*contentData, len(result.GetContents()))
-	for i, content := range result.GetContents() {
-		contents[i] = &contentData{
-			ID:   content.GetContentId(),
-			Name: content.GetName(),
+	var avatarContents []*contentData
+	var animationContents []*contentData
+	for _, content := range result.GetContents() {
+		switch content.GetType() {
+		case pb.ContentType_CONTENT_TYPE_AVATAR:
+			avatarContents = append(avatarContents, &contentData{
+				ID:   content.GetContentId(),
+				Name: content.GetName(),
+			})
+		case pb.ContentType_CONTENT_TYPE_ANIMATION:
+			animationContents = append(animationContents, &contentData{
+				ID:   content.GetContentId(),
+				Name: content.GetName(),
+			})
 		}
 	}
 
-	return contents, nil
+	return avatarContents, animationContents, nil
 }

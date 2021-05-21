@@ -64,34 +64,54 @@ func EventStreamHandler() http.HandlerFunc {
 				return
 			}
 
-			switch event.GetType() {
-			case pb.DashboardEventType_JOIN_ROOM, pb.DashboardEventType_LEAVE_ROOM:
-				state := event.GetRoomState()
-				if state == nil {
-					continue
-				}
+			if event.GetType() != pb.DashboardEventType_DASHBOARD_EVENT_ROOM_EVENT {
+				continue
+			}
 
-				room, err := roomService.Get(ctx, &pb.RoomRequest{
-					TeamId: user.TeamID(),
-					RoomId: state.GetRoomId(),
-				})
-				if grpc.Code(err) == codes.NotFound {
-					continue
-				}
-				if err != nil {
-					logger.Errorw("failed to get the room", "team_id", user.TeamID(), "room_id", state.GetRoomId())
-					continue
-				}
+			roomEvent := event.GetRoomEvent()
+			roomState := roomEvent.GetRoomState()
+			if roomState == nil {
+				continue
+			}
 
-				e := &jsondata.Event{
-					Type: jsondata.EventType(event.GetType()),
-					Room: newRoom(room, state),
-				}
-				e.Room.SetStatus(user.DeviceID())
-				conn.WriteJSON(e)
+			var typ jsondata.EventType
+			switch roomEvent.GetType() {
+			case pb.RoomEventType_ROOM_EVENT_ROOM_CREATED:
+				typ = jsondata.RoomCreated
+			case pb.RoomEventType_ROOM_EVENT_ROOM_DELETED:
+				typ = jsondata.RoomDeleted
+			case pb.RoomEventType_ROOM_EVENT_DEVICE_JOINED:
+				typ = jsondata.DeviceJoined
+			case pb.RoomEventType_ROOM_EVENT_DEVICE_LEAVED:
+				typ = jsondata.DeviceLeaved
+			case pb.RoomEventType_ROOM_EVENT_DEVICE_DELETED:
+				typ = jsondata.DeviceDeleted
+			case pb.RoomEventType_ROOM_EVENT_DEVICE_OFFLINE:
+				typ = jsondata.DeviceOffline
+			case pb.RoomEventType_ROOM_EVENT_DEVICE_ONLINE:
+				typ = jsondata.DeviceOnline
 			default:
 				continue
 			}
+
+			room, err := roomService.Get(ctx, &pb.RoomRequest{
+				TeamId: user.TeamID(),
+				RoomId: roomState.GetRoomId(),
+			})
+			if grpc.Code(err) == codes.NotFound {
+				continue
+			}
+			if err != nil {
+				logger.Errorw("failed to get the room", "team_id", user.TeamID(), "room_id", roomState.GetRoomId())
+				continue
+			}
+
+			e := &jsondata.Event{
+				Type: typ,
+				Room: newRoom(room, roomState),
+			}
+			e.Room.SetStatus(user.DeviceID())
+			conn.WriteJSON(e)
 
 		}
 	}

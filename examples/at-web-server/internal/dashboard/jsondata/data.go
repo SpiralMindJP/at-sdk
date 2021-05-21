@@ -1,8 +1,6 @@
 package jsondata
 
-import (
-	pb "github.com/SpiralMindJP/at-sdk/go/pb/core"
-)
+import "github.com/SpiralMindJP/at-sdk/examples/at-web-server/internal/enum"
 
 type RoomStatus string
 
@@ -53,7 +51,8 @@ type Room struct {
 	ID   int64  `json:"id"`
 	Name string `json:"name"`
 
-	OperatorDeviceID int64
+	OperatorDeviceID int64                      `json:"operator_device_id"`
+	ConnectionState  enum.DeviceConnectionState `json:"connection_state"`
 
 	Status RoomStatus `json:"status,omitempty"`
 }
@@ -78,9 +77,15 @@ func (r *Room) SetStatus(deviceID int64) {
 type EventType int
 
 const (
-	EventNoEvent       = EventType(pb.DashboardEventType_NO_EVENT)
-	EventJoinRoom      = EventType(pb.DashboardEventType_JOIN_ROOM)
-	EventJoinLeaveRoom = EventType(pb.DashboardEventType_LEAVE_ROOM)
+	RoomCreated EventType = 0 // ルームが作成された。
+	RoomDeleted EventType = 1 // ルームが削除された。
+
+	DeviceJoined  EventType = 10 // デバイスが入室した。
+	DeviceLeaved  EventType = 11 // デバイスが退室した。
+	DeviceDeleted EventType = 12 // デバイスが削除された。
+
+	DeviceOffline EventType = 20 // デバイスがオフラインになった。
+	DeviceOnline  EventType = 21 // デバイスがオンラインになった。
 )
 
 type Event struct {
