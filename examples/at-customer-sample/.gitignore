@@ -13,3 +13,6 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+/at-customer-client/at-customer-client.aar
+/at-customer-client/build/
