@@ -1,5 +1,5 @@
 = AT Core Server API Reference
-v1.2, 2021-03-26
+v2.0, 2021-05-21
 :toc:
 :toclevels: 4
 :toc-title: 目次
@@ -1275,6 +1275,32 @@ Avatar はアバターに関する情報を操作します。
 
 
 
+[[at_core_service.Animation]]
+
+==== Animation
+
+アバターのアニメーションを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| name
+| <<string,string>>
+| 
+| アニメーション名称。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
 [[at_core_service.Avatar]]
 
 ==== Avatar
@@ -1306,6 +1332,10 @@ Avatar はアバターに関する情報を操作します。
 | <<int64,int64>>
 | 
 | アニメーションのコンテンツID。
+| animations
+| <<at_core_service.Animation,Animation>>
+| repeated
+| アニメーションのリスト。
 
 // end range fields
 |===
@@ -1344,6 +1374,10 @@ Avatar はアバターに関する情報を操作します。
 | <<int64,int64>>
 | 
 | アニメーションのコンテンツID。
+| animations
+| <<at_core_service.Animation,Animation>>
+| repeated
+| アニメーションのリスト。
 
 // end range fields
 |===
@@ -1442,6 +1476,10 @@ Avatar はアバターに関する情報を操作します。
 | <<int64,int64>>
 | 
 | アニメーションのコンテンツID。
+| animations
+| <<at_core_service.Animation,Animation>>
+| repeated
+| アニメーションのリスト。
 
 // end range fields
 |===
@@ -1800,10 +1838,10 @@ Dashboard はダッシュボードに関する情報を操作します。
 | <<at_core_service.DashboardEventType,DashboardEventType>>
 | 
 | イベントタイプ
-| room_state
-| <<at_core_service.RoomState,RoomState>>
+| room_event
+| <<at_core_service.RoomEvent,RoomEvent>>
 | 
-| 入室または退室したルームの状態。
+| ルームイベント。
 
 // end range fields
 |===
@@ -1913,32 +1951,6 @@ Dashboard はダッシュボードに関する情報を操作します。
 
 
 
-[[at_core_service.OperatorDevice]]
-
-==== OperatorDevice
-
-オペレーターのデバイスを表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| device_id
-| <<int64,int64>>
-| 
-| デバイスID。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
 [[at_core_service.PlayAnimationRequest]]
 
 ==== PlayAnimationRequest
@@ -1958,14 +1970,10 @@ Dashboard はダッシュボードに関する情報を操作します。
 | <<int64,int64>>
 | 
 | アニメーションを再生するルームに入室しているデバイスのデバイスID。
-| content_id
-| <<int64,int64>>
-| 
-| 再生するアニメーションのコンテンツID。
-| animation_no
+| animation_index
 | <<int32,int32>>
 | 
-| 再生するアニメーション番号。
+| 再生するアニメーションのインデックス。
 
 // end range fields
 |===
@@ -2000,44 +2008,6 @@ Dashboard はダッシュボードに関する情報を操作します。
 | <<int64,int64>>
 | 
 | 再生するコンテンツのコンテンツID。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.RoomState]]
-
-==== RoomState
-
-ルームの状態を表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| room_id
-| <<int64,int64>>
-| 
-| ルームID。
-| device_id
-| <<int64,int64>>
-| 
-| ルームに登録されたデバイスのデバイスID。
-| device_state
-| <<at_core_service.DeviceState,DeviceState>>
-| 
-| ルームに登録されたデバイスの状態。
-| operators
-| <<at_core_service.OperatorDevice,OperatorDevice>>
-| repeated
-| オペレーション中のオペレーターデバイスのリスト。
 
 // end range fields
 |===
@@ -2109,36 +2079,6 @@ Dashboard はダッシュボードに関する情報を操作します。
 
 
 
-[[at_core_service.VideoFrame]]
-
-==== VideoFrame
-
-ビデオストリームのビデオフレームを表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| type
-| <<at_core_service.VideoFrameType,VideoFrameType>>
-| 
-| ビデオフレームのタイプ。
-| payload
-| <<bytes,bytes>>
-| 
-| ビデオフレームのペイロード。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
 [[at_core_service.VideoStreamRequest]]
 
 ==== VideoStreamRequest
@@ -2188,66 +2128,15 @@ Dashboard はダッシュボードに関する情報を操作します。
 |===
 | Name | Number | Description
 
-| NO_EVENT
+| DASHBOARD_NO_EVENT
 | 0
 | なにもないイベント。
-| JOIN_ROOM
+| DASHBOARD_EVENT_ROOM_EVENT
 | 1
-| 何れかのオペレーターがルームに入室した。
-| LEAVE_ROOM
-| 2
-| 何れかのオペレーターがルームから退室した。
-| DEVICE_OFFLINE
-| 11
-| 何れかのカスタマーデバイスがオフラインになった。
-| DEVICE_ONLINE
-| 12
-| 何れかのカスタマーデバイスがオンラインになった。
-
-// end range values
-|===
-
-
-[[at_core_service.DeviceState]]
-
-==== DeviceState
-
-デバイスの状態を表します。
-
-[%autowidth.stretch]
-|===
-| Name | Number | Description
-
-| NO_DEVICE
-| 0
-| デバイスが登録されていない。
-| OFFLINE
-| 1
-| デバイスはオフライン。
-| ONLINE
-| 2
-| デバイスはオンライン。
-
-// end range values
-|===
-
-
-[[at_core_service.VideoFrameType]]
-
-==== VideoFrameType
-
-ビデオフレームのタイプを表します。
-
-[%autowidth.stretch]
-|===
-| Name | Number | Description
-
-| VIDEO_FRAME_UNKOWN
-| 0
-| 不明なフレーム
-| VIDEO_FRAME_JPEG
-| 1
-| JPEG フレーム。
+| ルームイベント。
+| DASHBOARD_EVENT_PING
+| 999
+| ping
 
 // end range values
 |===
@@ -2302,7 +2191,7 @@ a| コンテンツを停止します。 コンテンツを停止するルーム�
 | PlayAnimation
 | <<at_core_service.PlayAnimationRequest,PlayAnimationRequest>>
 | <<google.protobuf.Empty,.google.protobuf.Empty>>
-a| アニメーションを再生します。 再生するアニメーションコンテンツのコンテンツIDとアニメーション番号、ルームに入室しているデバイスのデバイスIDを設定した PlayAnimationRequest を渡します。
+a| アニメーションを再生します。 再生するアニメーションコンテンツのコンテンツIDとアニメーションのインデックス、ルームに入室しているデバイスのデバイスIDを設定した PlayAnimationRequest を渡します。
 | StopAnimation
 | <<at_core_service.StopAnimationRequest,StopAnimationRequest>>
 | <<google.protobuf.Empty,.google.protobuf.Empty>>
@@ -2524,6 +2413,7 @@ image::images/content_delete.png[ContentService.Delete]
 
 == 改訂履歴
 
+* v2.0, 2021-05-21  Release
 * v1.2, 2021-03-26  Release
 * v1.1, 2021-02-25  Release
 * v1.0, 2021-01-15  Release
