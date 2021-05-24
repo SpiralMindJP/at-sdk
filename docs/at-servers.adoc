@@ -23,13 +23,13 @@ AT SDK の各サーバーアプリケーションの Docker イメージは、Go
 | サーバー名 | Docker イメージ名
 
 | Core サーバー
-| asia.gcr.io/at-sdk/at-core-server:1.2
+| asia.gcr.io/at-sdk/at-core-server:2.0
 
 | ATP サーバー 
-| asia.gcr.io/at-sdk/at-atp-server:1.2
+| asia.gcr.io/at-sdk/at-atp-server:2.0
 
 | State サーバー 
-| asia.gcr.io/at-sdk/at-state-server:1.2
+| asia.gcr.io/at-sdk/at-state-server:2.0
 
 |===
 
@@ -79,6 +79,14 @@ $ GCS_BUCKET_NAME=[バケット名] docker compose up
 詳細は、link:#google_cloud_storage[Google Cloud Storage] セクションを参照してください。
 
 また、GCS のバケット名を、環境変数 `GCS_BUCKET_NAME` で指定します。
+
+=== サーバーの認証について
+
+v2.0 より、各サーバーに認証機能が実装されています。
+サーバーを起動するためには、認証サーバーから発行されたユーザーIDと秘密鍵が必要です。
+発行されたユーザーID及び秘密鍵は、環境変数 `AUTH_USER_ID` 及び `AUTH_PRIVATE_KEY` にて設定します。
+
+ユーザーID及び秘密鍵の発行については、SpiralMind の担当者にお問合せください。
 
 == 各サーバーについて
 
@@ -133,6 +141,14 @@ Core サーバーの Docker イメージは、サーバーの設定を環境変�
 | CORE_SERVER_APP_TLS_KEY_FILE
 |
 | Core サーバーの App API サービスで TLS を使用するために必要な、TLS 秘密鍵ファイルのパスを指定します。
+
+| AUTH_USER_ID
+|
+| サーバーの認証に使用するユーザーIDを指定します。
+
+| AUTH_PRIVATE_KEY
+|
+| サーバーの認証に使用する秘密鍵を指定します。
 
 | MYSQL_HOST
 | mysql
@@ -227,6 +243,14 @@ State サーバーの Docker イメージは、サーバーの設定を環境変
 | 8082
 | State サーバーがバインドするポートを指定します。
 
+| AUTH_USER_ID
+|
+| サーバーの認証に使用するユーザーIDを指定します。
+
+| AUTH_PRIVATE_KEY
+|
+| サーバーの認証に使用する秘密鍵を指定します。
+
 | REDIS_HOST
 | redis
 | Redis サーバーのホストを指定します。
@@ -279,6 +303,14 @@ ATP サーバーの Docker イメージは、サーバーの設定を環境変�
 | ATP_SERVER_SERVER_PORT
 | 10000
 | クライアントアプリケーションが ATP サーバーにアクセスするためのポートを指定します。
+
+| AUTH_USER_ID
+|
+| サーバーの認証に使用するユーザーIDを指定します。
+
+| AUTH_PRIVATE_KEY
+|
+| サーバーの認証に使用する秘密鍵を指定します。
 
 | STATE_SERVER_HOST
 | state
