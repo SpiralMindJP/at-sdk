@@ -1,7 +1,7 @@
 = AT Customer Client をネイティブアプリに埋め込む手順
 :author:    株式会社SpiralMind
-:revnumber: 1.0
-:revdate:   2020-07-28
+:revnumber: 2.0
+:revdate:   2021-05-24
 
 == Android Studio でプロジェクトを作成する
 
@@ -62,6 +62,9 @@ public class ATCustomerActivity extends ATCustomerClientActivity {
 Unity の画面に Android のネイティブコントロールを配置する場合は、`onCreate` イベントにて追加する。
 `mUnityPlayer` メンバーは `FrameLayout` なので、`addView` メソッドを呼び出して各種ビューを追加できる。
 
+v2.0 以降は、`ATCustomerClientActivity` は抽象クラスとなっています。
+抽象メソッド、`onAvatarSceneStateChanged` をオーバーライドしてください。
+
 === Unity を表示する Activity を起動する
 
 Unity を表示する Activity を指定した `Intent` を作成し、画面を起動する。
@@ -108,6 +111,53 @@ public void ShowSettingView()
 ----
 public void ShowSelectServerView()
 ----
+
+==== onAvatarSceneStateChanged メソッド (v2.0 以降)
+
+このメソッドは、抽象メソッドです。
+
+メソッドをオーバーライドすることで、アバターシーンの状態変更を受け取ることができます。
+
+[source, java]
+----
+    @Override
+    protected void onAvatarSceneStateChanged(String state)
+    {
+    }
+----
+
+各状態は以下のようになります。
+
+
+.イベント状態値
+|===
+| 状態値 | 説明
+
+| `"started"`
+| アバターシーンが開始された。
+
+| `"connecting"`
+| 接続中。
+
+| `"reconnecting"`
+| 再接続中
+
+| `"online"`
+| オンライン。
+
+| `"offline"`
+| オフライン。
+
+| `"operator-joined"`
+| オペレーターが入室した。
+
+| `"operator-leaved"`
+| オペレーターが退室した。
+
+| `"exit"`
+| アバターシーンが終了した。
+
+|===
 
 == Tips
 
