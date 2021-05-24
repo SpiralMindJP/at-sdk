@@ -137,7 +137,7 @@ func verifyPost(r *http.Request) (*editAvatarData, []string) {
 	}
 
 	animationContentID, err := webutil.PostFormInt64(r, "animation_content")
-	if err != nil || avatarContentID <= 0 {
+	if err != nil || animationContentID < 0 {
 		errMessages = append(errMessages, "アニメーションコンテンツが選択されていません。")
 	}
 

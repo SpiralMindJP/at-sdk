@@ -23,6 +23,7 @@
         </p>
         <p class="input">
           <select name="animation_content">
+            <option value="0">選択解除</option>
             {{range .Data.AnimationContents}}
               {{if eq .ID $.Data.AnimationContentID }}
                 <option value="{{.ID}}" selected>{{.Name}}</option>
