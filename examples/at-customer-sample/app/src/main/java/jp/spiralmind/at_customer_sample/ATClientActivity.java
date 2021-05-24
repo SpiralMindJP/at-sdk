@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import jp.spiralmind.avatar_teleporter.customer.ATCustomerClientActivity;
 
@@ -34,6 +35,12 @@ public class ATClientActivity extends ATCustomerClientActivity{
                 this.finish();
             }
         }
+    }
+
+    @Override
+    protected void onAvatarSceneStateChanged(String state)
+    {
+        Toast.makeText(this, state, Toast.LENGTH_LONG).show();
     }
 
     protected void showMainActivity() {
