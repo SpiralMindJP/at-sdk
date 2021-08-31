@@ -18,14 +18,14 @@ services:
     volumes:
       - ./data/redis:/data
   state:
-    image: asia.gcr.io/at-sdk/at-state-server:2.0
+    image: asia.gcr.io/at-sdk/at-state-server:2.1
     links:
       - redis
     environment:
       AUTH_USER_ID: ${AUTH_USER_ID}
       AUTH_PRIVATE_KEY: ${AUTH_PRIVATE_KEY}
   core:
-    image: asia.gcr.io/at-sdk/at-core-server:2.0
+    image: asia.gcr.io/at-sdk/at-core-server:2.1
     command: ["-c", "config.toml", "-migrate"]
     links:
       - mysql
@@ -41,7 +41,7 @@ services:
       AUTH_USER_ID: ${AUTH_USER_ID}
       AUTH_PRIVATE_KEY: ${AUTH_PRIVATE_KEY}
   atp:
-    image: asia.gcr.io/at-sdk/at-atp-server:2.0
+    image: asia.gcr.io/at-sdk/at-atp-server:2.1
     links:
       - state
     ports:
