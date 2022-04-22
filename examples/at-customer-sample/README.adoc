@@ -1,7 +1,0 @@
-= Avatar Teleporter Customer Client サンプル
-
-== 使用方法
-
-link:https://github.com/SpiralMindJP/at-sdk/releases[リリースページ]より、AAR ファイルをダウンロードし、`at-customer-client/at-customer-client.aar` を配置してください。
-
-AAR ファイルを配置後、Android Studio にてプロジェクトを開き、ビルド及び実行してください。

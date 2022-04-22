@@ -1,6 +1,0 @@
-<resources>
-    <string name="app_name">at-customer-sample</string>
-    <string name="game_view_content_description">Game view</string>
-    <string name="load_button">LOAD UNITY</string>
-    <string name="unload_button">UNLOAD UNITY</string>
-</resources>
