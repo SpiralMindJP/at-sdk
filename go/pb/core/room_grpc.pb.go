@@ -12,40 +12,42 @@ import (
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
+// Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
 // RoomServiceClient is the client API for RoomService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type RoomServiceClient interface {
+	// ルームのリストを取得します。
+	// 取得するルームのチームIDを指定した GetRoomsRequest を渡します。
+	// 指定されたチームIDのルーム情報のリストが設定された GetRoomsResponse が返ります。
+	GetRooms(ctx context.Context, in *GetRoomsRequest, opts ...grpc.CallOption) (*GetRoomsResponse, error)
 	// ルームを取得します。
-	// 取得するルームのチームIDを指定した RoomListRequest を渡します。
-	// 指定されたチームIDのルームのリストが設定された Rooms が返ります。
-	List(ctx context.Context, in *RoomListRequest, opts ...grpc.CallOption) (*Rooms, error)
-	// ルームを取得します。
-	// 取得するルームのルームIDを指定した RoomRequest を渡します。
-	// ルームが存在する場合、Room が返ります。
-	Get(ctx context.Context, in *RoomRequest, opts ...grpc.CallOption) (*Room, error)
+	// 取得するルームのチームIDおよびルームIDを指定した GetRoomRequest を渡します。
+	// ルームが存在する場合、ルーム情報が設定された GetRoomResponse が返ります。
+	GetRoom(ctx context.Context, in *GetRoomRequest, opts ...grpc.CallOption) (*GetRoomResponse, error)
 	// 新しくルームを作成します。
-	// ルーム名とチームIDを指定した RoomCreateRequest を渡します。
-	// ルームの作成に成功すると、ルームIDが設定さた Room が返ります。
-	Create(ctx context.Context, in *RoomCreateRequest, opts ...grpc.CallOption) (*Room, error)
+	// ルーム名とチームIDを指定した CreateRoomRequest を渡します。
+	// ルームの作成に成功すると、作成されたルーム情報が設定された CreateRoomResponse が返ります。
+	CreateRoom(ctx context.Context, in *CreateRoomRequest, opts ...grpc.CallOption) (*CreateRoomResponse, error)
 	// ルームを更新します。
-	// 更新するルームのルームIDと、新しいルーム名を指定した RoomUpdateRequest を渡します。
-	// ルームの作成に成功すると、Room が返ります。
-	Update(ctx context.Context, in *RoomUpdateRequest, opts ...grpc.CallOption) (*Room, error)
-	// ルームにカスタマーデバイスを設定します。
-	// 設定するルームのルームIDと、設定するカスタマーデバイスのデバイスIDを指定した RoomDeviceRequest を渡します。
-	// RoomDeviceRequest の force に True を指定すると、他のルームに既に設定されているデバイスであっても、設定します。
-	// カスタマーデバイスの設定に成功すると、Room が返ります。
-	SetDevice(ctx context.Context, in *RoomDeviceRequest, opts ...grpc.CallOption) (*Room, error)
-	// ルームに設定されたカスタマーデバイスを削除します。
-	// カスタマーデバイスを削除するルームのルームIDを指定した RoomRequest を渡します。
-	// カスタマーデバイスの削除に成功すると、Room が返ります。
-	DeleteDevice(ctx context.Context, in *RoomRequest, opts ...grpc.CallOption) (*Room, error)
+	// 更新するルームのルームIDと、新しいルーム名を指定した UpdateRoomRequest を渡します。
+	// ルームの更新に成功すると、更新されたルーム情報が設定された UpdateRoomResponse が返ります。
+	UpdateRoom(ctx context.Context, in *UpdateRoomRequest, opts ...grpc.CallOption) (*UpdateRoomResponse, error)
+	// ルームへのカスタマーデバイスの入室を行います。
+	// 入室先のルームのルームIDと、入室を行うカスタマーデバイスのデバイスIDを指定した JoinCustomerDeviceRequest を渡します。
+	// 入室先のルームに既にカスタマーデバイスが入室済の場合は、入室を行いません。
+	// ただし、force に true をした場合は入室済のカスタマーデバイスを強制的に退室させ、入室を行います。
+	// カスタマーデバイスの入室に成功すると、入室したルームのルーム情報を設定した JoinCustomerDeviceResponse が返ります。
+	JoinCustomerDevice(ctx context.Context, in *JoinCustomerDeviceRequest, opts ...grpc.CallOption) (*JoinCustomerDeviceResponse, error)
+	// ルームからのカスタマーデバイスの退室を行います。
+	// カスタマーデバイスを退室させるルームのルームIDを指定した LeaveCustomerDeviceRequest を渡します。
+	// カスタマーデバイスの退室に成功すると、退室したルームのルーム情報を設定した LeaveCustomerDeviceResponse が返ります。
+	LeaveCustomerDevice(ctx context.Context, in *LeaveCustomerDeviceRequest, opts ...grpc.CallOption) (*LeaveCustomerDeviceResponse, error)
 	// ルームを削除します。
-	// 削除するルームのルームIDを指定した RoomRequest を渡します。
-	Delete(ctx context.Context, in *RoomRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// 削除するルームのルームIDを指定した DeleteRoomRequest を渡します。
+	DeleteRoom(ctx context.Context, in *DeleteRoomRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type roomServiceClient struct {
@@ -56,63 +58,63 @@ func NewRoomServiceClient(cc grpc.ClientConnInterface) RoomServiceClient {
 	return &roomServiceClient{cc}
 }
 
-func (c *roomServiceClient) List(ctx context.Context, in *RoomListRequest, opts ...grpc.CallOption) (*Rooms, error) {
-	out := new(Rooms)
-	err := c.cc.Invoke(ctx, "/at_core_service.RoomService/List", in, out, opts...)
+func (c *roomServiceClient) GetRooms(ctx context.Context, in *GetRoomsRequest, opts ...grpc.CallOption) (*GetRoomsResponse, error) {
+	out := new(GetRoomsResponse)
+	err := c.cc.Invoke(ctx, "/at.core.RoomService/GetRooms", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *roomServiceClient) Get(ctx context.Context, in *RoomRequest, opts ...grpc.CallOption) (*Room, error) {
-	out := new(Room)
-	err := c.cc.Invoke(ctx, "/at_core_service.RoomService/Get", in, out, opts...)
+func (c *roomServiceClient) GetRoom(ctx context.Context, in *GetRoomRequest, opts ...grpc.CallOption) (*GetRoomResponse, error) {
+	out := new(GetRoomResponse)
+	err := c.cc.Invoke(ctx, "/at.core.RoomService/GetRoom", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *roomServiceClient) Create(ctx context.Context, in *RoomCreateRequest, opts ...grpc.CallOption) (*Room, error) {
-	out := new(Room)
-	err := c.cc.Invoke(ctx, "/at_core_service.RoomService/Create", in, out, opts...)
+func (c *roomServiceClient) CreateRoom(ctx context.Context, in *CreateRoomRequest, opts ...grpc.CallOption) (*CreateRoomResponse, error) {
+	out := new(CreateRoomResponse)
+	err := c.cc.Invoke(ctx, "/at.core.RoomService/CreateRoom", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *roomServiceClient) Update(ctx context.Context, in *RoomUpdateRequest, opts ...grpc.CallOption) (*Room, error) {
-	out := new(Room)
-	err := c.cc.Invoke(ctx, "/at_core_service.RoomService/Update", in, out, opts...)
+func (c *roomServiceClient) UpdateRoom(ctx context.Context, in *UpdateRoomRequest, opts ...grpc.CallOption) (*UpdateRoomResponse, error) {
+	out := new(UpdateRoomResponse)
+	err := c.cc.Invoke(ctx, "/at.core.RoomService/UpdateRoom", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *roomServiceClient) SetDevice(ctx context.Context, in *RoomDeviceRequest, opts ...grpc.CallOption) (*Room, error) {
-	out := new(Room)
-	err := c.cc.Invoke(ctx, "/at_core_service.RoomService/SetDevice", in, out, opts...)
+func (c *roomServiceClient) JoinCustomerDevice(ctx context.Context, in *JoinCustomerDeviceRequest, opts ...grpc.CallOption) (*JoinCustomerDeviceResponse, error) {
+	out := new(JoinCustomerDeviceResponse)
+	err := c.cc.Invoke(ctx, "/at.core.RoomService/JoinCustomerDevice", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *roomServiceClient) DeleteDevice(ctx context.Context, in *RoomRequest, opts ...grpc.CallOption) (*Room, error) {
-	out := new(Room)
-	err := c.cc.Invoke(ctx, "/at_core_service.RoomService/DeleteDevice", in, out, opts...)
+func (c *roomServiceClient) LeaveCustomerDevice(ctx context.Context, in *LeaveCustomerDeviceRequest, opts ...grpc.CallOption) (*LeaveCustomerDeviceResponse, error) {
+	out := new(LeaveCustomerDeviceResponse)
+	err := c.cc.Invoke(ctx, "/at.core.RoomService/LeaveCustomerDevice", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *roomServiceClient) Delete(ctx context.Context, in *RoomRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *roomServiceClient) DeleteRoom(ctx context.Context, in *DeleteRoomRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/at_core_service.RoomService/Delete", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/at.core.RoomService/DeleteRoom", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -123,34 +125,35 @@ func (c *roomServiceClient) Delete(ctx context.Context, in *RoomRequest, opts ..
 // All implementations must embed UnimplementedRoomServiceServer
 // for forward compatibility
 type RoomServiceServer interface {
+	// ルームのリストを取得します。
+	// 取得するルームのチームIDを指定した GetRoomsRequest を渡します。
+	// 指定されたチームIDのルーム情報のリストが設定された GetRoomsResponse が返ります。
+	GetRooms(context.Context, *GetRoomsRequest) (*GetRoomsResponse, error)
 	// ルームを取得します。
-	// 取得するルームのチームIDを指定した RoomListRequest を渡します。
-	// 指定されたチームIDのルームのリストが設定された Rooms が返ります。
-	List(context.Context, *RoomListRequest) (*Rooms, error)
-	// ルームを取得します。
-	// 取得するルームのルームIDを指定した RoomRequest を渡します。
-	// ルームが存在する場合、Room が返ります。
-	Get(context.Context, *RoomRequest) (*Room, error)
+	// 取得するルームのチームIDおよびルームIDを指定した GetRoomRequest を渡します。
+	// ルームが存在する場合、ルーム情報が設定された GetRoomResponse が返ります。
+	GetRoom(context.Context, *GetRoomRequest) (*GetRoomResponse, error)
 	// 新しくルームを作成します。
-	// ルーム名とチームIDを指定した RoomCreateRequest を渡します。
-	// ルームの作成に成功すると、ルームIDが設定さた Room が返ります。
-	Create(context.Context, *RoomCreateRequest) (*Room, error)
+	// ルーム名とチームIDを指定した CreateRoomRequest を渡します。
+	// ルームの作成に成功すると、作成されたルーム情報が設定された CreateRoomResponse が返ります。
+	CreateRoom(context.Context, *CreateRoomRequest) (*CreateRoomResponse, error)
 	// ルームを更新します。
-	// 更新するルームのルームIDと、新しいルーム名を指定した RoomUpdateRequest を渡します。
-	// ルームの作成に成功すると、Room が返ります。
-	Update(context.Context, *RoomUpdateRequest) (*Room, error)
-	// ルームにカスタマーデバイスを設定します。
-	// 設定するルームのルームIDと、設定するカスタマーデバイスのデバイスIDを指定した RoomDeviceRequest を渡します。
-	// RoomDeviceRequest の force に True を指定すると、他のルームに既に設定されているデバイスであっても、設定します。
-	// カスタマーデバイスの設定に成功すると、Room が返ります。
-	SetDevice(context.Context, *RoomDeviceRequest) (*Room, error)
-	// ルームに設定されたカスタマーデバイスを削除します。
-	// カスタマーデバイスを削除するルームのルームIDを指定した RoomRequest を渡します。
-	// カスタマーデバイスの削除に成功すると、Room が返ります。
-	DeleteDevice(context.Context, *RoomRequest) (*Room, error)
+	// 更新するルームのルームIDと、新しいルーム名を指定した UpdateRoomRequest を渡します。
+	// ルームの更新に成功すると、更新されたルーム情報が設定された UpdateRoomResponse が返ります。
+	UpdateRoom(context.Context, *UpdateRoomRequest) (*UpdateRoomResponse, error)
+	// ルームへのカスタマーデバイスの入室を行います。
+	// 入室先のルームのルームIDと、入室を行うカスタマーデバイスのデバイスIDを指定した JoinCustomerDeviceRequest を渡します。
+	// 入室先のルームに既にカスタマーデバイスが入室済の場合は、入室を行いません。
+	// ただし、force に true をした場合は入室済のカスタマーデバイスを強制的に退室させ、入室を行います。
+	// カスタマーデバイスの入室に成功すると、入室したルームのルーム情報を設定した JoinCustomerDeviceResponse が返ります。
+	JoinCustomerDevice(context.Context, *JoinCustomerDeviceRequest) (*JoinCustomerDeviceResponse, error)
+	// ルームからのカスタマーデバイスの退室を行います。
+	// カスタマーデバイスを退室させるルームのルームIDを指定した LeaveCustomerDeviceRequest を渡します。
+	// カスタマーデバイスの退室に成功すると、退室したルームのルーム情報を設定した LeaveCustomerDeviceResponse が返ります。
+	LeaveCustomerDevice(context.Context, *LeaveCustomerDeviceRequest) (*LeaveCustomerDeviceResponse, error)
 	// ルームを削除します。
-	// 削除するルームのルームIDを指定した RoomRequest を渡します。
-	Delete(context.Context, *RoomRequest) (*emptypb.Empty, error)
+	// 削除するルームのルームIDを指定した DeleteRoomRequest を渡します。
+	DeleteRoom(context.Context, *DeleteRoomRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedRoomServiceServer()
 }
 
@@ -158,26 +161,26 @@ type RoomServiceServer interface {
 type UnimplementedRoomServiceServer struct {
 }
 
-func (UnimplementedRoomServiceServer) List(context.Context, *RoomListRequest) (*Rooms, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
+func (UnimplementedRoomServiceServer) GetRooms(context.Context, *GetRoomsRequest) (*GetRoomsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRooms not implemented")
 }
-func (UnimplementedRoomServiceServer) Get(context.Context, *RoomRequest) (*Room, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+func (UnimplementedRoomServiceServer) GetRoom(context.Context, *GetRoomRequest) (*GetRoomResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRoom not implemented")
 }
-func (UnimplementedRoomServiceServer) Create(context.Context, *RoomCreateRequest) (*Room, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+func (UnimplementedRoomServiceServer) CreateRoom(context.Context, *CreateRoomRequest) (*CreateRoomResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateRoom not implemented")
 }
-func (UnimplementedRoomServiceServer) Update(context.Context, *RoomUpdateRequest) (*Room, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+func (UnimplementedRoomServiceServer) UpdateRoom(context.Context, *UpdateRoomRequest) (*UpdateRoomResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateRoom not implemented")
 }
-func (UnimplementedRoomServiceServer) SetDevice(context.Context, *RoomDeviceRequest) (*Room, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SetDevice not implemented")
+func (UnimplementedRoomServiceServer) JoinCustomerDevice(context.Context, *JoinCustomerDeviceRequest) (*JoinCustomerDeviceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method JoinCustomerDevice not implemented")
 }
-func (UnimplementedRoomServiceServer) DeleteDevice(context.Context, *RoomRequest) (*Room, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteDevice not implemented")
+func (UnimplementedRoomServiceServer) LeaveCustomerDevice(context.Context, *LeaveCustomerDeviceRequest) (*LeaveCustomerDeviceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LeaveCustomerDevice not implemented")
 }
-func (UnimplementedRoomServiceServer) Delete(context.Context, *RoomRequest) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
+func (UnimplementedRoomServiceServer) DeleteRoom(context.Context, *DeleteRoomRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteRoom not implemented")
 }
 func (UnimplementedRoomServiceServer) mustEmbedUnimplementedRoomServiceServer() {}
 
@@ -189,168 +192,171 @@ type UnsafeRoomServiceServer interface {
 }
 
 func RegisterRoomServiceServer(s grpc.ServiceRegistrar, srv RoomServiceServer) {
-	s.RegisterService(&_RoomService_serviceDesc, srv)
+	s.RegisterService(&RoomService_ServiceDesc, srv)
 }
 
-func _RoomService_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RoomListRequest)
+func _RoomService_GetRooms_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRoomsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(RoomServiceServer).List(ctx, in)
+		return srv.(RoomServiceServer).GetRooms(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/at_core_service.RoomService/List",
+		FullMethod: "/at.core.RoomService/GetRooms",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RoomServiceServer).List(ctx, req.(*RoomListRequest))
+		return srv.(RoomServiceServer).GetRooms(ctx, req.(*GetRoomsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _RoomService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RoomRequest)
+func _RoomService_GetRoom_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRoomRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(RoomServiceServer).Get(ctx, in)
+		return srv.(RoomServiceServer).GetRoom(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/at_core_service.RoomService/Get",
+		FullMethod: "/at.core.RoomService/GetRoom",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RoomServiceServer).Get(ctx, req.(*RoomRequest))
+		return srv.(RoomServiceServer).GetRoom(ctx, req.(*GetRoomRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _RoomService_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RoomCreateRequest)
+func _RoomService_CreateRoom_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateRoomRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(RoomServiceServer).Create(ctx, in)
+		return srv.(RoomServiceServer).CreateRoom(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/at_core_service.RoomService/Create",
+		FullMethod: "/at.core.RoomService/CreateRoom",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RoomServiceServer).Create(ctx, req.(*RoomCreateRequest))
+		return srv.(RoomServiceServer).CreateRoom(ctx, req.(*CreateRoomRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _RoomService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RoomUpdateRequest)
+func _RoomService_UpdateRoom_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateRoomRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(RoomServiceServer).Update(ctx, in)
+		return srv.(RoomServiceServer).UpdateRoom(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/at_core_service.RoomService/Update",
+		FullMethod: "/at.core.RoomService/UpdateRoom",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RoomServiceServer).Update(ctx, req.(*RoomUpdateRequest))
+		return srv.(RoomServiceServer).UpdateRoom(ctx, req.(*UpdateRoomRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _RoomService_SetDevice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RoomDeviceRequest)
+func _RoomService_JoinCustomerDevice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(JoinCustomerDeviceRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(RoomServiceServer).SetDevice(ctx, in)
+		return srv.(RoomServiceServer).JoinCustomerDevice(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/at_core_service.RoomService/SetDevice",
+		FullMethod: "/at.core.RoomService/JoinCustomerDevice",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RoomServiceServer).SetDevice(ctx, req.(*RoomDeviceRequest))
+		return srv.(RoomServiceServer).JoinCustomerDevice(ctx, req.(*JoinCustomerDeviceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _RoomService_DeleteDevice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RoomRequest)
+func _RoomService_LeaveCustomerDevice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LeaveCustomerDeviceRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(RoomServiceServer).DeleteDevice(ctx, in)
+		return srv.(RoomServiceServer).LeaveCustomerDevice(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/at_core_service.RoomService/DeleteDevice",
+		FullMethod: "/at.core.RoomService/LeaveCustomerDevice",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RoomServiceServer).DeleteDevice(ctx, req.(*RoomRequest))
+		return srv.(RoomServiceServer).LeaveCustomerDevice(ctx, req.(*LeaveCustomerDeviceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _RoomService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RoomRequest)
+func _RoomService_DeleteRoom_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteRoomRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(RoomServiceServer).Delete(ctx, in)
+		return srv.(RoomServiceServer).DeleteRoom(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/at_core_service.RoomService/Delete",
+		FullMethod: "/at.core.RoomService/DeleteRoom",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RoomServiceServer).Delete(ctx, req.(*RoomRequest))
+		return srv.(RoomServiceServer).DeleteRoom(ctx, req.(*DeleteRoomRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-var _RoomService_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "at_core_service.RoomService",
+// RoomService_ServiceDesc is the grpc.ServiceDesc for RoomService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var RoomService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "at.core.RoomService",
 	HandlerType: (*RoomServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "List",
-			Handler:    _RoomService_List_Handler,
+			MethodName: "GetRooms",
+			Handler:    _RoomService_GetRooms_Handler,
 		},
 		{
-			MethodName: "Get",
-			Handler:    _RoomService_Get_Handler,
+			MethodName: "GetRoom",
+			Handler:    _RoomService_GetRoom_Handler,
 		},
 		{
-			MethodName: "Create",
-			Handler:    _RoomService_Create_Handler,
+			MethodName: "CreateRoom",
+			Handler:    _RoomService_CreateRoom_Handler,
 		},
 		{
-			MethodName: "Update",
-			Handler:    _RoomService_Update_Handler,
+			MethodName: "UpdateRoom",
+			Handler:    _RoomService_UpdateRoom_Handler,
 		},
 		{
-			MethodName: "SetDevice",
-			Handler:    _RoomService_SetDevice_Handler,
+			MethodName: "JoinCustomerDevice",
+			Handler:    _RoomService_JoinCustomerDevice_Handler,
 		},
 		{
-			MethodName: "DeleteDevice",
-			Handler:    _RoomService_DeleteDevice_Handler,
+			MethodName: "LeaveCustomerDevice",
+			Handler:    _RoomService_LeaveCustomerDevice_Handler,
 		},
 		{
-			MethodName: "Delete",
-			Handler:    _RoomService_Delete_Handler,
+			MethodName: "DeleteRoom",
+			Handler:    _RoomService_DeleteRoom_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "room.proto",
+	Metadata: "core/room.proto",
 }

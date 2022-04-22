@@ -12,6 +12,7 @@ import (
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
+// Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
 // ContentServiceClient is the client API for ContentService service.
@@ -19,34 +20,35 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ContentServiceClient interface {
 	// コンテンツのリストを取得します。
-	// 取得するコンテンツのチームIDを指定した ContentListRequest を渡します。
-	// 指定されたチームIDのコンテンツのリストが設定された Contents が返ります。
-	List(ctx context.Context, in *ContentListRequest, opts ...grpc.CallOption) (*Contents, error)
-	// 指定されたコンテンツタイプのコンテンツのリストを取得します。
-	// 取得するコンテンツのチームIDとコンテンツタイプを指定した ContentListByTypeRequest を渡します。
-	// 指定されたチームIDとコンテンツタイプのコンテンツのリストが設定された Contents が返ります。
-	ListContentType(ctx context.Context, in *ContentListByTypeRequest, opts ...grpc.CallOption) (*Contents, error)
+	// 取得するコンテンツのチームIDを指定した GetContentsRequest を渡します。
+	// contents_types に1つ以上のコンテンツタイプを指定すると、指定されたコンテンツタイプのコンテンツのみ取得します。
+	// 指定されたチームIDのコンテンツ情報のリストが設定された GetContentsResponse が返ります。
+	GetContents(ctx context.Context, in *GetContentsRequest, opts ...grpc.CallOption) (*GetContentsResponse, error)
 	// コンテンツを取得します。
-	// 取得するコンテンツのコンテンツIDを指定した ContentRequest を渡します。
-	// コンテンツが存在する場合、Content が返ります。
-	Get(ctx context.Context, in *ContentRequest, opts ...grpc.CallOption) (*Content, error)
+	// 取得するコンテンツのコンテンツIDを指定した GetContentRequest を渡します。
+	// コンテンツが存在する場合、コンテンツ情報が設定された GetContentResponse が返ります。
+	GetContent(ctx context.Context, in *GetContentRequest, opts ...grpc.CallOption) (*GetContentResponse, error)
 	// コンテンツをアップロードします。
-	// チームID、アップロードするコンテンツのコンテンツ名とコンテンツタイプを指定した ContentUploadRequest を渡します。
+	// チームID、アップロードするコンテンツのコンテンツ名とコンテンツタイプを指定した UploadContentRequest を渡します。
 	// アップロードを行うための URL が設定された ContentUploadURL が返ります。
 	// このURLにコンテンツデータをHTTP POSTメソッドで転送することで、アップロードが行われます。
 	// アップロード完了後、FinishUpload メソッドでアップロードの完了を登録します。
-	Upload(ctx context.Context, in *ContentUploadRequest, opts ...grpc.CallOption) (*ContentUploadURL, error)
+	UploadContent(ctx context.Context, in *UploadContentRequest, opts ...grpc.CallOption) (*UploadContentResponse, error)
 	// コンテンツのアップロード完了を登録します。
 	// チームID、コンテンツID、アップロードしたコンテンツのMD5ハッシュを指定した FinishUploadRequest を渡します。
 	// 登録に成功すると Content が返ります。
-	FinishUpload(ctx context.Context, in *FinishUploadRequest, opts ...grpc.CallOption) (*Content, error)
+	FinishUploadContent(ctx context.Context, in *FinishUploadContentRequest, opts ...grpc.CallOption) (*FinishUploadContentResponse, error)
+	// コンテンツをダウンロードするための情報を取得します。
+	// ダウンロードするコンテンツのチームID、コンテンツIDを指定した、DownloadContentRequest を渡します。
+	// コンテンツが存在する場合、コンテンツ情報とダウンロードURLが設定された DownloadContentResponse が返ります。
+	DownloadContent(ctx context.Context, in *DownloadContentRequest, opts ...grpc.CallOption) (*DownloadContentResponse, error)
 	// コンテンツを更新します。
 	// 更新するコンテンツのコンテンツIDと、新しいコンテンツ名を指定した ContentUpdateRequest を渡します。
 	// コンテンツの作成に成功すると、Content が返ります。
-	Update(ctx context.Context, in *ContentUpdateRequest, opts ...grpc.CallOption) (*Content, error)
+	UpdateContent(ctx context.Context, in *UpdateContentRequest, opts ...grpc.CallOption) (*UpdateContentResponse, error)
 	// コンテンツを削除します。
 	// 削除するコンテンツのコンテンツIDを指定した ContentRequest を渡します。
-	Delete(ctx context.Context, in *ContentRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	DeleteContent(ctx context.Context, in *DeleteContentRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type contentServiceClient struct {
@@ -57,63 +59,63 @@ func NewContentServiceClient(cc grpc.ClientConnInterface) ContentServiceClient {
 	return &contentServiceClient{cc}
 }
 
-func (c *contentServiceClient) List(ctx context.Context, in *ContentListRequest, opts ...grpc.CallOption) (*Contents, error) {
-	out := new(Contents)
-	err := c.cc.Invoke(ctx, "/at_core_service.ContentService/List", in, out, opts...)
+func (c *contentServiceClient) GetContents(ctx context.Context, in *GetContentsRequest, opts ...grpc.CallOption) (*GetContentsResponse, error) {
+	out := new(GetContentsResponse)
+	err := c.cc.Invoke(ctx, "/at.core.ContentService/GetContents", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *contentServiceClient) ListContentType(ctx context.Context, in *ContentListByTypeRequest, opts ...grpc.CallOption) (*Contents, error) {
-	out := new(Contents)
-	err := c.cc.Invoke(ctx, "/at_core_service.ContentService/ListContentType", in, out, opts...)
+func (c *contentServiceClient) GetContent(ctx context.Context, in *GetContentRequest, opts ...grpc.CallOption) (*GetContentResponse, error) {
+	out := new(GetContentResponse)
+	err := c.cc.Invoke(ctx, "/at.core.ContentService/GetContent", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *contentServiceClient) Get(ctx context.Context, in *ContentRequest, opts ...grpc.CallOption) (*Content, error) {
-	out := new(Content)
-	err := c.cc.Invoke(ctx, "/at_core_service.ContentService/Get", in, out, opts...)
+func (c *contentServiceClient) UploadContent(ctx context.Context, in *UploadContentRequest, opts ...grpc.CallOption) (*UploadContentResponse, error) {
+	out := new(UploadContentResponse)
+	err := c.cc.Invoke(ctx, "/at.core.ContentService/UploadContent", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *contentServiceClient) Upload(ctx context.Context, in *ContentUploadRequest, opts ...grpc.CallOption) (*ContentUploadURL, error) {
-	out := new(ContentUploadURL)
-	err := c.cc.Invoke(ctx, "/at_core_service.ContentService/Upload", in, out, opts...)
+func (c *contentServiceClient) FinishUploadContent(ctx context.Context, in *FinishUploadContentRequest, opts ...grpc.CallOption) (*FinishUploadContentResponse, error) {
+	out := new(FinishUploadContentResponse)
+	err := c.cc.Invoke(ctx, "/at.core.ContentService/FinishUploadContent", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *contentServiceClient) FinishUpload(ctx context.Context, in *FinishUploadRequest, opts ...grpc.CallOption) (*Content, error) {
-	out := new(Content)
-	err := c.cc.Invoke(ctx, "/at_core_service.ContentService/FinishUpload", in, out, opts...)
+func (c *contentServiceClient) DownloadContent(ctx context.Context, in *DownloadContentRequest, opts ...grpc.CallOption) (*DownloadContentResponse, error) {
+	out := new(DownloadContentResponse)
+	err := c.cc.Invoke(ctx, "/at.core.ContentService/DownloadContent", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *contentServiceClient) Update(ctx context.Context, in *ContentUpdateRequest, opts ...grpc.CallOption) (*Content, error) {
-	out := new(Content)
-	err := c.cc.Invoke(ctx, "/at_core_service.ContentService/Update", in, out, opts...)
+func (c *contentServiceClient) UpdateContent(ctx context.Context, in *UpdateContentRequest, opts ...grpc.CallOption) (*UpdateContentResponse, error) {
+	out := new(UpdateContentResponse)
+	err := c.cc.Invoke(ctx, "/at.core.ContentService/UpdateContent", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *contentServiceClient) Delete(ctx context.Context, in *ContentRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *contentServiceClient) DeleteContent(ctx context.Context, in *DeleteContentRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/at_core_service.ContentService/Delete", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/at.core.ContentService/DeleteContent", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -125,34 +127,35 @@ func (c *contentServiceClient) Delete(ctx context.Context, in *ContentRequest, o
 // for forward compatibility
 type ContentServiceServer interface {
 	// コンテンツのリストを取得します。
-	// 取得するコンテンツのチームIDを指定した ContentListRequest を渡します。
-	// 指定されたチームIDのコンテンツのリストが設定された Contents が返ります。
-	List(context.Context, *ContentListRequest) (*Contents, error)
-	// 指定されたコンテンツタイプのコンテンツのリストを取得します。
-	// 取得するコンテンツのチームIDとコンテンツタイプを指定した ContentListByTypeRequest を渡します。
-	// 指定されたチームIDとコンテンツタイプのコンテンツのリストが設定された Contents が返ります。
-	ListContentType(context.Context, *ContentListByTypeRequest) (*Contents, error)
+	// 取得するコンテンツのチームIDを指定した GetContentsRequest を渡します。
+	// contents_types に1つ以上のコンテンツタイプを指定すると、指定されたコンテンツタイプのコンテンツのみ取得します。
+	// 指定されたチームIDのコンテンツ情報のリストが設定された GetContentsResponse が返ります。
+	GetContents(context.Context, *GetContentsRequest) (*GetContentsResponse, error)
 	// コンテンツを取得します。
-	// 取得するコンテンツのコンテンツIDを指定した ContentRequest を渡します。
-	// コンテンツが存在する場合、Content が返ります。
-	Get(context.Context, *ContentRequest) (*Content, error)
+	// 取得するコンテンツのコンテンツIDを指定した GetContentRequest を渡します。
+	// コンテンツが存在する場合、コンテンツ情報が設定された GetContentResponse が返ります。
+	GetContent(context.Context, *GetContentRequest) (*GetContentResponse, error)
 	// コンテンツをアップロードします。
-	// チームID、アップロードするコンテンツのコンテンツ名とコンテンツタイプを指定した ContentUploadRequest を渡します。
+	// チームID、アップロードするコンテンツのコンテンツ名とコンテンツタイプを指定した UploadContentRequest を渡します。
 	// アップロードを行うための URL が設定された ContentUploadURL が返ります。
 	// このURLにコンテンツデータをHTTP POSTメソッドで転送することで、アップロードが行われます。
 	// アップロード完了後、FinishUpload メソッドでアップロードの完了を登録します。
-	Upload(context.Context, *ContentUploadRequest) (*ContentUploadURL, error)
+	UploadContent(context.Context, *UploadContentRequest) (*UploadContentResponse, error)
 	// コンテンツのアップロード完了を登録します。
 	// チームID、コンテンツID、アップロードしたコンテンツのMD5ハッシュを指定した FinishUploadRequest を渡します。
 	// 登録に成功すると Content が返ります。
-	FinishUpload(context.Context, *FinishUploadRequest) (*Content, error)
+	FinishUploadContent(context.Context, *FinishUploadContentRequest) (*FinishUploadContentResponse, error)
+	// コンテンツをダウンロードするための情報を取得します。
+	// ダウンロードするコンテンツのチームID、コンテンツIDを指定した、DownloadContentRequest を渡します。
+	// コンテンツが存在する場合、コンテンツ情報とダウンロードURLが設定された DownloadContentResponse が返ります。
+	DownloadContent(context.Context, *DownloadContentRequest) (*DownloadContentResponse, error)
 	// コンテンツを更新します。
 	// 更新するコンテンツのコンテンツIDと、新しいコンテンツ名を指定した ContentUpdateRequest を渡します。
 	// コンテンツの作成に成功すると、Content が返ります。
-	Update(context.Context, *ContentUpdateRequest) (*Content, error)
+	UpdateContent(context.Context, *UpdateContentRequest) (*UpdateContentResponse, error)
 	// コンテンツを削除します。
 	// 削除するコンテンツのコンテンツIDを指定した ContentRequest を渡します。
-	Delete(context.Context, *ContentRequest) (*emptypb.Empty, error)
+	DeleteContent(context.Context, *DeleteContentRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedContentServiceServer()
 }
 
@@ -160,26 +163,26 @@ type ContentServiceServer interface {
 type UnimplementedContentServiceServer struct {
 }
 
-func (UnimplementedContentServiceServer) List(context.Context, *ContentListRequest) (*Contents, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
+func (UnimplementedContentServiceServer) GetContents(context.Context, *GetContentsRequest) (*GetContentsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetContents not implemented")
 }
-func (UnimplementedContentServiceServer) ListContentType(context.Context, *ContentListByTypeRequest) (*Contents, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListContentType not implemented")
+func (UnimplementedContentServiceServer) GetContent(context.Context, *GetContentRequest) (*GetContentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetContent not implemented")
 }
-func (UnimplementedContentServiceServer) Get(context.Context, *ContentRequest) (*Content, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+func (UnimplementedContentServiceServer) UploadContent(context.Context, *UploadContentRequest) (*UploadContentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UploadContent not implemented")
 }
-func (UnimplementedContentServiceServer) Upload(context.Context, *ContentUploadRequest) (*ContentUploadURL, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Upload not implemented")
+func (UnimplementedContentServiceServer) FinishUploadContent(context.Context, *FinishUploadContentRequest) (*FinishUploadContentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FinishUploadContent not implemented")
 }
-func (UnimplementedContentServiceServer) FinishUpload(context.Context, *FinishUploadRequest) (*Content, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method FinishUpload not implemented")
+func (UnimplementedContentServiceServer) DownloadContent(context.Context, *DownloadContentRequest) (*DownloadContentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DownloadContent not implemented")
 }
-func (UnimplementedContentServiceServer) Update(context.Context, *ContentUpdateRequest) (*Content, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+func (UnimplementedContentServiceServer) UpdateContent(context.Context, *UpdateContentRequest) (*UpdateContentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateContent not implemented")
 }
-func (UnimplementedContentServiceServer) Delete(context.Context, *ContentRequest) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
+func (UnimplementedContentServiceServer) DeleteContent(context.Context, *DeleteContentRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteContent not implemented")
 }
 func (UnimplementedContentServiceServer) mustEmbedUnimplementedContentServiceServer() {}
 
@@ -191,168 +194,171 @@ type UnsafeContentServiceServer interface {
 }
 
 func RegisterContentServiceServer(s grpc.ServiceRegistrar, srv ContentServiceServer) {
-	s.RegisterService(&_ContentService_serviceDesc, srv)
+	s.RegisterService(&ContentService_ServiceDesc, srv)
 }
 
-func _ContentService_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ContentListRequest)
+func _ContentService_GetContents_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetContentsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ContentServiceServer).List(ctx, in)
+		return srv.(ContentServiceServer).GetContents(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/at_core_service.ContentService/List",
+		FullMethod: "/at.core.ContentService/GetContents",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContentServiceServer).List(ctx, req.(*ContentListRequest))
+		return srv.(ContentServiceServer).GetContents(ctx, req.(*GetContentsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ContentService_ListContentType_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ContentListByTypeRequest)
+func _ContentService_GetContent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetContentRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ContentServiceServer).ListContentType(ctx, in)
+		return srv.(ContentServiceServer).GetContent(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/at_core_service.ContentService/ListContentType",
+		FullMethod: "/at.core.ContentService/GetContent",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContentServiceServer).ListContentType(ctx, req.(*ContentListByTypeRequest))
+		return srv.(ContentServiceServer).GetContent(ctx, req.(*GetContentRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ContentService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ContentRequest)
+func _ContentService_UploadContent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UploadContentRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ContentServiceServer).Get(ctx, in)
+		return srv.(ContentServiceServer).UploadContent(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/at_core_service.ContentService/Get",
+		FullMethod: "/at.core.ContentService/UploadContent",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContentServiceServer).Get(ctx, req.(*ContentRequest))
+		return srv.(ContentServiceServer).UploadContent(ctx, req.(*UploadContentRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ContentService_Upload_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ContentUploadRequest)
+func _ContentService_FinishUploadContent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FinishUploadContentRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ContentServiceServer).Upload(ctx, in)
+		return srv.(ContentServiceServer).FinishUploadContent(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/at_core_service.ContentService/Upload",
+		FullMethod: "/at.core.ContentService/FinishUploadContent",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContentServiceServer).Upload(ctx, req.(*ContentUploadRequest))
+		return srv.(ContentServiceServer).FinishUploadContent(ctx, req.(*FinishUploadContentRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ContentService_FinishUpload_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(FinishUploadRequest)
+func _ContentService_DownloadContent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DownloadContentRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ContentServiceServer).FinishUpload(ctx, in)
+		return srv.(ContentServiceServer).DownloadContent(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/at_core_service.ContentService/FinishUpload",
+		FullMethod: "/at.core.ContentService/DownloadContent",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContentServiceServer).FinishUpload(ctx, req.(*FinishUploadRequest))
+		return srv.(ContentServiceServer).DownloadContent(ctx, req.(*DownloadContentRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ContentService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ContentUpdateRequest)
+func _ContentService_UpdateContent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateContentRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ContentServiceServer).Update(ctx, in)
+		return srv.(ContentServiceServer).UpdateContent(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/at_core_service.ContentService/Update",
+		FullMethod: "/at.core.ContentService/UpdateContent",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContentServiceServer).Update(ctx, req.(*ContentUpdateRequest))
+		return srv.(ContentServiceServer).UpdateContent(ctx, req.(*UpdateContentRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ContentService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ContentRequest)
+func _ContentService_DeleteContent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteContentRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ContentServiceServer).Delete(ctx, in)
+		return srv.(ContentServiceServer).DeleteContent(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/at_core_service.ContentService/Delete",
+		FullMethod: "/at.core.ContentService/DeleteContent",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ContentServiceServer).Delete(ctx, req.(*ContentRequest))
+		return srv.(ContentServiceServer).DeleteContent(ctx, req.(*DeleteContentRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-var _ContentService_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "at_core_service.ContentService",
+// ContentService_ServiceDesc is the grpc.ServiceDesc for ContentService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var ContentService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "at.core.ContentService",
 	HandlerType: (*ContentServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "List",
-			Handler:    _ContentService_List_Handler,
+			MethodName: "GetContents",
+			Handler:    _ContentService_GetContents_Handler,
 		},
 		{
-			MethodName: "ListContentType",
-			Handler:    _ContentService_ListContentType_Handler,
+			MethodName: "GetContent",
+			Handler:    _ContentService_GetContent_Handler,
 		},
 		{
-			MethodName: "Get",
-			Handler:    _ContentService_Get_Handler,
+			MethodName: "UploadContent",
+			Handler:    _ContentService_UploadContent_Handler,
 		},
 		{
-			MethodName: "Upload",
-			Handler:    _ContentService_Upload_Handler,
+			MethodName: "FinishUploadContent",
+			Handler:    _ContentService_FinishUploadContent_Handler,
 		},
 		{
-			MethodName: "FinishUpload",
-			Handler:    _ContentService_FinishUpload_Handler,
+			MethodName: "DownloadContent",
+			Handler:    _ContentService_DownloadContent_Handler,
 		},
 		{
-			MethodName: "Update",
-			Handler:    _ContentService_Update_Handler,
+			MethodName: "UpdateContent",
+			Handler:    _ContentService_UpdateContent_Handler,
 		},
 		{
-			MethodName: "Delete",
-			Handler:    _ContentService_Delete_Handler,
+			MethodName: "DeleteContent",
+			Handler:    _ContentService_DeleteContent_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "content.proto",
+	Metadata: "core/content.proto",
 }

@@ -12,50 +12,44 @@ import (
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
+// Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
 // AvatarServiceClient is the client API for AvatarService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AvatarServiceClient interface {
-	// アバターリストを取得します。
-	// 取得するアバターのチームIDを指定した AvatarListRequest を渡します。
-	// 指定されたチームIDのアバターのリストが設定された Avatars が返ります。
-	List(ctx context.Context, in *AvatarListRequest, opts ...grpc.CallOption) (*Avatars, error)
-	// アバターを取得します。
-	// 取得するアバターのアバターIDとチームIDを指定した AvatarRequest を渡します。
-	// アバターが存在する場合、Avatar が返ります。
-	Get(ctx context.Context, in *AvatarRequest, opts ...grpc.CallOption) (*Avatar, error)
+	// アバター情報のリストを取得します。
+	// 取得するアバターのチームIDを指定した GetAvatarsRequest を渡します。
+	// used_only に true を指定すると、Operator デバイスに設定されているアバターのみ取得します。
+	// 指定されたチームIDのアバター情報のリストが設定された GetAvatarsResponse が返ります。
+	GetAvatars(ctx context.Context, in *GetAvatarsRequest, opts ...grpc.CallOption) (*GetAvatarsResponse, error)
+	// アバター情報を取得します。
+	// 取得するアバターのアバターIDとチームIDを指定した GetAvatarRequest を渡します。
+	// アバターが存在する場合、アバター情報が設定された GetAvatarResponse が返ります。
+	GetAvatar(ctx context.Context, in *GetAvatarRequest, opts ...grpc.CallOption) (*GetAvatarResponse, error)
 	// 新しくアバターを作成します。
-	// アバター名とアバターのコンテンツID、アニメーションのコンテンツID、チームIDを指定した AvatarCreateRequest を渡します。
-	// アバターの作成に成功すると、アバターIDが設定さた Avatar が返ります。
-	Create(ctx context.Context, in *AvatarCreateRequest, opts ...grpc.CallOption) (*Avatar, error)
-	// アバターを更新します。
-	// 更新するアバターのアバターIDとチームID、新しいアバター名、アバターのコンテンツID、アニメーションのコンテンツIDを指定した AvatarUpdateRequest を渡します。
-	// アバターの作成に成功すると、Avatar が返ります。
-	Update(ctx context.Context, in *AvatarUpdateRequest, opts ...grpc.CallOption) (*Avatar, error)
-	// オペレーターデバイスのアバターを取得します。
-	// 取得するオペレーターデバイスのデバイスIDを指定した OperatorAvatarRequest を渡します。
-	// デバイスのアバターが設定されている場合、Avatar が返ります。
-	GetByOperator(ctx context.Context, in *OperatorAvatarRequest, opts ...grpc.CallOption) (*Avatar, error)
+	// アバター名とアバターのコンテンツID、アニメーションのコンテンツID、チームIDを指定した CreateAvatarRequest を渡します。
+	// アバターの作成に成功すると、作成したアバター情報が設定された CreateAvatarResponse が返ります。
+	CreateAvatar(ctx context.Context, in *CreateAvatarRequest, opts ...grpc.CallOption) (*CreateAvatarResponse, error)
+	// アバター情報を更新します。
+	// 更新するアバターのアバターIDとチームID、新しいアバター名、アバターのコンテンツID、アニメーションのコンテンツIDを指定した UpdateAvatarRequest を渡します。
+	// アバターの更新に成功すると、更新したアバター情報が設定された UpdateAvatarResponse が返ります。
+	UpdateAvatar(ctx context.Context, in *UpdateAvatarRequest, opts ...grpc.CallOption) (*UpdateAvatarResponse, error)
 	// アバターを削除します。
-	// 削除するアバターのアバターIDとチームIDを指定した AvatarRequest を渡します。
-	Delete(ctx context.Context, in *AvatarRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	// オペレーターアバターリストを取得します。
-	// 取得するオペレーターアバターのチームIDを指定した OperatorAvatarListRequest を渡します。
-	// 指定されたチームIDのオペレーターアバターのリストが設定された OperatorAvatars が返ります。
-	ListOperatorAvatar(ctx context.Context, in *OperatorAvatarListRequest, opts ...grpc.CallOption) (*OperatorAvatars, error)
-	// オペレーターアバターを取得します。
-	// 取得するオペレーターアバターのデバイスIDとチームIDを指定した OperatorAvatarRequest を渡します。
+	// 削除するアバターのアバターIDとチームIDを指定した DeleteAvatarRequest を渡します。
+	DeleteAvatar(ctx context.Context, in *DeleteAvatarRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// オペレーターデバイスに設定されているアバター情報を取得します。
+	// アバター情報を取得するオペレーターデバイスのデバイスIDとチームIDを指定した GetOperatorAvatarRequest を渡します。
 	// デバイスにオペレーターが設定されている場合、OperatorAvatar が返ります。
-	GetOperatorAvatar(ctx context.Context, in *OperatorAvatarRequest, opts ...grpc.CallOption) (*OperatorAvatar, error)
+	GetOperatorAvatar(ctx context.Context, in *GetOperatorAvatarRequest, opts ...grpc.CallOption) (*GetOperatorAvatarResponse, error)
 	// オペレーターデバイスにアバターを設定します。
-	// 設定するアバターのアバターIDと、設定するオペレーターデバイスのデバイスIDとチームIDを指定した OperatorAvatarSetRequest を渡します。
-	// オペレーターデバイスへのアバターの設定に成功すると、OperatorAvatar が返ります。
-	SetOperatorAvatar(ctx context.Context, in *OperatorAvatarSetRequest, opts ...grpc.CallOption) (*OperatorAvatar, error)
+	// 設定するアバターのアバターIDと、設定するオペレーターデバイスのデバイスIDとチームIDを指定した SetOperatorAvatarRequest を渡します。
+	// オペレーターデバイスへのアバターの設定に成功すると、オペレーターアバター情報を設定した SetOperatorAvatarResponse が返ります。
+	SetOperatorAvatar(ctx context.Context, in *SetOperatorAvatarRequest, opts ...grpc.CallOption) (*SetOperatorAvatarResponse, error)
 	// オペレーターデバイスに設定されたアバターを削除します。
-	// 削除するオペレーターデバイスのデバイスIDとチームIDを指定した OperatorAvatarRequest を渡します。
-	DeleteOperatorAvatar(ctx context.Context, in *OperatorAvatarRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// 削除するオペレーターデバイスのデバイスIDとチームIDを指定した DeleteOperatorAvatarRequest を渡します。
+	DeleteOperatorAvatar(ctx context.Context, in *DeleteOperatorAvatarRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type avatarServiceClient struct {
@@ -66,90 +60,72 @@ func NewAvatarServiceClient(cc grpc.ClientConnInterface) AvatarServiceClient {
 	return &avatarServiceClient{cc}
 }
 
-func (c *avatarServiceClient) List(ctx context.Context, in *AvatarListRequest, opts ...grpc.CallOption) (*Avatars, error) {
-	out := new(Avatars)
-	err := c.cc.Invoke(ctx, "/at_core_service.AvatarService/List", in, out, opts...)
+func (c *avatarServiceClient) GetAvatars(ctx context.Context, in *GetAvatarsRequest, opts ...grpc.CallOption) (*GetAvatarsResponse, error) {
+	out := new(GetAvatarsResponse)
+	err := c.cc.Invoke(ctx, "/at.core.AvatarService/GetAvatars", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *avatarServiceClient) Get(ctx context.Context, in *AvatarRequest, opts ...grpc.CallOption) (*Avatar, error) {
-	out := new(Avatar)
-	err := c.cc.Invoke(ctx, "/at_core_service.AvatarService/Get", in, out, opts...)
+func (c *avatarServiceClient) GetAvatar(ctx context.Context, in *GetAvatarRequest, opts ...grpc.CallOption) (*GetAvatarResponse, error) {
+	out := new(GetAvatarResponse)
+	err := c.cc.Invoke(ctx, "/at.core.AvatarService/GetAvatar", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *avatarServiceClient) Create(ctx context.Context, in *AvatarCreateRequest, opts ...grpc.CallOption) (*Avatar, error) {
-	out := new(Avatar)
-	err := c.cc.Invoke(ctx, "/at_core_service.AvatarService/Create", in, out, opts...)
+func (c *avatarServiceClient) CreateAvatar(ctx context.Context, in *CreateAvatarRequest, opts ...grpc.CallOption) (*CreateAvatarResponse, error) {
+	out := new(CreateAvatarResponse)
+	err := c.cc.Invoke(ctx, "/at.core.AvatarService/CreateAvatar", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *avatarServiceClient) Update(ctx context.Context, in *AvatarUpdateRequest, opts ...grpc.CallOption) (*Avatar, error) {
-	out := new(Avatar)
-	err := c.cc.Invoke(ctx, "/at_core_service.AvatarService/Update", in, out, opts...)
+func (c *avatarServiceClient) UpdateAvatar(ctx context.Context, in *UpdateAvatarRequest, opts ...grpc.CallOption) (*UpdateAvatarResponse, error) {
+	out := new(UpdateAvatarResponse)
+	err := c.cc.Invoke(ctx, "/at.core.AvatarService/UpdateAvatar", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *avatarServiceClient) GetByOperator(ctx context.Context, in *OperatorAvatarRequest, opts ...grpc.CallOption) (*Avatar, error) {
-	out := new(Avatar)
-	err := c.cc.Invoke(ctx, "/at_core_service.AvatarService/GetByOperator", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *avatarServiceClient) Delete(ctx context.Context, in *AvatarRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *avatarServiceClient) DeleteAvatar(ctx context.Context, in *DeleteAvatarRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/at_core_service.AvatarService/Delete", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/at.core.AvatarService/DeleteAvatar", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *avatarServiceClient) ListOperatorAvatar(ctx context.Context, in *OperatorAvatarListRequest, opts ...grpc.CallOption) (*OperatorAvatars, error) {
-	out := new(OperatorAvatars)
-	err := c.cc.Invoke(ctx, "/at_core_service.AvatarService/ListOperatorAvatar", in, out, opts...)
+func (c *avatarServiceClient) GetOperatorAvatar(ctx context.Context, in *GetOperatorAvatarRequest, opts ...grpc.CallOption) (*GetOperatorAvatarResponse, error) {
+	out := new(GetOperatorAvatarResponse)
+	err := c.cc.Invoke(ctx, "/at.core.AvatarService/GetOperatorAvatar", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *avatarServiceClient) GetOperatorAvatar(ctx context.Context, in *OperatorAvatarRequest, opts ...grpc.CallOption) (*OperatorAvatar, error) {
-	out := new(OperatorAvatar)
-	err := c.cc.Invoke(ctx, "/at_core_service.AvatarService/GetOperatorAvatar", in, out, opts...)
+func (c *avatarServiceClient) SetOperatorAvatar(ctx context.Context, in *SetOperatorAvatarRequest, opts ...grpc.CallOption) (*SetOperatorAvatarResponse, error) {
+	out := new(SetOperatorAvatarResponse)
+	err := c.cc.Invoke(ctx, "/at.core.AvatarService/SetOperatorAvatar", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *avatarServiceClient) SetOperatorAvatar(ctx context.Context, in *OperatorAvatarSetRequest, opts ...grpc.CallOption) (*OperatorAvatar, error) {
-	out := new(OperatorAvatar)
-	err := c.cc.Invoke(ctx, "/at_core_service.AvatarService/SetOperatorAvatar", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *avatarServiceClient) DeleteOperatorAvatar(ctx context.Context, in *OperatorAvatarRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *avatarServiceClient) DeleteOperatorAvatar(ctx context.Context, in *DeleteOperatorAvatarRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/at_core_service.AvatarService/DeleteOperatorAvatar", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/at.core.AvatarService/DeleteOperatorAvatar", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -160,44 +136,37 @@ func (c *avatarServiceClient) DeleteOperatorAvatar(ctx context.Context, in *Oper
 // All implementations must embed UnimplementedAvatarServiceServer
 // for forward compatibility
 type AvatarServiceServer interface {
-	// アバターリストを取得します。
-	// 取得するアバターのチームIDを指定した AvatarListRequest を渡します。
-	// 指定されたチームIDのアバターのリストが設定された Avatars が返ります。
-	List(context.Context, *AvatarListRequest) (*Avatars, error)
-	// アバターを取得します。
-	// 取得するアバターのアバターIDとチームIDを指定した AvatarRequest を渡します。
-	// アバターが存在する場合、Avatar が返ります。
-	Get(context.Context, *AvatarRequest) (*Avatar, error)
+	// アバター情報のリストを取得します。
+	// 取得するアバターのチームIDを指定した GetAvatarsRequest を渡します。
+	// used_only に true を指定すると、Operator デバイスに設定されているアバターのみ取得します。
+	// 指定されたチームIDのアバター情報のリストが設定された GetAvatarsResponse が返ります。
+	GetAvatars(context.Context, *GetAvatarsRequest) (*GetAvatarsResponse, error)
+	// アバター情報を取得します。
+	// 取得するアバターのアバターIDとチームIDを指定した GetAvatarRequest を渡します。
+	// アバターが存在する場合、アバター情報が設定された GetAvatarResponse が返ります。
+	GetAvatar(context.Context, *GetAvatarRequest) (*GetAvatarResponse, error)
 	// 新しくアバターを作成します。
-	// アバター名とアバターのコンテンツID、アニメーションのコンテンツID、チームIDを指定した AvatarCreateRequest を渡します。
-	// アバターの作成に成功すると、アバターIDが設定さた Avatar が返ります。
-	Create(context.Context, *AvatarCreateRequest) (*Avatar, error)
-	// アバターを更新します。
-	// 更新するアバターのアバターIDとチームID、新しいアバター名、アバターのコンテンツID、アニメーションのコンテンツIDを指定した AvatarUpdateRequest を渡します。
-	// アバターの作成に成功すると、Avatar が返ります。
-	Update(context.Context, *AvatarUpdateRequest) (*Avatar, error)
-	// オペレーターデバイスのアバターを取得します。
-	// 取得するオペレーターデバイスのデバイスIDを指定した OperatorAvatarRequest を渡します。
-	// デバイスのアバターが設定されている場合、Avatar が返ります。
-	GetByOperator(context.Context, *OperatorAvatarRequest) (*Avatar, error)
+	// アバター名とアバターのコンテンツID、アニメーションのコンテンツID、チームIDを指定した CreateAvatarRequest を渡します。
+	// アバターの作成に成功すると、作成したアバター情報が設定された CreateAvatarResponse が返ります。
+	CreateAvatar(context.Context, *CreateAvatarRequest) (*CreateAvatarResponse, error)
+	// アバター情報を更新します。
+	// 更新するアバターのアバターIDとチームID、新しいアバター名、アバターのコンテンツID、アニメーションのコンテンツIDを指定した UpdateAvatarRequest を渡します。
+	// アバターの更新に成功すると、更新したアバター情報が設定された UpdateAvatarResponse が返ります。
+	UpdateAvatar(context.Context, *UpdateAvatarRequest) (*UpdateAvatarResponse, error)
 	// アバターを削除します。
-	// 削除するアバターのアバターIDとチームIDを指定した AvatarRequest を渡します。
-	Delete(context.Context, *AvatarRequest) (*emptypb.Empty, error)
-	// オペレーターアバターリストを取得します。
-	// 取得するオペレーターアバターのチームIDを指定した OperatorAvatarListRequest を渡します。
-	// 指定されたチームIDのオペレーターアバターのリストが設定された OperatorAvatars が返ります。
-	ListOperatorAvatar(context.Context, *OperatorAvatarListRequest) (*OperatorAvatars, error)
-	// オペレーターアバターを取得します。
-	// 取得するオペレーターアバターのデバイスIDとチームIDを指定した OperatorAvatarRequest を渡します。
+	// 削除するアバターのアバターIDとチームIDを指定した DeleteAvatarRequest を渡します。
+	DeleteAvatar(context.Context, *DeleteAvatarRequest) (*emptypb.Empty, error)
+	// オペレーターデバイスに設定されているアバター情報を取得します。
+	// アバター情報を取得するオペレーターデバイスのデバイスIDとチームIDを指定した GetOperatorAvatarRequest を渡します。
 	// デバイスにオペレーターが設定されている場合、OperatorAvatar が返ります。
-	GetOperatorAvatar(context.Context, *OperatorAvatarRequest) (*OperatorAvatar, error)
+	GetOperatorAvatar(context.Context, *GetOperatorAvatarRequest) (*GetOperatorAvatarResponse, error)
 	// オペレーターデバイスにアバターを設定します。
-	// 設定するアバターのアバターIDと、設定するオペレーターデバイスのデバイスIDとチームIDを指定した OperatorAvatarSetRequest を渡します。
-	// オペレーターデバイスへのアバターの設定に成功すると、OperatorAvatar が返ります。
-	SetOperatorAvatar(context.Context, *OperatorAvatarSetRequest) (*OperatorAvatar, error)
+	// 設定するアバターのアバターIDと、設定するオペレーターデバイスのデバイスIDとチームIDを指定した SetOperatorAvatarRequest を渡します。
+	// オペレーターデバイスへのアバターの設定に成功すると、オペレーターアバター情報を設定した SetOperatorAvatarResponse が返ります。
+	SetOperatorAvatar(context.Context, *SetOperatorAvatarRequest) (*SetOperatorAvatarResponse, error)
 	// オペレーターデバイスに設定されたアバターを削除します。
-	// 削除するオペレーターデバイスのデバイスIDとチームIDを指定した OperatorAvatarRequest を渡します。
-	DeleteOperatorAvatar(context.Context, *OperatorAvatarRequest) (*emptypb.Empty, error)
+	// 削除するオペレーターデバイスのデバイスIDとチームIDを指定した DeleteOperatorAvatarRequest を渡します。
+	DeleteOperatorAvatar(context.Context, *DeleteOperatorAvatarRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedAvatarServiceServer()
 }
 
@@ -205,34 +174,28 @@ type AvatarServiceServer interface {
 type UnimplementedAvatarServiceServer struct {
 }
 
-func (UnimplementedAvatarServiceServer) List(context.Context, *AvatarListRequest) (*Avatars, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
+func (UnimplementedAvatarServiceServer) GetAvatars(context.Context, *GetAvatarsRequest) (*GetAvatarsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAvatars not implemented")
 }
-func (UnimplementedAvatarServiceServer) Get(context.Context, *AvatarRequest) (*Avatar, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+func (UnimplementedAvatarServiceServer) GetAvatar(context.Context, *GetAvatarRequest) (*GetAvatarResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAvatar not implemented")
 }
-func (UnimplementedAvatarServiceServer) Create(context.Context, *AvatarCreateRequest) (*Avatar, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+func (UnimplementedAvatarServiceServer) CreateAvatar(context.Context, *CreateAvatarRequest) (*CreateAvatarResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateAvatar not implemented")
 }
-func (UnimplementedAvatarServiceServer) Update(context.Context, *AvatarUpdateRequest) (*Avatar, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+func (UnimplementedAvatarServiceServer) UpdateAvatar(context.Context, *UpdateAvatarRequest) (*UpdateAvatarResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateAvatar not implemented")
 }
-func (UnimplementedAvatarServiceServer) GetByOperator(context.Context, *OperatorAvatarRequest) (*Avatar, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetByOperator not implemented")
+func (UnimplementedAvatarServiceServer) DeleteAvatar(context.Context, *DeleteAvatarRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteAvatar not implemented")
 }
-func (UnimplementedAvatarServiceServer) Delete(context.Context, *AvatarRequest) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
-}
-func (UnimplementedAvatarServiceServer) ListOperatorAvatar(context.Context, *OperatorAvatarListRequest) (*OperatorAvatars, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListOperatorAvatar not implemented")
-}
-func (UnimplementedAvatarServiceServer) GetOperatorAvatar(context.Context, *OperatorAvatarRequest) (*OperatorAvatar, error) {
+func (UnimplementedAvatarServiceServer) GetOperatorAvatar(context.Context, *GetOperatorAvatarRequest) (*GetOperatorAvatarResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetOperatorAvatar not implemented")
 }
-func (UnimplementedAvatarServiceServer) SetOperatorAvatar(context.Context, *OperatorAvatarSetRequest) (*OperatorAvatar, error) {
+func (UnimplementedAvatarServiceServer) SetOperatorAvatar(context.Context, *SetOperatorAvatarRequest) (*SetOperatorAvatarResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetOperatorAvatar not implemented")
 }
-func (UnimplementedAvatarServiceServer) DeleteOperatorAvatar(context.Context, *OperatorAvatarRequest) (*emptypb.Empty, error) {
+func (UnimplementedAvatarServiceServer) DeleteOperatorAvatar(context.Context, *DeleteOperatorAvatarRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteOperatorAvatar not implemented")
 }
 func (UnimplementedAvatarServiceServer) mustEmbedUnimplementedAvatarServiceServer() {}
@@ -245,137 +208,101 @@ type UnsafeAvatarServiceServer interface {
 }
 
 func RegisterAvatarServiceServer(s grpc.ServiceRegistrar, srv AvatarServiceServer) {
-	s.RegisterService(&_AvatarService_serviceDesc, srv)
+	s.RegisterService(&AvatarService_ServiceDesc, srv)
 }
 
-func _AvatarService_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AvatarListRequest)
+func _AvatarService_GetAvatars_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAvatarsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AvatarServiceServer).List(ctx, in)
+		return srv.(AvatarServiceServer).GetAvatars(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/at_core_service.AvatarService/List",
+		FullMethod: "/at.core.AvatarService/GetAvatars",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AvatarServiceServer).List(ctx, req.(*AvatarListRequest))
+		return srv.(AvatarServiceServer).GetAvatars(ctx, req.(*GetAvatarsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AvatarService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AvatarRequest)
+func _AvatarService_GetAvatar_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAvatarRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AvatarServiceServer).Get(ctx, in)
+		return srv.(AvatarServiceServer).GetAvatar(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/at_core_service.AvatarService/Get",
+		FullMethod: "/at.core.AvatarService/GetAvatar",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AvatarServiceServer).Get(ctx, req.(*AvatarRequest))
+		return srv.(AvatarServiceServer).GetAvatar(ctx, req.(*GetAvatarRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AvatarService_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AvatarCreateRequest)
+func _AvatarService_CreateAvatar_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateAvatarRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AvatarServiceServer).Create(ctx, in)
+		return srv.(AvatarServiceServer).CreateAvatar(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/at_core_service.AvatarService/Create",
+		FullMethod: "/at.core.AvatarService/CreateAvatar",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AvatarServiceServer).Create(ctx, req.(*AvatarCreateRequest))
+		return srv.(AvatarServiceServer).CreateAvatar(ctx, req.(*CreateAvatarRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AvatarService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AvatarUpdateRequest)
+func _AvatarService_UpdateAvatar_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateAvatarRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AvatarServiceServer).Update(ctx, in)
+		return srv.(AvatarServiceServer).UpdateAvatar(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/at_core_service.AvatarService/Update",
+		FullMethod: "/at.core.AvatarService/UpdateAvatar",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AvatarServiceServer).Update(ctx, req.(*AvatarUpdateRequest))
+		return srv.(AvatarServiceServer).UpdateAvatar(ctx, req.(*UpdateAvatarRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AvatarService_GetByOperator_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(OperatorAvatarRequest)
+func _AvatarService_DeleteAvatar_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteAvatarRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AvatarServiceServer).GetByOperator(ctx, in)
+		return srv.(AvatarServiceServer).DeleteAvatar(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/at_core_service.AvatarService/GetByOperator",
+		FullMethod: "/at.core.AvatarService/DeleteAvatar",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AvatarServiceServer).GetByOperator(ctx, req.(*OperatorAvatarRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _AvatarService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AvatarRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AvatarServiceServer).Delete(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/at_core_service.AvatarService/Delete",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AvatarServiceServer).Delete(ctx, req.(*AvatarRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _AvatarService_ListOperatorAvatar_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(OperatorAvatarListRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AvatarServiceServer).ListOperatorAvatar(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/at_core_service.AvatarService/ListOperatorAvatar",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AvatarServiceServer).ListOperatorAvatar(ctx, req.(*OperatorAvatarListRequest))
+		return srv.(AvatarServiceServer).DeleteAvatar(ctx, req.(*DeleteAvatarRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _AvatarService_GetOperatorAvatar_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(OperatorAvatarRequest)
+	in := new(GetOperatorAvatarRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -384,16 +311,16 @@ func _AvatarService_GetOperatorAvatar_Handler(srv interface{}, ctx context.Conte
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/at_core_service.AvatarService/GetOperatorAvatar",
+		FullMethod: "/at.core.AvatarService/GetOperatorAvatar",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AvatarServiceServer).GetOperatorAvatar(ctx, req.(*OperatorAvatarRequest))
+		return srv.(AvatarServiceServer).GetOperatorAvatar(ctx, req.(*GetOperatorAvatarRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _AvatarService_SetOperatorAvatar_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(OperatorAvatarSetRequest)
+	in := new(SetOperatorAvatarRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -402,16 +329,16 @@ func _AvatarService_SetOperatorAvatar_Handler(srv interface{}, ctx context.Conte
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/at_core_service.AvatarService/SetOperatorAvatar",
+		FullMethod: "/at.core.AvatarService/SetOperatorAvatar",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AvatarServiceServer).SetOperatorAvatar(ctx, req.(*OperatorAvatarSetRequest))
+		return srv.(AvatarServiceServer).SetOperatorAvatar(ctx, req.(*SetOperatorAvatarRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _AvatarService_DeleteOperatorAvatar_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(OperatorAvatarRequest)
+	in := new(DeleteOperatorAvatarRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -420,45 +347,40 @@ func _AvatarService_DeleteOperatorAvatar_Handler(srv interface{}, ctx context.Co
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/at_core_service.AvatarService/DeleteOperatorAvatar",
+		FullMethod: "/at.core.AvatarService/DeleteOperatorAvatar",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AvatarServiceServer).DeleteOperatorAvatar(ctx, req.(*OperatorAvatarRequest))
+		return srv.(AvatarServiceServer).DeleteOperatorAvatar(ctx, req.(*DeleteOperatorAvatarRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-var _AvatarService_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "at_core_service.AvatarService",
+// AvatarService_ServiceDesc is the grpc.ServiceDesc for AvatarService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var AvatarService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "at.core.AvatarService",
 	HandlerType: (*AvatarServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "List",
-			Handler:    _AvatarService_List_Handler,
+			MethodName: "GetAvatars",
+			Handler:    _AvatarService_GetAvatars_Handler,
 		},
 		{
-			MethodName: "Get",
-			Handler:    _AvatarService_Get_Handler,
+			MethodName: "GetAvatar",
+			Handler:    _AvatarService_GetAvatar_Handler,
 		},
 		{
-			MethodName: "Create",
-			Handler:    _AvatarService_Create_Handler,
+			MethodName: "CreateAvatar",
+			Handler:    _AvatarService_CreateAvatar_Handler,
 		},
 		{
-			MethodName: "Update",
-			Handler:    _AvatarService_Update_Handler,
+			MethodName: "UpdateAvatar",
+			Handler:    _AvatarService_UpdateAvatar_Handler,
 		},
 		{
-			MethodName: "GetByOperator",
-			Handler:    _AvatarService_GetByOperator_Handler,
-		},
-		{
-			MethodName: "Delete",
-			Handler:    _AvatarService_Delete_Handler,
-		},
-		{
-			MethodName: "ListOperatorAvatar",
-			Handler:    _AvatarService_ListOperatorAvatar_Handler,
+			MethodName: "DeleteAvatar",
+			Handler:    _AvatarService_DeleteAvatar_Handler,
 		},
 		{
 			MethodName: "GetOperatorAvatar",
@@ -474,5 +396,5 @@ var _AvatarService_serviceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "avatar.proto",
+	Metadata: "core/avatar.proto",
 }

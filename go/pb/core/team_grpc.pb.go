@@ -12,31 +12,32 @@ import (
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
+// Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
 // TeamServiceClient is the client API for TeamService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TeamServiceClient interface {
+	// チームのリストを取得します。
+	// GetTeamsRequest を渡します。
+	// チーム情報のリストが設定された GetTeamsResponse が返ります。
+	GetTeams(ctx context.Context, in *GetTeamsRequest, opts ...grpc.CallOption) (*GetTeamsResponse, error)
 	// チームを取得します。
-	// TeamListRequest を渡します。
-	// チームのリストが設定された Teams が返ります。
-	List(ctx context.Context, in *TeamListRequest, opts ...grpc.CallOption) (*Teams, error)
-	// チームを取得します。
-	// 取得するチームのチームIDを指定した TeamRequest を渡します。
-	// チームが存在する場合、Team が返ります。
-	Get(ctx context.Context, in *TeamRequest, opts ...grpc.CallOption) (*Team, error)
+	// 取得するチームのチームIDを指定した GetTeamRequest を渡します。
+	// チームが存在する場合、チーム情報が設定された GetTeamResponse が返ります。
+	GetTeam(ctx context.Context, in *GetTeamRequest, opts ...grpc.CallOption) (*GetTeamResponse, error)
 	// 新しくチームを作成します。
-	// チーム名を指定した TeamCreateRequest を渡します。
-	// チームの作成に成功すると、チームIDが設定さた Team が返ります。
-	Create(ctx context.Context, in *TeamCreateRequest, opts ...grpc.CallOption) (*Team, error)
+	// チーム名を指定した CreateTeamRequest を渡します。
+	// チームの作成に成功すると、作成されたチーム情報が設定さた CreateTeamResponse が返ります。
+	CreateTeam(ctx context.Context, in *CreateTeamRequest, opts ...grpc.CallOption) (*CreateTeamResponse, error)
 	// チームを更新します。
-	// 更新するチームのチームIDと、新しいチーム名を指定した TeamUpdateRequest を渡します。
-	// チームの作成に成功すると、Team が返ります。
-	Update(ctx context.Context, in *TeamUpdateRequest, opts ...grpc.CallOption) (*Team, error)
+	// 更新するチームのチームIDと、新しいチーム名を指定した UpdateTeamRequest を渡します。
+	// チームの更新に成功すると、更新されたチーム情報が設定された UpdateTeamResponse が返ります。
+	UpdateTeam(ctx context.Context, in *UpdateTeamRequest, opts ...grpc.CallOption) (*UpdateTeamResponse, error)
 	// チームを削除します。
-	// 削除するチームのチームIDを指定した TeamRequest を渡します。
-	Delete(ctx context.Context, in *TeamRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// 削除するチームのチームIDを指定した DeleteTeamRequest を渡します。
+	DeleteTeam(ctx context.Context, in *DeleteTeamRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type teamServiceClient struct {
@@ -47,45 +48,45 @@ func NewTeamServiceClient(cc grpc.ClientConnInterface) TeamServiceClient {
 	return &teamServiceClient{cc}
 }
 
-func (c *teamServiceClient) List(ctx context.Context, in *TeamListRequest, opts ...grpc.CallOption) (*Teams, error) {
-	out := new(Teams)
-	err := c.cc.Invoke(ctx, "/at_core_service.TeamService/List", in, out, opts...)
+func (c *teamServiceClient) GetTeams(ctx context.Context, in *GetTeamsRequest, opts ...grpc.CallOption) (*GetTeamsResponse, error) {
+	out := new(GetTeamsResponse)
+	err := c.cc.Invoke(ctx, "/at.core.TeamService/GetTeams", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *teamServiceClient) Get(ctx context.Context, in *TeamRequest, opts ...grpc.CallOption) (*Team, error) {
-	out := new(Team)
-	err := c.cc.Invoke(ctx, "/at_core_service.TeamService/Get", in, out, opts...)
+func (c *teamServiceClient) GetTeam(ctx context.Context, in *GetTeamRequest, opts ...grpc.CallOption) (*GetTeamResponse, error) {
+	out := new(GetTeamResponse)
+	err := c.cc.Invoke(ctx, "/at.core.TeamService/GetTeam", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *teamServiceClient) Create(ctx context.Context, in *TeamCreateRequest, opts ...grpc.CallOption) (*Team, error) {
-	out := new(Team)
-	err := c.cc.Invoke(ctx, "/at_core_service.TeamService/Create", in, out, opts...)
+func (c *teamServiceClient) CreateTeam(ctx context.Context, in *CreateTeamRequest, opts ...grpc.CallOption) (*CreateTeamResponse, error) {
+	out := new(CreateTeamResponse)
+	err := c.cc.Invoke(ctx, "/at.core.TeamService/CreateTeam", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *teamServiceClient) Update(ctx context.Context, in *TeamUpdateRequest, opts ...grpc.CallOption) (*Team, error) {
-	out := new(Team)
-	err := c.cc.Invoke(ctx, "/at_core_service.TeamService/Update", in, out, opts...)
+func (c *teamServiceClient) UpdateTeam(ctx context.Context, in *UpdateTeamRequest, opts ...grpc.CallOption) (*UpdateTeamResponse, error) {
+	out := new(UpdateTeamResponse)
+	err := c.cc.Invoke(ctx, "/at.core.TeamService/UpdateTeam", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *teamServiceClient) Delete(ctx context.Context, in *TeamRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *teamServiceClient) DeleteTeam(ctx context.Context, in *DeleteTeamRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/at_core_service.TeamService/Delete", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/at.core.TeamService/DeleteTeam", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -96,25 +97,25 @@ func (c *teamServiceClient) Delete(ctx context.Context, in *TeamRequest, opts ..
 // All implementations must embed UnimplementedTeamServiceServer
 // for forward compatibility
 type TeamServiceServer interface {
+	// チームのリストを取得します。
+	// GetTeamsRequest を渡します。
+	// チーム情報のリストが設定された GetTeamsResponse が返ります。
+	GetTeams(context.Context, *GetTeamsRequest) (*GetTeamsResponse, error)
 	// チームを取得します。
-	// TeamListRequest を渡します。
-	// チームのリストが設定された Teams が返ります。
-	List(context.Context, *TeamListRequest) (*Teams, error)
-	// チームを取得します。
-	// 取得するチームのチームIDを指定した TeamRequest を渡します。
-	// チームが存在する場合、Team が返ります。
-	Get(context.Context, *TeamRequest) (*Team, error)
+	// 取得するチームのチームIDを指定した GetTeamRequest を渡します。
+	// チームが存在する場合、チーム情報が設定された GetTeamResponse が返ります。
+	GetTeam(context.Context, *GetTeamRequest) (*GetTeamResponse, error)
 	// 新しくチームを作成します。
-	// チーム名を指定した TeamCreateRequest を渡します。
-	// チームの作成に成功すると、チームIDが設定さた Team が返ります。
-	Create(context.Context, *TeamCreateRequest) (*Team, error)
+	// チーム名を指定した CreateTeamRequest を渡します。
+	// チームの作成に成功すると、作成されたチーム情報が設定さた CreateTeamResponse が返ります。
+	CreateTeam(context.Context, *CreateTeamRequest) (*CreateTeamResponse, error)
 	// チームを更新します。
-	// 更新するチームのチームIDと、新しいチーム名を指定した TeamUpdateRequest を渡します。
-	// チームの作成に成功すると、Team が返ります。
-	Update(context.Context, *TeamUpdateRequest) (*Team, error)
+	// 更新するチームのチームIDと、新しいチーム名を指定した UpdateTeamRequest を渡します。
+	// チームの更新に成功すると、更新されたチーム情報が設定された UpdateTeamResponse が返ります。
+	UpdateTeam(context.Context, *UpdateTeamRequest) (*UpdateTeamResponse, error)
 	// チームを削除します。
-	// 削除するチームのチームIDを指定した TeamRequest を渡します。
-	Delete(context.Context, *TeamRequest) (*emptypb.Empty, error)
+	// 削除するチームのチームIDを指定した DeleteTeamRequest を渡します。
+	DeleteTeam(context.Context, *DeleteTeamRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedTeamServiceServer()
 }
 
@@ -122,20 +123,20 @@ type TeamServiceServer interface {
 type UnimplementedTeamServiceServer struct {
 }
 
-func (UnimplementedTeamServiceServer) List(context.Context, *TeamListRequest) (*Teams, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
+func (UnimplementedTeamServiceServer) GetTeams(context.Context, *GetTeamsRequest) (*GetTeamsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTeams not implemented")
 }
-func (UnimplementedTeamServiceServer) Get(context.Context, *TeamRequest) (*Team, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+func (UnimplementedTeamServiceServer) GetTeam(context.Context, *GetTeamRequest) (*GetTeamResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTeam not implemented")
 }
-func (UnimplementedTeamServiceServer) Create(context.Context, *TeamCreateRequest) (*Team, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+func (UnimplementedTeamServiceServer) CreateTeam(context.Context, *CreateTeamRequest) (*CreateTeamResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateTeam not implemented")
 }
-func (UnimplementedTeamServiceServer) Update(context.Context, *TeamUpdateRequest) (*Team, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+func (UnimplementedTeamServiceServer) UpdateTeam(context.Context, *UpdateTeamRequest) (*UpdateTeamResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateTeam not implemented")
 }
-func (UnimplementedTeamServiceServer) Delete(context.Context, *TeamRequest) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
+func (UnimplementedTeamServiceServer) DeleteTeam(context.Context, *DeleteTeamRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteTeam not implemented")
 }
 func (UnimplementedTeamServiceServer) mustEmbedUnimplementedTeamServiceServer() {}
 
@@ -147,124 +148,127 @@ type UnsafeTeamServiceServer interface {
 }
 
 func RegisterTeamServiceServer(s grpc.ServiceRegistrar, srv TeamServiceServer) {
-	s.RegisterService(&_TeamService_serviceDesc, srv)
+	s.RegisterService(&TeamService_ServiceDesc, srv)
 }
 
-func _TeamService_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TeamListRequest)
+func _TeamService_GetTeams_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTeamsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TeamServiceServer).List(ctx, in)
+		return srv.(TeamServiceServer).GetTeams(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/at_core_service.TeamService/List",
+		FullMethod: "/at.core.TeamService/GetTeams",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TeamServiceServer).List(ctx, req.(*TeamListRequest))
+		return srv.(TeamServiceServer).GetTeams(ctx, req.(*GetTeamsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TeamService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TeamRequest)
+func _TeamService_GetTeam_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTeamRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TeamServiceServer).Get(ctx, in)
+		return srv.(TeamServiceServer).GetTeam(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/at_core_service.TeamService/Get",
+		FullMethod: "/at.core.TeamService/GetTeam",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TeamServiceServer).Get(ctx, req.(*TeamRequest))
+		return srv.(TeamServiceServer).GetTeam(ctx, req.(*GetTeamRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TeamService_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TeamCreateRequest)
+func _TeamService_CreateTeam_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateTeamRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TeamServiceServer).Create(ctx, in)
+		return srv.(TeamServiceServer).CreateTeam(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/at_core_service.TeamService/Create",
+		FullMethod: "/at.core.TeamService/CreateTeam",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TeamServiceServer).Create(ctx, req.(*TeamCreateRequest))
+		return srv.(TeamServiceServer).CreateTeam(ctx, req.(*CreateTeamRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TeamService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TeamUpdateRequest)
+func _TeamService_UpdateTeam_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateTeamRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TeamServiceServer).Update(ctx, in)
+		return srv.(TeamServiceServer).UpdateTeam(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/at_core_service.TeamService/Update",
+		FullMethod: "/at.core.TeamService/UpdateTeam",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TeamServiceServer).Update(ctx, req.(*TeamUpdateRequest))
+		return srv.(TeamServiceServer).UpdateTeam(ctx, req.(*UpdateTeamRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TeamService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TeamRequest)
+func _TeamService_DeleteTeam_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteTeamRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TeamServiceServer).Delete(ctx, in)
+		return srv.(TeamServiceServer).DeleteTeam(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/at_core_service.TeamService/Delete",
+		FullMethod: "/at.core.TeamService/DeleteTeam",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TeamServiceServer).Delete(ctx, req.(*TeamRequest))
+		return srv.(TeamServiceServer).DeleteTeam(ctx, req.(*DeleteTeamRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-var _TeamService_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "at_core_service.TeamService",
+// TeamService_ServiceDesc is the grpc.ServiceDesc for TeamService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var TeamService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "at.core.TeamService",
 	HandlerType: (*TeamServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "List",
-			Handler:    _TeamService_List_Handler,
+			MethodName: "GetTeams",
+			Handler:    _TeamService_GetTeams_Handler,
 		},
 		{
-			MethodName: "Get",
-			Handler:    _TeamService_Get_Handler,
+			MethodName: "GetTeam",
+			Handler:    _TeamService_GetTeam_Handler,
 		},
 		{
-			MethodName: "Create",
-			Handler:    _TeamService_Create_Handler,
+			MethodName: "CreateTeam",
+			Handler:    _TeamService_CreateTeam_Handler,
 		},
 		{
-			MethodName: "Update",
-			Handler:    _TeamService_Update_Handler,
+			MethodName: "UpdateTeam",
+			Handler:    _TeamService_UpdateTeam_Handler,
 		},
 		{
-			MethodName: "Delete",
-			Handler:    _TeamService_Delete_Handler,
+			MethodName: "DeleteTeam",
+			Handler:    _TeamService_DeleteTeam_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "team.proto",
+	Metadata: "core/team.proto",
 }
