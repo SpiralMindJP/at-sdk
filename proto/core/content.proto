@@ -5,99 +5,113 @@ syntax = "proto3";
 
 option go_package = "github.com/SpiralMindJP/at-sdk/go/pb/core";
 
-package at_core_service;
+package at.core;
 
+import "common/common.proto";
 import "google/protobuf/empty.proto";
 
 /*
- * コンテンツのタイプを表します。
+ * コンテンツリスト取得リクエストを表します。
  */
-enum ContentType {
-  CONTENT_TYPE_IMAGE     = 0;   // 画像コンテンツ。
-  CONTENT_TYPE_VIDEO     = 1;   // ビデオコンテンツ。
-  CONTENT_TYPE_AVATAR    = 2;   // アバターVRMコンテンツ。
-  CONTENT_TYPE_ANIMATION = 3;   // アニメーションコンテンツ。
-  CONTENT_TYPE_OTHER     = 999; // その他のコンテンツ。
+message GetContentsRequest {
+  int64                          team_id       = 1; // チームID。
+  repeated at.common.ContentType content_types = 2; // コンテンツタイプのリスト。
 }
 
 /*
- * コンテンツを表します。
+ * コンテンツリスト取得レスポンスを表します。
  */
-message Content {
+message GetContentsResponse {
+  repeated at.common.Content contents = 1; // コンテンツ情報のリスト。
+}
+
+/*
+ * コンテンツ取得リクエストを表します。
+ */
+message GetContentRequest {
+  int64 team_id    = 1; // チームID。
+  int64 content_id = 2; // コンテンツID。
+}
+
+/*
+ * コンテンツ取得レスポンスを表します。
+ */
+message GetContentResponse {
+  at.common.Content content = 1; // コンテンツ情報。
+}
+
+/*
+ * コンテンツアップロードリクエストを表します。
+ */
+message UploadContentRequest {
+  int64                 team_id      = 1; // チームID。
+  string                name         = 2; // コンテンツ名。
+  at.common.ContentType content_type = 3; // コンテンツタイプ。
+  string                file_name    = 4; // コンテンツのファイル名。
+}
+
+/*
+ * コンテンツアップロードレスポンスを表します。
+ */
+message UploadContentResponse {
+  int64  content_id = 1; // コンテンツID。
+  string upload_url = 2; // コンテンツをアップロードするURL。
+}
+
+/*
+ * コンテンツアップロード終了リクエストを表します。
+ */
+message FinishUploadContentRequest {
   int64       team_id    = 1; // チームID。
   int64       content_id = 2; // コンテンツID。
-  string      name       = 3; // コンテンツ名。
-  ContentType type       = 4; // コンテンツタイプ。
-  int64       size       = 5; // コンテンツのサイズ。
-  string      mime_type  = 6; // コンテンツのMIMEタイプ。
-  bytes       md5        = 7; // MD5ハッシュ。
-  string      ext        = 8; // コンテンツの拡張子。
+  bytes       md5        = 3; // MD5ハッシュ。
 }
 
 /*
- * コンテンツの更新要求を表します。
+ * コンテンツアップロード終了レスポンスを表します。
  */
-message ContentUpdateRequest {
+message FinishUploadContentResponse {
+  at.common.Content content = 1; // コンテンツ情報。
+}
+
+/*
+ * コンテンツダウンロード情報取得リクエストを表します。
+ */
+message DownloadContentRequest {
+  int64 team_id    = 1; // チームID。
+  int64 content_id = 2; // コンテンツID。
+}
+
+/*
+ * コンテンツダウンロード情報取得レスポンスを表します。
+ */
+message DownloadContentResponse {
+  at.common.Content content      = 1; // コンテンツ。
+  string            download_url = 2; // ダウンロードURL。
+}
+
+/*
+ * コンテンツ更新リクエストを表します。
+ */
+message UpdateContentRequest {
   int64  team_id    = 1; // チームID。
   int64  content_id = 2; // コンテンツID。
   string name       = 3; // コンテンツ名。
 }
 
 /*
- * コンテンツを取得する際のリクエストを表します。
+ * コンテンツ更新レスポンスを表します。
  */
-message ContentRequest {
-  int64 team_id    = 1; // チームID。
-  int64 content_id = 2; // コンテンツID。
+message UpdateContentResponse {
+  at.common.Content content = 1; // コンテンツ情報。
 }
 
 /*
- * コンテンツのリストを取得する際のリクエストを表します。
+ * コンテンツ削除リクエストを表します。
  */
-message ContentListRequest {
-  int64 team_id = 1; // チームID。
-}
-
-/*
- * コンテンツタイプを指定したコンテンツのリストを取得する際のリクエストを表します。
- */
-message ContentListByTypeRequest {
-  int64       team_id = 1; // チームID。
-  ContentType type    = 2; // コンテンツのタイプ。
-}
-
-/*
- * コンテンツのリストを表します。
- */
-message Contents {
-  repeated Content contents = 1; // コンテンツのリスト。
-}
-
-/*
- * コンテンツのアップロード要求を表します。
- */
-message ContentUploadRequest {
-  int64       team_id   = 1; // チームID。
-  string      name      = 2; // コンテンツ名。
-  ContentType type      = 3; // コンテンツタイプ。
-  string      file_name = 4; // コンテンツのファイル名。
-}
-
-/*
- * コンテンツをアップロードするためのURLを表します。
- */
-message ContentUploadURL {
-  int64  content_id = 1; // コンテンツID。
-  string url        = 2; // コンテンツをアップロードするURL。
-}
-
-/*
- * コンテンツをアップロード終了要求を表します。
- */
-message FinishUploadRequest {
-  int64       team_id    = 1; // チームID。
-  int64       content_id = 2; // コンテンツID。
-  bytes       md5        = 3; // MD5ハッシュ。
+message DeleteContentRequest {
+  int64  team_id    = 1; // チームID。
+  int64  content_id = 2; // コンテンツID。
 }
 
 /*
@@ -105,36 +119,36 @@ message FinishUploadRequest {
  */
 service ContentService {
   // コンテンツのリストを取得します。
-  // 取得するコンテンツのチームIDを指定した ContentListRequest を渡します。
-  // 指定されたチームIDのコンテンツのリストが設定された Contents が返ります。
-  rpc List(ContentListRequest) returns (Contents);
-
-  // 指定されたコンテンツタイプのコンテンツのリストを取得します。
-  // 取得するコンテンツのチームIDとコンテンツタイプを指定した ContentListByTypeRequest を渡します。
-  // 指定されたチームIDとコンテンツタイプのコンテンツのリストが設定された Contents が返ります。
-  rpc ListContentType(ContentListByTypeRequest) returns (Contents);
+  // 取得するコンテンツのチームIDを指定した GetContentsRequest を渡します。
+  // contents_types に1つ以上のコンテンツタイプを指定すると、指定されたコンテンツタイプのコンテンツのみ取得します。
+  // 指定されたチームIDのコンテンツ情報のリストが設定された GetContentsResponse が返ります。
+  rpc GetContents(GetContentsRequest) returns (GetContentsResponse);
 
   // コンテンツを取得します。
-  // 取得するコンテンツのコンテンツIDを指定した ContentRequest を渡します。
-  // コンテンツが存在する場合、Content が返ります。
-  rpc Get(ContentRequest) returns (Content);
+  // 取得するコンテンツのコンテンツIDを指定した GetContentRequest を渡します。
+  // コンテンツが存在する場合、コンテンツ情報が設定された GetContentResponse が返ります。
+  rpc GetContent(GetContentRequest) returns (GetContentResponse);
 
   // コンテンツをアップロードします。
-  // チームID、アップロードするコンテンツのコンテンツ名とコンテンツタイプを指定した ContentUploadRequest を渡します。
+  // チームID、アップロードするコンテンツのコンテンツ名とコンテンツタイプを指定した UploadContentRequest を渡します。
   // アップロードを行うための URL が設定された ContentUploadURL が返ります。
   // このURLにコンテンツデータをHTTP POSTメソッドで転送することで、アップロードが行われます。
   // アップロード完了後、FinishUpload メソッドでアップロードの完了を登録します。
-  rpc Upload(ContentUploadRequest) returns (ContentUploadURL);
+  rpc UploadContent(UploadContentRequest) returns (UploadContentResponse);
   // コンテンツのアップロード完了を登録します。
   // チームID、コンテンツID、アップロードしたコンテンツのMD5ハッシュを指定した FinishUploadRequest を渡します。
   // 登録に成功すると Content が返ります。
-  rpc FinishUpload(FinishUploadRequest) returns (Content);
+  rpc FinishUploadContent(FinishUploadContentRequest) returns (FinishUploadContentResponse);
+  // コンテンツをダウンロードするための情報を取得します。
+  // ダウンロードするコンテンツのチームID、コンテンツIDを指定した、DownloadContentRequest を渡します。
+  // コンテンツが存在する場合、コンテンツ情報とダウンロードURLが設定された DownloadContentResponse が返ります。
+  rpc DownloadContent(DownloadContentRequest) returns (DownloadContentResponse);
 
   // コンテンツを更新します。
   // 更新するコンテンツのコンテンツIDと、新しいコンテンツ名を指定した ContentUpdateRequest を渡します。
   // コンテンツの作成に成功すると、Content が返ります。
-  rpc Update(ContentUpdateRequest) returns (Content);
+  rpc UpdateContent(UpdateContentRequest) returns (UpdateContentResponse);
   // コンテンツを削除します。
   // 削除するコンテンツのコンテンツIDを指定した ContentRequest を渡します。
-  rpc Delete(ContentRequest) returns (google.protobuf.Empty);
+  rpc DeleteContent(DeleteContentRequest) returns (google.protobuf.Empty);
 }

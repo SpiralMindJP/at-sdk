@@ -1,0 +1,125 @@
+syntax = "proto3";
+
+option go_package = "github.com/SpiralMindJP/at-sdk/go/pb/common";
+
+package at.common;
+
+import "google/protobuf/timestamp.proto";
+
+/*
+ * デバイスのタイプを表します。
+ */
+enum DeviceType {
+  DEVICE_TYPE_OPERATOR = 0; // オペレーターデバイスを表します。
+  DEVICE_TYPE_CUSTOMER = 1; // カスタマーデバイスを表します。
+}
+
+/*
+ * デバイスの接続状態を表します。
+ */
+enum DeviceConnectionState {
+  DEVICE_OFFLINE = 0; // デバイスがオフライン。
+  DEVICE_ONLINE  = 1; // デバイスがオンライン。
+}
+
+// ルームの状態を表します。
+message RoomState {
+  int64  team_id = 1; // チームID。
+  int64  room_id = 2; // ルームID。
+  string name    = 3; // ルーム名。
+
+  repeated DeviceState device_states = 11; // デバイスの状態のリスト。
+}
+
+// デバイスの状態を表します。
+message DeviceState {
+  int64                 team_id          = 1; // チームID。
+  int64                 device_id        = 2;// デバイスID。
+  DeviceType            type             = 3;// デバイスタイプ。
+  DeviceConnectionState connection_state = 4;// デバイスの接続状態。
+}
+
+/*
+ * チームを表します。
+ */
+message Team {
+  int64  team_id = 1; // チームID。
+  string name    = 2; // チーム名。
+}
+
+/*
+ * ルームを表します。
+ */
+message Room {
+  int64  team_id = 1; // チームID。
+  int64  room_id = 2; // ルームID。
+  string name    = 3; // ルーム名。
+
+  repeated Device devices = 11; // デバイスリスト。
+}
+
+/*
+ * デバイスを表します。
+ */
+message Device {
+  int64      team_id     = 1; // チームID。
+  int64      device_id   = 2; // デバイスID。
+  string     name        = 3; // デバイス名。
+  DeviceType device_type = 4; // デバイスのタイプ。
+  int64      room_id     = 5; // デバイスが入室しているルームID。
+
+  Avatar     avatar      = 11; // オペレーターデバイスに設定されているアバター情報。
+}
+
+/*
+ * コンテンツのタイプを表します。
+ */
+enum ContentType {
+  CONTENT_TYPE_IMAGE     = 0;   // 画像コンテンツ。
+  CONTENT_TYPE_VIDEO     = 1;   // ビデオコンテンツ。
+  CONTENT_TYPE_VRM       = 2;   // アバターVRMコンテンツ。
+  CONTENT_TYPE_ANIMATION = 3;   // アニメーションコンテンツ。
+  CONTENT_TYPE_OTHER     = 999; // その他のコンテンツ。
+}
+
+/*
+ * コンテンツを表します。
+ */
+message Content {
+  int64       team_id      = 1; // チームID。
+  int64       content_id   = 2; // コンテンツID。
+  string      name         = 3; // コンテンツ名。
+  ContentType content_type = 4; // コンテンツタイプ。
+  int64       size         = 5; // コンテンツのサイズ。
+  string      mime_type    = 6; // コンテンツのMIMEタイプ。
+  bytes       md5          = 7; // MD5ハッシュ。
+  string      ext          = 8; // コンテンツの拡張子。
+}
+
+/*
+ * アバターを表します。
+ */
+message Avatar {
+  int64    team_id              = 1; // チームID。
+  int64    avatar_id            = 2; // アバターID。
+  string   name                 = 3; // アバター名称。
+  int64    avatar_content_id    = 4; // アバターのコンテンツID。
+  int64    animation_content_id = 5; // アニメーションのコンテンツID。
+  repeated Animation animations = 6; // アニメーションのリスト。
+}
+
+/*
+ * アバターのアニメーションを表します。
+ */
+message Animation {
+  int32  index = 1; // アニメーションインデックス。
+  string name  = 2; // アニメーション名称。
+}
+
+/*
+ * 各種トークンを表します。
+ */
+message Token {
+  string                    token                     = 1; // JWT トークン文字列。
+  google.protobuf.Timestamp expiration_time           = 2; // トークンの有効期限。
+}

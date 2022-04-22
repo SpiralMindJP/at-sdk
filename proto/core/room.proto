@@ -5,106 +5,152 @@ syntax = "proto3";
 
 option go_package = "github.com/SpiralMindJP/at-sdk/go/pb/core";
 
-package at_core_service;
+package at.core;
 
+import "common/common.proto";
 import "google/protobuf/empty.proto";
 
 /*
- * ルームを表します。
+ * ルームリスト取得クエストを表します。
  */
-message Room {
-  int64  team_id = 1; // チームID。
-  int64  room_id = 2; // ルームID。
-  string name    = 3; // ルーム名。
+message GetRoomsRequest {
+  int64 team_id = 1; // チームID。
 
-  int64  device_id   = 11; // デバイスID。
-  string device_name = 12; // デバイス名。
+  bool with_devices = 11; // true を指定すると、ルームに入室しているデバイスのリストも取得。
 }
 
 /*
- * ルームの作成要求を表します。
+ * ルームリスト取得レスポンスを表します。
  */
-message RoomCreateRequest {
+message GetRoomsResponse {
+  repeated at.common.Room rooms = 1; // ルーム情報のリスト。
+}
+
+/*
+ * ルーム取得リクエストを表します。
+ */
+message GetRoomRequest {
+  int64 team_id = 1; // チームID。
+  int64 room_id = 2; // ルームID。
+
+  bool with_devices = 11; // true を指定すると、ルームに入室しているデバイスのリストも取得。
+}
+
+/*
+ * ルーム取得レスポンスを表します。
+ */
+message GetRoomResponse {
+  at.common.Room room = 1; // ルーム情報。
+}
+
+/*
+ * ルーム作成リクエストを表します。
+ */
+message CreateRoomRequest {
   int64  team_id = 1; // チームID。
   string name    = 2; // ルーム名。
 }
 
 /*
- * ルームの更新要求を表します。
+ * ルーム作成レスポンスを表します。
  */
-message RoomUpdateRequest {
+message CreateRoomResponse {
+  at.common.Room room = 1; // ルーム情報。
+}
+
+/*
+ * ルーム更新リクエストを表します。
+ */
+message UpdateRoomRequest {
   int64  team_id = 1; // チームID。
   int64  room_id = 2; // ルームID。
   string name    = 3; // ルーム名。
 }
 
 /*
- * ルームへのデバイス設定要求を表します。
+ * ルーム更新レスポンスを表します。
  */
-message RoomDeviceRequest {
+message UpdateRoomResponse {
+  at.common.Room room = 1; // ルーム情報。
+}
+
+/*
+ * ルームへのカスタマーデバイス入室リクエストを表します。
+ */
+message JoinCustomerDeviceRequest {
   int64 team_id   = 1; // チームID。
   int64 room_id   = 2; // ルームID。
   int64 device_id = 3; // デバイスID。
-  bool  force     = 4; // 強制的にデバイスを設定するかどうか。True の場合、他のルームに既に設定されているデバイスであっても、登録します。(optional)
+
+  bool force = 11; // true の場合は入室済のカスタマーデバイスを強制的に退室させ、入室を行います。
 }
 
 /*
- * ルームを取得する際のリクエストを表します。
+ * ルームへのカスタマーデバイス入室レスポンスを表します。
  */
-message RoomRequest {
+message JoinCustomerDeviceResponse {
+  at.common.Room room = 1; // ルーム情報。
+}
+
+/*
+ * ルームからのカスタマーデバイス退室リクエストを表します。
+ */
+message LeaveCustomerDeviceRequest {
+  int64 team_id   = 1; // チームID。
+  int64 room_id   = 2; // ルームID。
+}
+
+/*
+ * ルームからのカスタマーデバイス退室レスポンスを表します。
+ */
+message LeaveCustomerDeviceResponse {
+  at.common.Room room = 1; // ルーム情報。
+}
+
+/*
+ * ルーム削除リクエストを表します。
+ */
+message DeleteRoomRequest {
   int64 team_id = 1; // チームID。
   int64 room_id = 2; // ルームID。
-}
-
-/*
- * ルームのリストを取得する際のリクエストを表します。
- */
-message RoomListRequest {
-  int64 team_id = 1; // チームID。
-}
-
-/*
- * ルームのリストを表します。
- */
-message Rooms {
-  repeated Room rooms = 1; // ルームのリスト。
 }
 
 /*
  * ルームを操作するAPIを提供します。
  */
 service RoomService {
-  // ルームを取得します。
-  // 取得するルームのチームIDを指定した RoomListRequest を渡します。
-  // 指定されたチームIDのルームのリストが設定された Rooms が返ります。
-  rpc List(RoomListRequest) returns (Rooms);
+  // ルームのリストを取得します。
+  // 取得するルームのチームIDを指定した GetRoomsRequest を渡します。
+  // 指定されたチームIDのルーム情報のリストが設定された GetRoomsResponse が返ります。
+  rpc GetRooms(GetRoomsRequest) returns (GetRoomsResponse);
 
   // ルームを取得します。
-  // 取得するルームのルームIDを指定した RoomRequest を渡します。
-  // ルームが存在する場合、Room が返ります。
-  rpc Get(RoomRequest) returns (Room);
+  // 取得するルームのチームIDおよびルームIDを指定した GetRoomRequest を渡します。
+  // ルームが存在する場合、ルーム情報が設定された GetRoomResponse が返ります。
+  rpc GetRoom(GetRoomRequest) returns (GetRoomResponse);
 
   // 新しくルームを作成します。
-  // ルーム名とチームIDを指定した RoomCreateRequest を渡します。
-  // ルームの作成に成功すると、ルームIDが設定さた Room が返ります。
-  rpc Create(RoomCreateRequest) returns (Room);
+  // ルーム名とチームIDを指定した CreateRoomRequest を渡します。
+  // ルームの作成に成功すると、作成されたルーム情報が設定された CreateRoomResponse が返ります。
+  rpc CreateRoom(CreateRoomRequest) returns (CreateRoomResponse);
 
   // ルームを更新します。
-  // 更新するルームのルームIDと、新しいルーム名を指定した RoomUpdateRequest を渡します。
-  // ルームの作成に成功すると、Room が返ります。
-  rpc Update(RoomUpdateRequest) returns (Room);
+  // 更新するルームのルームIDと、新しいルーム名を指定した UpdateRoomRequest を渡します。
+  // ルームの更新に成功すると、更新されたルーム情報が設定された UpdateRoomResponse が返ります。
+  rpc UpdateRoom(UpdateRoomRequest) returns (UpdateRoomResponse);
 
-  // ルームにカスタマーデバイスを設定します。
-  // 設定するルームのルームIDと、設定するカスタマーデバイスのデバイスIDを指定した RoomDeviceRequest を渡します。
-  // RoomDeviceRequest の force に True を指定すると、他のルームに既に設定されているデバイスであっても、設定します。
-  // カスタマーデバイスの設定に成功すると、Room が返ります。
-  rpc SetDevice(RoomDeviceRequest) returns (Room);
-  // ルームに設定されたカスタマーデバイスを削除します。
-  // カスタマーデバイスを削除するルームのルームIDを指定した RoomRequest を渡します。
-  // カスタマーデバイスの削除に成功すると、Room が返ります。
-  rpc DeleteDevice(RoomRequest) returns (Room);
+  // ルームへのカスタマーデバイスの入室を行います。
+  // 入室先のルームのルームIDと、入室を行うカスタマーデバイスのデバイスIDを指定した JoinCustomerDeviceRequest を渡します。
+  // 入室先のルームに既にカスタマーデバイスが入室済の場合は、入室を行いません。
+  // ただし、force に true をした場合は入室済のカスタマーデバイスを強制的に退室させ、入室を行います。
+  // カスタマーデバイスの入室に成功すると、入室したルームのルーム情報を設定した JoinCustomerDeviceResponse が返ります。
+  rpc JoinCustomerDevice(JoinCustomerDeviceRequest) returns (JoinCustomerDeviceResponse);
+  // ルームからのカスタマーデバイスの退室を行います。
+  // カスタマーデバイスを退室させるルームのルームIDを指定した LeaveCustomerDeviceRequest を渡します。
+  // カスタマーデバイスの退室に成功すると、退室したルームのルーム情報を設定した LeaveCustomerDeviceResponse が返ります。
+  rpc LeaveCustomerDevice(LeaveCustomerDeviceRequest) returns (LeaveCustomerDeviceResponse);
 
   // ルームを削除します。
-  // 削除するルームのルームIDを指定した RoomRequest を渡します。
-  rpc Delete(RoomRequest) returns (google.protobuf.Empty);
+  // 削除するルームのルームIDを指定した DeleteRoomRequest を渡します。
+  rpc DeleteRoom(DeleteRoomRequest) returns (google.protobuf.Empty);
 }

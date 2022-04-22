@@ -1,0 +1,68 @@
+/*
+ * Authorization は認可トークンを発行する API を提供します。
+ */
+syntax = "proto3";
+
+option go_package = "github.com/SpiralMindJP/at-sdk/go/pb/core";
+
+package at.core;
+
+import "common/common.proto";
+
+/*
+ * Web リフレッシュトークンを発行するためのリクエストを表します。
+ */
+message IssueWebRefreshTokenRequest {
+  int64                team_id     = 1; // チームID。
+  int64                device_id   = 2; // デバイスID。
+  at.common.DeviceType device_type = 3; // デバイスタイプ。
+}
+
+/*
+ * Web リフレッシュトークンを発行したレスポンスを表します。
+ */
+message IssueWebRefreshTokenResponse {
+  at.common.Token token = 1;
+}
+
+/*
+ * Web アクセストークンを発行するためのリクエストを表します。
+ */
+message IssueWebAccessTokenRequest {
+  string refresh_token = 1; // Web リフレッシュトークン。
+}
+
+/*
+ * Web アクセストークンを発行したレスポンスを表します。
+ */
+message IssueWebAccessTokenResponse {
+  at.common.Token token = 1;
+}
+
+/*
+ * WebRTC アクセストークンを発行するためのリクエストを表します。
+ */
+message IssueWebRTCAccessTokenRequest {
+  string refresh_token = 1; // Web リフレッシュトークン。
+  int64  room_id       = 2; // ルームID。
+}
+
+/*
+ * WebRTC アクセストークンを発行したレスポンスを表します。
+ */
+message IssueWebRTCAccessTokenResponse {
+  at.common.Token token = 1;
+}
+
+/*
+ * 認可トークンを発行する API を提供します。
+ */
+service AuthorizationService {
+  // Web リフレッシュトークンを発行します。
+  rpc IssueWebRefreshToken(IssueWebRefreshTokenRequest) returns (IssueWebRefreshTokenResponse);
+  // Web アクセストークンを発行します。
+  rpc IssueWebAccessToken(IssueWebAccessTokenRequest) returns (IssueWebAccessTokenResponse);
+  // WebRTC アクセストークンを発行します。
+  rpc IssueWebRTCAccessToken(IssueWebRTCAccessTokenRequest) returns (IssueWebRTCAccessTokenResponse);
+}
+

@@ -5,78 +5,99 @@ syntax = "proto3";
 
 option go_package = "github.com/SpiralMindJP/at-sdk/go/pb/core";
 
-package at_core_service;
+package at.core;
 
+import "common/common.proto";
 import "google/protobuf/empty.proto";
 
 /*
- * チームを表します。
+ * チームリスト取得リクエストを表します。
  */
-message Team {
-  int64  team_id = 1; // チームID。
-  string name    = 2; // チーム名。
+message GetTeamsRequest {
 }
 
 /*
- * チームの作成要求を表します。
+ * チームリスト取得レスポンスを表します。
  */
-message TeamCreateRequest {
-  string name = 1; // チーム名。
+message GetTeamsResponse {
+  repeated at.common.Team teams = 1; // チームのリスト。
 }
 
 /*
- * チームの更新要求を表します。
+ * チーム取得リクエストを表します。
  */
-message TeamUpdateRequest {
-  int64  team_id = 1; // チームID。
-  string name    = 2; // チーム名。
-}
-
-/*
- * チームを取得する際のリクエストを表します。
- */
-message TeamRequest {
+message GetTeamRequest {
   int64 team_id = 1; // チームID。
 }
 
 /*
- * チームのリストを取得する際のリクエストを表します。
+ * チーム取得リクエストを表します。
  */
-message TeamListRequest {
+message GetTeamResponse {
+  at.common.Team team = 1; // チーム。
 }
 
 /*
- * チームのリストを表します。
+ * チーム作成リクエストを表します。
  */
-message Teams {
-  repeated Team teams = 1; // チームのリスト。
+message CreateTeamRequest {
+  string name = 1; // チーム名。
+}
+
+/*
+ * チーム作成レスポンスを表します。
+ */
+message CreateTeamResponse {
+  at.common.Team team = 1; // チーム。
+}
+
+/*
+ * チーム更新リクエストを表します。
+ */
+message UpdateTeamRequest {
+  int64  team_id = 1; // チームID。
+  string name    = 2; // チーム名。
+}
+
+/*
+ * チーム更新レスポンスを表します。
+ */
+message UpdateTeamResponse {
+  at.common.Team team = 1; // チーム。
+}
+
+/*
+ * チーム削除リクエストを表します。
+ */
+message DeleteTeamRequest {
+  int64  team_id = 1; // チームID。
 }
 
 /*
  * チームを操作するAPIを提供します。
  */
 service TeamService {
-  // チームを取得します。
-  // TeamListRequest を渡します。
-  // チームのリストが設定された Teams が返ります。
-  rpc List(TeamListRequest) returns (Teams);
+  // チームのリストを取得します。
+  // GetTeamsRequest を渡します。
+  // チーム情報のリストが設定された GetTeamsResponse が返ります。
+  rpc GetTeams(GetTeamsRequest) returns (GetTeamsResponse);
 
   // チームを取得します。
-  // 取得するチームのチームIDを指定した TeamRequest を渡します。
-  // チームが存在する場合、Team が返ります。
-  rpc Get(TeamRequest) returns (Team);
+  // 取得するチームのチームIDを指定した GetTeamRequest を渡します。
+  // チームが存在する場合、チーム情報が設定された GetTeamResponse が返ります。
+  rpc GetTeam(GetTeamRequest) returns (GetTeamResponse);
 
   // 新しくチームを作成します。
-  // チーム名を指定した TeamCreateRequest を渡します。
-  // チームの作成に成功すると、チームIDが設定さた Team が返ります。
-  rpc Create(TeamCreateRequest) returns (Team);
+  // チーム名を指定した CreateTeamRequest を渡します。
+  // チームの作成に成功すると、作成されたチーム情報が設定さた CreateTeamResponse が返ります。
+  rpc CreateTeam(CreateTeamRequest) returns (CreateTeamResponse);
 
   // チームを更新します。
-  // 更新するチームのチームIDと、新しいチーム名を指定した TeamUpdateRequest を渡します。
-  // チームの作成に成功すると、Team が返ります。
-  rpc Update(TeamUpdateRequest) returns (Team);
+  // 更新するチームのチームIDと、新しいチーム名を指定した UpdateTeamRequest を渡します。
+  // チームの更新に成功すると、更新されたチーム情報が設定された UpdateTeamResponse が返ります。
+  rpc UpdateTeam(UpdateTeamRequest) returns (UpdateTeamResponse);
 
   // チームを削除します。
-  // 削除するチームのチームIDを指定した TeamRequest を渡します。
-  rpc Delete(TeamRequest) returns (google.protobuf.Empty);
+  // 削除するチームのチームIDを指定した DeleteTeamRequest を渡します。
+  rpc DeleteTeam(DeleteTeamRequest) returns (google.protobuf.Empty);
 }
