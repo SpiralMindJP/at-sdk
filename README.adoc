@@ -6,29 +6,8 @@ Avatar Teleporter サービスの SDK を利用するための情報を提供し
 
 link:LICENSE.pdf[Avatar Teleporter SDK 利用規約]
 
-== How to use
-
-AT Teleporter サービスの概要を知りたい::
-link:docs/avatar-teleporter-sdk.pdf[Avatar Teleporter SDK] のドキュメントを確認してください。
-
-AT Core Servers について知りたい::
-link:docs/at-servers.adoc[Avatar Teleporter SDK サーバー] のドキュメントを確認してください。
-
-AT Customer Client の使い方を知りたい::
-link:docs/how-to-embed-at-customer-client.adoc[AT Customer Client をネイティブアプリに埋め込む手順] のドキュメントを確認してください。
-
-AT SDK を使用するサンプルについて知りたい::
-* link:examples/at-web-server[AT SDK 使用サンプル Web アプリケーション]を確認してください。
-
-AT Operator アプリについて知りたい::
-* link:docs/at-operator-app.adoc[Avatar Telrporter Operator アプリケーションについて]を確認してください。
-
 == Documents
 
 * link:docs/at-sdk-terms-of-use.pdf[Avatar Teleporter SDK 利用規約]
-* link:docs/avatar-teleporter-sdk.pdf[Avatar Teleporter SDK]
 * link:docs/at-core-server-api.adoc[AT Core Server API Reference]
-* link:docs/at-servers.adoc[Avatar Teleporter SDK サーバー]
-* link:docs/how-to-embed-at-customer-client.adoc[AT Customer Client をネイティブアプリに埋め込む手順]
-* link:examples/at-web-server[AT SDK 使用サンプル Web アプリケーション]
-* link:docs/at-operator-app.adoc[Avatar Telrporter Operator アプリケーションについて]
+* link:docs/at-sdk-npm-packages.adoc[AT SDK NPM Package について]
