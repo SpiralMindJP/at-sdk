@@ -1,0 +1,53 @@
+= AT SDK NPM Package について
+
+== はじめに
+
+AT SDK では、SDK を使用した Web アプリケーションを作成するための NPM パッケージを提供しています。
+
+各 NPM パッケージは、link:https://docs.github.com/ja/packages[GitHub Packages] にて公開されています。
+
+GitHub Packages に公開されている NPM パッケージのインストールについては、link:https://docs.github.com/ja/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#installing-a-package[GitHub のドキュメント]を参照してください。
+
+== AT SDK が提供する NPM パッケージの概要
+
+=== @spiralmindjp/at-common
+
+`at-common` パッケージは、SDK の各 NPM パッケージが使用する共通の型や関数を提供します。
+
+API のエラー処理など、AT SDK を使用するためには必須のパッケージです。
+
+=== @spiralmindjp/at-device
+
+`at-device` パッケージは、Web アプリケーションからカメラやマイクなどのメディアデバイスを使用するためのクラス等を提供します。
+
+`at-sfu-client` パッケージや `at-api-client` パッケージなど、AT SDK で提供するパッケージにてメディアデバイスを使用する場合、このパッケージを使用します。
+
+=== @spiralmindjp/at-react-ui
+
+`at-react-ui` パッケージは、ReactJS 用の UI コポーネントを提供します。
+
+このパッケージの使用は必須ではありません。
+
+=== @spiralmindjp/at-sfu-client
+
+`at-sfu-client` パッケージは、AT SDK が提供する WebRTC SFU サーバーとの通信を行うためのクライアントクラスや、WebRTC 通信で使用するメディアストリームクラスを提供します。
+
+クライアントクラスについては、SDK 利用者は直接使用せず、`at-api-client` パッケージを介して利用することになります。
+
+=== @spiralmindjp/at-api-client
+
+`at-api-client` パッケージは、AT SDK が提供する Web API にアクセスするための Client クラスを提供します。
+
+この Client クラスを使用することで、AT SDK Core Server へアクセスが可能になります。
+
+=== @spiralmindjp/at-facemesh
+
+`at-facemesh` パッケージは、Web カメラを使用した表情や頭の動きを検出する機能を提供します。
+
+`at-avatar-display` と組み合わせることで、検出した顔の動きを反映させてアバターを動かすことが可能になります。
+
+=== @spiralmindjp/at-avatar-display
+
+`at-avatar-display` パッケージは、アバターモデルの表示機能を提供します。
+
+任意の VRM モデルを表示することが可能です。
