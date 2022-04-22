@@ -1,5 +1,5 @@
 = AT Core Server API Reference
-v2.0, 2021-05-21
+v3.0, 2022-04-22
 :toc:
 :toclevels: 4
 :toc-title: 目次
@@ -7,1275 +7,16 @@ v2.0, 2021-05-21
 
 
 
-[[team.proto]]
+== common/common.proto
 
-== team.proto
 
-Team はチームに関する情報を操作します。
 
 
 === Messages
 
 
 
-[[at_core_service.Team]]
-
-==== Team
-
-チームを表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-| name
-| <<string,string>>
-| 
-| チーム名。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.TeamCreateRequest]]
-
-==== TeamCreateRequest
-
-チームの作成要求を表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| name
-| <<string,string>>
-| 
-| チーム名。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.TeamListRequest]]
-
-==== TeamListRequest
-
-チームのリストを取得する際のリクエストを表します。
-
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.TeamRequest]]
-
-==== TeamRequest
-
-チームを取得する際のリクエストを表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.TeamUpdateRequest]]
-
-==== TeamUpdateRequest
-
-チームの更新要求を表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-| name
-| <<string,string>>
-| 
-| チーム名。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.Teams]]
-
-==== Teams
-
-チームのリストを表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| teams
-| <<at_core_service.Team,Team>>
-| repeated
-| チームのリスト。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-// end range messages
-
-
-// end if has messages
-
-
-// end if has enums
-
-
-// end if has extensions
-
-
-=== Services
-
-
-
-[[at_core_service.TeamService]]
-
-==== TeamService
-
-チームを操作するAPIを提供します。
-
-[%autowidth.stretch]
-|===
-| Method Name | Request Type | Response Type | Description
-
-| List
-| <<at_core_service.TeamListRequest,TeamListRequest>>
-| <<at_core_service.Teams,Teams>>
-a| チームを取得します。 TeamListRequest を渡します。 チームのリストが設定された Teams が返ります。
-| Get
-| <<at_core_service.TeamRequest,TeamRequest>>
-| <<at_core_service.Team,Team>>
-a| チームを取得します。 取得するチームのチームIDを指定した TeamRequest を渡します。 チームが存在する場合、Team が返ります。
-| Create
-| <<at_core_service.TeamCreateRequest,TeamCreateRequest>>
-| <<at_core_service.Team,Team>>
-a| 新しくチームを作成します。 チーム名を指定した TeamCreateRequest を渡します。 チームの作成に成功すると、チームIDが設定さた Team が返ります。
-| Update
-| <<at_core_service.TeamUpdateRequest,TeamUpdateRequest>>
-| <<at_core_service.Team,Team>>
-a| チームを更新します。 更新するチームのチームIDと、新しいチーム名を指定した TeamUpdateRequest を渡します。 チームの作成に成功すると、Team が返ります。
-| Delete
-| <<at_core_service.TeamRequest,TeamRequest>>
-| <<google.protobuf.Empty,.google.protobuf.Empty>>
-a| チームを削除します。 削除するチームのチームIDを指定した TeamRequest を渡します。
-
-// end range methods
-|===
-
-// end range services
-
-
-// end if has services
-
-
-
-
-[[room.proto]]
-
-== room.proto
-
-Room はルームに関する情報を操作します。
-
-
-=== Messages
-
-
-
-[[at_core_service.Room]]
-
-==== Room
-
-ルームを表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-| room_id
-| <<int64,int64>>
-| 
-| ルームID。
-| name
-| <<string,string>>
-| 
-| ルーム名。
-| device_id
-| <<int64,int64>>
-| 
-| デバイスID。
-| device_name
-| <<string,string>>
-| 
-| デバイス名。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.RoomCreateRequest]]
-
-==== RoomCreateRequest
-
-ルームの作成要求を表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-| name
-| <<string,string>>
-| 
-| ルーム名。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.RoomDeviceRequest]]
-
-==== RoomDeviceRequest
-
-ルームへのデバイス設定要求を表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-| room_id
-| <<int64,int64>>
-| 
-| ルームID。
-| device_id
-| <<int64,int64>>
-| 
-| デバイスID。
-| force
-| <<bool,bool>>
-| 
-| 強制的にデバイスを設定するかどうか。True の場合、他のルームに既に設定されているデバイスであっても、登録します。(optional)
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.RoomListRequest]]
-
-==== RoomListRequest
-
-ルームのリストを取得する際のリクエストを表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.RoomRequest]]
-
-==== RoomRequest
-
-ルームを取得する際のリクエストを表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-| room_id
-| <<int64,int64>>
-| 
-| ルームID。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.RoomUpdateRequest]]
-
-==== RoomUpdateRequest
-
-ルームの更新要求を表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-| room_id
-| <<int64,int64>>
-| 
-| ルームID。
-| name
-| <<string,string>>
-| 
-| ルーム名。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.Rooms]]
-
-==== Rooms
-
-ルームのリストを表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| rooms
-| <<at_core_service.Room,Room>>
-| repeated
-| ルームのリスト。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-// end range messages
-
-
-// end if has messages
-
-
-// end if has enums
-
-
-// end if has extensions
-
-
-=== Services
-
-
-
-[[at_core_service.RoomService]]
-
-==== RoomService
-
-ルームを操作するAPIを提供します。
-
-[%autowidth.stretch]
-|===
-| Method Name | Request Type | Response Type | Description
-
-| List
-| <<at_core_service.RoomListRequest,RoomListRequest>>
-| <<at_core_service.Rooms,Rooms>>
-a| ルームを取得します。 取得するルームのチームIDを指定した RoomListRequest を渡します。 指定されたチームIDのルームのリストが設定された Rooms が返ります。
-| Get
-| <<at_core_service.RoomRequest,RoomRequest>>
-| <<at_core_service.Room,Room>>
-a| ルームを取得します。 取得するルームのルームIDを指定した RoomRequest を渡します。 ルームが存在する場合、Room が返ります。
-| Create
-| <<at_core_service.RoomCreateRequest,RoomCreateRequest>>
-| <<at_core_service.Room,Room>>
-a| 新しくルームを作成します。 ルーム名とチームIDを指定した RoomCreateRequest を渡します。 ルームの作成に成功すると、ルームIDが設定さた Room が返ります。
-| Update
-| <<at_core_service.RoomUpdateRequest,RoomUpdateRequest>>
-| <<at_core_service.Room,Room>>
-a| ルームを更新します。 更新するルームのルームIDと、新しいルーム名を指定した RoomUpdateRequest を渡します。 ルームの作成に成功すると、Room が返ります。
-| SetDevice
-| <<at_core_service.RoomDeviceRequest,RoomDeviceRequest>>
-| <<at_core_service.Room,Room>>
-a| ルームにカスタマーデバイスを設定します。 設定するルームのルームIDと、設定するカスタマーデバイスのデバイスIDを指定した RoomDeviceRequest を渡します。 RoomDeviceRequest の force に True を指定すると、他のルームに既に設定されているデバイスであっても、設定します。 カスタマーデバイスの設定に成功すると、Room が返ります。
-| DeleteDevice
-| <<at_core_service.RoomRequest,RoomRequest>>
-| <<at_core_service.Room,Room>>
-a| ルームに設定されたカスタマーデバイスを削除します。 カスタマーデバイスを削除するルームのルームIDを指定した RoomRequest を渡します。 カスタマーデバイスの削除に成功すると、Room が返ります。
-| Delete
-| <<at_core_service.RoomRequest,RoomRequest>>
-| <<google.protobuf.Empty,.google.protobuf.Empty>>
-a| ルームを削除します。 削除するルームのルームIDを指定した RoomRequest を渡します。
-
-// end range methods
-|===
-
-// end range services
-
-
-// end if has services
-
-
-
-
-[[device.proto]]
-
-== device.proto
-
-Device はデバイスに関する情報を操作します。
-
-
-=== Messages
-
-
-
-[[at_core_service.Device]]
-
-==== Device
-
-デバイスを表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-| device_id
-| <<int64,int64>>
-| 
-| デバイスID。
-| name
-| <<string,string>>
-| 
-| デバイス名。
-| type
-| <<at_core_service.DeviceType,DeviceType>>
-| 
-| デバイスのタイプ。
-| room_id
-| <<int64,int64>>
-| 
-| デバイスが登録されているルームID。デバイスのタイプがカスタマーの場合のみ設定。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.DeviceListByTypeRequest]]
-
-==== DeviceListByTypeRequest
-
-デバイスタイプを指定したデバイスのリストを取得する際のリクエストを表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-| type
-| <<at_core_service.DeviceType,DeviceType>>
-| 
-| デバイスのタイプ。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.DeviceListRequest]]
-
-==== DeviceListRequest
-
-デバイスのリストを取得する際のリクエストを表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.DeviceRegistrationRequest]]
-
-==== DeviceRegistrationRequest
-
-デバイスの登録要求を表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-| name
-| <<string,string>>
-| 
-| デバイス名。
-| otp
-| <<int32,int32>>
-| 
-| ワンタイムパスワード。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.DeviceRequest]]
-
-==== DeviceRequest
-
-デバイスを取得する際のリクエストを表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-| device_id
-| <<int64,int64>>
-| 
-| デバイスID。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.DeviceUpdateRequest]]
-
-==== DeviceUpdateRequest
-
-デバイスの更新要求を表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-| device_id
-| <<int64,int64>>
-| 
-| デバイスID。
-| name
-| <<string,string>>
-| 
-| デバイス名。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.Devices]]
-
-==== Devices
-
-デバイスのリストを表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| devices
-| <<at_core_service.Device,Device>>
-| repeated
-| デバイスのリスト。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-// end range messages
-
-
-// end if has messages
-
-
-=== Enums
-
-
-
-[[at_core_service.DeviceType]]
-
-==== DeviceType
-
-デバイスのタイプを表します。
-
-[%autowidth.stretch]
-|===
-| Name | Number | Description
-
-| DEVICE_TYPE_OPERATOR
-| 0
-| オペレーターデバイスを表します。
-| DEVICE_TYPE_CUSTOMER
-| 1
-| カスタマーデバイスを表します。
-
-// end range values
-|===
-
-// end range enums
-
-
-// end if has enums
-
-
-// end if has extensions
-
-
-=== Services
-
-
-
-[[at_core_service.DeviceService]]
-
-==== DeviceService
-
-デバイスを操作するAPIを提供します。
-
-[%autowidth.stretch]
-|===
-| Method Name | Request Type | Response Type | Description
-
-| List
-| <<at_core_service.DeviceListRequest,DeviceListRequest>>
-| <<at_core_service.Devices,Devices>>
-a| デバイスのリストを取得します。 取得するデバイスのチームIDを指定した DeviceListRequest を渡します。 指定されたチームIDのデバイスのリストが設定された Devices が返ります。
-| ListByType
-| <<at_core_service.DeviceListByTypeRequest,DeviceListByTypeRequest>>
-| <<at_core_service.Devices,Devices>>
-a| 指定されたデバイスタイプのデバイスのリストを取得します。 取得するデバイスのチームIDとデバイスタイプを指定した DeviceListByTypeRequest を渡します。 指定されたチームIDのデバイスのリストが設定された Devices が返ります。
-| Get
-| <<at_core_service.DeviceRequest,DeviceRequest>>
-| <<at_core_service.Device,Device>>
-a| デバイスを取得します。 取得するデバイスのデバイスIDを指定した DeviceRequest を渡します。 デバイスが存在する場合、Device が返ります。
-| Register
-| <<at_core_service.DeviceRegistrationRequest,DeviceRegistrationRequest>>
-| <<at_core_service.Device,Device>>
-a| 新しくデバイスを登録します。 チームID、デバイス名、ワンタイムパスワードを指定した DeviceRegistrationRequest を渡します。 デバイスの作成に成功すると、デバイスID、デバイスタイプが設定さた Device が返ります。
-| Update
-| <<at_core_service.DeviceUpdateRequest,DeviceUpdateRequest>>
-| <<at_core_service.Device,Device>>
-a| デバイスを更新します。 更新するデバイスのデバイスIDと、新しいデバイス名を指定した DeviceUpdateRequest を渡します。 デバイスの作成に成功すると、Device が返ります。
-| Delete
-| <<at_core_service.DeviceRequest,DeviceRequest>>
-| <<google.protobuf.Empty,.google.protobuf.Empty>>
-a| デバイスを削除します。 削除するデバイスのデバイスIDを指定した DeviceRequest を渡します。
-
-// end range methods
-|===
-
-// end range services
-
-
-// end if has services
-
-
-
-
-[[content.proto]]
-
-== content.proto
-
-Content はコンテンツに関する情報を操作します。
-
-
-=== Messages
-
-
-
-[[at_core_service.Content]]
-
-==== Content
-
-コンテンツを表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-| content_id
-| <<int64,int64>>
-| 
-| コンテンツID。
-| name
-| <<string,string>>
-| 
-| コンテンツ名。
-| type
-| <<at_core_service.ContentType,ContentType>>
-| 
-| コンテンツタイプ。
-| size
-| <<int64,int64>>
-| 
-| コンテンツのサイズ。
-| mime_type
-| <<string,string>>
-| 
-| コンテンツのMIMEタイプ。
-| md5
-| <<bytes,bytes>>
-| 
-| MD5ハッシュ。
-| ext
-| <<string,string>>
-| 
-| コンテンツの拡張子。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.ContentListByTypeRequest]]
-
-==== ContentListByTypeRequest
-
-コンテンツタイプを指定したコンテンツのリストを取得する際のリクエストを表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-| type
-| <<at_core_service.ContentType,ContentType>>
-| 
-| コンテンツのタイプ。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.ContentListRequest]]
-
-==== ContentListRequest
-
-コンテンツのリストを取得する際のリクエストを表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.ContentRequest]]
-
-==== ContentRequest
-
-コンテンツを取得する際のリクエストを表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-| content_id
-| <<int64,int64>>
-| 
-| コンテンツID。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.ContentUpdateRequest]]
-
-==== ContentUpdateRequest
-
-コンテンツの更新要求を表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-| content_id
-| <<int64,int64>>
-| 
-| コンテンツID。
-| name
-| <<string,string>>
-| 
-| コンテンツ名。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.ContentUploadRequest]]
-
-==== ContentUploadRequest
-
-コンテンツのアップロード要求を表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-| name
-| <<string,string>>
-| 
-| コンテンツ名。
-| type
-| <<at_core_service.ContentType,ContentType>>
-| 
-| コンテンツタイプ。
-| file_name
-| <<string,string>>
-| 
-| コンテンツのファイル名。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.ContentUploadURL]]
-
-==== ContentUploadURL
-
-コンテンツをアップロードするためのURLを表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| content_id
-| <<int64,int64>>
-| 
-| コンテンツID。
-| url
-| <<string,string>>
-| 
-| コンテンツをアップロードするURL。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.Contents]]
-
-==== Contents
-
-コンテンツのリストを表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| contents
-| <<at_core_service.Content,Content>>
-| repeated
-| コンテンツのリスト。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.FinishUploadRequest]]
-
-==== FinishUploadRequest
-
-コンテンツをアップロード終了要求を表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-| content_id
-| <<int64,int64>>
-| 
-| コンテンツID。
-| md5
-| <<bytes,bytes>>
-| 
-| MD5ハッシュ。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-// end range messages
-
-
-// end if has messages
-
-
-=== Enums
-
-
-
-[[at_core_service.ContentType]]
-
-==== ContentType
-
-コンテンツのタイプを表します。
-
-[%autowidth.stretch]
-|===
-| Name | Number | Description
-
-| CONTENT_TYPE_IMAGE
-| 0
-| 画像コンテンツ。
-| CONTENT_TYPE_VIDEO
-| 1
-| ビデオコンテンツ。
-| CONTENT_TYPE_AVATAR
-| 2
-| アバターVRMコンテンツ。
-| CONTENT_TYPE_ANIMATION
-| 3
-| アニメーションコンテンツ。
-| CONTENT_TYPE_OTHER
-| 999
-| その他のコンテンツ。
-
-// end range values
-|===
-
-// end range enums
-
-
-// end if has enums
-
-
-// end if has extensions
-
-
-=== Services
-
-
-
-[[at_core_service.ContentService]]
-
-==== ContentService
-
-コンテンツを操作するAPIを提供します。
-
-[%autowidth.stretch]
-|===
-| Method Name | Request Type | Response Type | Description
-
-| List
-| <<at_core_service.ContentListRequest,ContentListRequest>>
-| <<at_core_service.Contents,Contents>>
-a| コンテンツのリストを取得します。 取得するコンテンツのチームIDを指定した ContentListRequest を渡します。 指定されたチームIDのコンテンツのリストが設定された Contents が返ります。
-| ListContentType
-| <<at_core_service.ContentListByTypeRequest,ContentListByTypeRequest>>
-| <<at_core_service.Contents,Contents>>
-a| 指定されたコンテンツタイプのコンテンツのリストを取得します。 取得するコンテンツのチームIDとコンテンツタイプを指定した ContentListByTypeRequest を渡します。 指定されたチームIDとコンテンツタイプのコンテンツのリストが設定された Contents が返ります。
-| Get
-| <<at_core_service.ContentRequest,ContentRequest>>
-| <<at_core_service.Content,Content>>
-a| コンテンツを取得します。 取得するコンテンツのコンテンツIDを指定した ContentRequest を渡します。 コンテンツが存在する場合、Content が返ります。
-| Upload
-| <<at_core_service.ContentUploadRequest,ContentUploadRequest>>
-| <<at_core_service.ContentUploadURL,ContentUploadURL>>
-a| コンテンツをアップロードします。 チームID、アップロードするコンテンツのコンテンツ名とコンテンツタイプを指定した ContentUploadRequest を渡します。 アップロードを行うための URL が設定された ContentUploadURL が返ります。 このURLにコンテンツデータをHTTP POSTメソッドで転送することで、アップロードが行われます。 アップロード完了後、FinishUpload メソッドでアップロードの完了を登録します。
-| FinishUpload
-| <<at_core_service.FinishUploadRequest,FinishUploadRequest>>
-| <<at_core_service.Content,Content>>
-a| コンテンツのアップロード完了を登録します。 チームID、コンテンツID、アップロードしたコンテンツのMD5ハッシュを指定した FinishUploadRequest を渡します。 登録に成功すると Content が返ります。
-| Update
-| <<at_core_service.ContentUpdateRequest,ContentUpdateRequest>>
-| <<at_core_service.Content,Content>>
-a| コンテンツを更新します。 更新するコンテンツのコンテンツIDと、新しいコンテンツ名を指定した ContentUpdateRequest を渡します。 コンテンツの作成に成功すると、Content が返ります。
-| Delete
-| <<at_core_service.ContentRequest,ContentRequest>>
-| <<google.protobuf.Empty,.google.protobuf.Empty>>
-a| コンテンツを削除します。 削除するコンテンツのコンテンツIDを指定した ContentRequest を渡します。
-
-// end range methods
-|===
-
-// end range services
-
-
-// end if has services
-
-
-
-
-[[avatar.proto]]
-
-== avatar.proto
-
-Avatar はアバターに関する情報を操作します。
-
-
-=== Messages
-
-
-
-[[at_core_service.Animation]]
+[[at.common.Animation]]
 
 ==== Animation
 
@@ -1286,6 +27,10 @@ Avatar はアバターに関する情報を操作します。
 |===
 | Field | Type | Label | Description
 
+| index
+| <<int32,int32>>
+| 
+| アニメーションインデックス。
 | name
 | <<string,string>>
 | 
@@ -1301,7 +46,7 @@ Avatar はアバターに関する情報を操作します。
 
 
 
-[[at_core_service.Avatar]]
+[[at.common.Avatar]]
 
 ==== Avatar
 
@@ -1333,7 +78,7 @@ Avatar はアバターに関する情報を操作します。
 | 
 | アニメーションのコンテンツID。
 | animations
-| <<at_core_service.Animation,Animation>>
+| <<at.common.Animation,Animation>>
 | repeated
 | アニメーションのリスト。
 
@@ -1347,53 +92,11 @@ Avatar はアバターに関する情報を操作します。
 
 
 
-[[at_core_service.AvatarCreateRequest]]
+[[at.common.Content]]
 
-==== AvatarCreateRequest
+==== Content
 
-アバターの作成要求を表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-| name
-| <<string,string>>
-| 
-| アバター名称。
-| avatar_content_id
-| <<int64,int64>>
-| 
-| アバターのコンテンツID。
-| animation_content_id
-| <<int64,int64>>
-| 
-| アニメーションのコンテンツID。
-| animations
-| <<at_core_service.Animation,Animation>>
-| repeated
-| アニメーションのリスト。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.AvatarListRequest]]
-
-==== AvatarListRequest
-
-アバターのリストを取得する際のリクエストを表します。
+コンテンツを表します。
 
 
 [%autowidth.stretch]
@@ -1404,402 +107,6 @@ Avatar はアバターに関する情報を操作します。
 | <<int64,int64>>
 | 
 | チームID。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.AvatarRequest]]
-
-==== AvatarRequest
-
-アバターを取得する際のリクエストを表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-| avatar_id
-| <<int64,int64>>
-| 
-| アバターID。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.AvatarUpdateRequest]]
-
-==== AvatarUpdateRequest
-
-アバターの更新要求を表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-| avatar_id
-| <<int64,int64>>
-| 
-| アバターID。
-| name
-| <<string,string>>
-| 
-| アバター名称。
-| avatar_content_id
-| <<int64,int64>>
-| 
-| アバターのコンテンツID。
-| animation_content_id
-| <<int64,int64>>
-| 
-| アニメーションのコンテンツID。
-| animations
-| <<at_core_service.Animation,Animation>>
-| repeated
-| アニメーションのリスト。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.Avatars]]
-
-==== Avatars
-
-アバターのリストを表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| avatars
-| <<at_core_service.Avatar,Avatar>>
-| repeated
-| アバターのリスト。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.OperatorAvatar]]
-
-==== OperatorAvatar
-
-オペレーターが使用するアバターを表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-| device_id
-| <<int64,int64>>
-| 
-| オペレーターデバイスのデバイスID。
-| avatar_id
-| <<int64,int64>>
-| 
-| アバターID。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.OperatorAvatarListRequest]]
-
-==== OperatorAvatarListRequest
-
-オペレーターアバターを取得する際のリクエストを表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.OperatorAvatarRequest]]
-
-==== OperatorAvatarRequest
-
-オペレーターアバターを取得する際のリクエストを表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-| device_id
-| <<int64,int64>>
-| 
-| オペレーターデバイスのデバイスID。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.OperatorAvatarSetRequest]]
-
-==== OperatorAvatarSetRequest
-
-オペレーターデバイスへのアバター設定要求を表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-| device_id
-| <<int64,int64>>
-| 
-| オペレーターデバイスのデバイスID。
-| avatar_id
-| <<int64,int64>>
-| 
-| アバターID。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.OperatorAvatars]]
-
-==== OperatorAvatars
-
-オペレーターアバターのリストを表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| operator_avatars
-| <<at_core_service.OperatorAvatar,OperatorAvatar>>
-| repeated
-| オペレーターアバターのリスト。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-// end range messages
-
-
-// end if has messages
-
-
-// end if has enums
-
-
-// end if has extensions
-
-
-=== Services
-
-
-
-[[at_core_service.AvatarService]]
-
-==== AvatarService
-
-アバター設定に関する情報を操作するAPIを提供します。
-
-[%autowidth.stretch]
-|===
-| Method Name | Request Type | Response Type | Description
-
-| List
-| <<at_core_service.AvatarListRequest,AvatarListRequest>>
-| <<at_core_service.Avatars,Avatars>>
-a| アバターリストを取得します。 取得するアバターのチームIDを指定した AvatarListRequest を渡します。 指定されたチームIDのアバターのリストが設定された Avatars が返ります。
-| Get
-| <<at_core_service.AvatarRequest,AvatarRequest>>
-| <<at_core_service.Avatar,Avatar>>
-a| アバターを取得します。 取得するアバターのアバターIDとチームIDを指定した AvatarRequest を渡します。 アバターが存在する場合、Avatar が返ります。
-| Create
-| <<at_core_service.AvatarCreateRequest,AvatarCreateRequest>>
-| <<at_core_service.Avatar,Avatar>>
-a| 新しくアバターを作成します。 アバター名とアバターのコンテンツID、アニメーションのコンテンツID、チームIDを指定した AvatarCreateRequest を渡します。 アバターの作成に成功すると、アバターIDが設定さた Avatar が返ります。
-| Update
-| <<at_core_service.AvatarUpdateRequest,AvatarUpdateRequest>>
-| <<at_core_service.Avatar,Avatar>>
-a| アバターを更新します。 更新するアバターのアバターIDとチームID、新しいアバター名、アバターのコンテンツID、アニメーションのコンテンツIDを指定した AvatarUpdateRequest を渡します。 アバターの作成に成功すると、Avatar が返ります。
-| GetByOperator
-| <<at_core_service.OperatorAvatarRequest,OperatorAvatarRequest>>
-| <<at_core_service.Avatar,Avatar>>
-a| オペレーターデバイスのアバターを取得します。 取得するオペレーターデバイスのデバイスIDを指定した OperatorAvatarRequest を渡します。 デバイスのアバターが設定されている場合、Avatar が返ります。
-| Delete
-| <<at_core_service.AvatarRequest,AvatarRequest>>
-| <<google.protobuf.Empty,.google.protobuf.Empty>>
-a| アバターを削除します。 削除するアバターのアバターIDとチームIDを指定した AvatarRequest を渡します。
-| ListOperatorAvatar
-| <<at_core_service.OperatorAvatarListRequest,OperatorAvatarListRequest>>
-| <<at_core_service.OperatorAvatars,OperatorAvatars>>
-a| オペレーターアバターリストを取得します。 取得するオペレーターアバターのチームIDを指定した OperatorAvatarListRequest を渡します。 指定されたチームIDのオペレーターアバターのリストが設定された OperatorAvatars が返ります。
-| GetOperatorAvatar
-| <<at_core_service.OperatorAvatarRequest,OperatorAvatarRequest>>
-| <<at_core_service.OperatorAvatar,OperatorAvatar>>
-a| オペレーターアバターを取得します。 取得するオペレーターアバターのデバイスIDとチームIDを指定した OperatorAvatarRequest を渡します。 デバイスにオペレーターが設定されている場合、OperatorAvatar が返ります。
-| SetOperatorAvatar
-| <<at_core_service.OperatorAvatarSetRequest,OperatorAvatarSetRequest>>
-| <<at_core_service.OperatorAvatar,OperatorAvatar>>
-a| オペレーターデバイスにアバターを設定します。 設定するアバターのアバターIDと、設定するオペレーターデバイスのデバイスIDとチームIDを指定した OperatorAvatarSetRequest を渡します。 オペレーターデバイスへのアバターの設定に成功すると、OperatorAvatar が返ります。
-| DeleteOperatorAvatar
-| <<at_core_service.OperatorAvatarRequest,OperatorAvatarRequest>>
-| <<google.protobuf.Empty,.google.protobuf.Empty>>
-a| オペレーターデバイスに設定されたアバターを削除します。 削除するオペレーターデバイスのデバイスIDとチームIDを指定した OperatorAvatarRequest を渡します。
-
-// end range methods
-|===
-
-// end range services
-
-
-// end if has services
-
-
-
-
-[[dashboard.proto]]
-
-== dashboard.proto
-
-Dashboard はダッシュボードに関する情報を操作します。
-
-
-=== Messages
-
-
-
-[[at_core_service.Dashboard]]
-
-==== Dashboard
-
-ダッシュボードの情報を表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| rooms
-| <<at_core_service.Room,Room>>
-| repeated
-| ルームのリスト。
-| room_states
-| <<at_core_service.RoomState,RoomState>>
-| repeated
-| ルーム状態のリスト。
-| contents
-| <<at_core_service.DashboardContent,DashboardContent>>
-| repeated
-| コンテンツのリスト。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.DashboardContent]]
-
-==== DashboardContent
-
-ダッシュボードのコンテンツを表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
 | content_id
 | <<int64,int64>>
 | 
@@ -1808,10 +115,26 @@ Dashboard はダッシュボードに関する情報を操作します。
 | <<string,string>>
 | 
 | コンテンツ名。
-| type
-| <<at_core_service.ContentType,ContentType>>
+| content_type
+| <<at.common.ContentType,ContentType>>
 | 
 | コンテンツタイプ。
+| size
+| <<int64,int64>>
+| 
+| コンテンツのサイズ。
+| mime_type
+| <<string,string>>
+| 
+| コンテンツのMIMEタイプ。
+| md5
+| <<bytes,bytes>>
+| 
+| MD5ハッシュ。
+| ext
+| <<string,string>>
+| 
+| コンテンツの拡張子。
 
 // end range fields
 |===
@@ -1823,25 +146,79 @@ Dashboard はダッシュボードに関する情報を操作します。
 
 
 
-[[at_core_service.DashboardEvent]]
+[[at.common.Device]]
 
-==== DashboardEvent
+==== Device
 
-ダッシュボードのイベントを表します。
+デバイスを表します。
 
 
 [%autowidth.stretch]
 |===
 | Field | Type | Label | Description
 
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| device_id
+| <<int64,int64>>
+| 
+| デバイスID。
+| name
+| <<string,string>>
+| 
+| デバイス名。
+| device_type
+| <<at.common.DeviceType,DeviceType>>
+| 
+| デバイスのタイプ。
+| room_id
+| <<int64,int64>>
+| 
+| デバイスが入室しているルームID。
+| avatar
+| <<at.common.Avatar,Avatar>>
+| 
+| オペレーターデバイスに設定されているアバター情報。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.common.DeviceState]]
+
+==== DeviceState
+
+デバイスの状態を表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| device_id
+| <<int64,int64>>
+| 
+| デバイスID。
 | type
-| <<at_core_service.DashboardEventType,DashboardEventType>>
+| <<at.common.DeviceType,DeviceType>>
 | 
-| イベントタイプ
-| room_event
-| <<at_core_service.RoomEvent,RoomEvent>>
+| デバイスタイプ。
+| connection_state
+| <<at.common.DeviceConnectionState,DeviceConnectionState>>
 | 
-| ルームイベント。
+| デバイスの接続状態。
 
 // end range fields
 |===
@@ -1853,37 +230,11 @@ Dashboard はダッシュボードに関する情報を操作します。
 
 
 
-[[at_core_service.DashboardRequest]]
+[[at.common.Room]]
 
-==== DashboardRequest
+==== Room
 
-ダッシュボードを取得する際のリクエストを表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.JoinRoomRequest]]
-
-==== JoinRoomRequest
-
-ルームの入室リクエストを表します。
+ルームを表します。
 
 
 [%autowidth.stretch]
@@ -1897,15 +248,15 @@ Dashboard はダッシュボードに関する情報を操作します。
 | room_id
 | <<int64,int64>>
 | 
-| 入室するルームのルームID。
-| device_id
-| <<int64,int64>>
+| ルームID。
+| name
+| <<string,string>>
 | 
-| 入室するオペレーターデバイスのデバイスID。
-| force
-| <<bool,bool>>
-| 
-| 既に入室しているデバイスがある場合に、強制的に入室するかどうか。True の場合、既に入室しているデバイスを強制的に退室させ、入室を行います。(optional)
+| ルーム名。
+| devices
+| <<at.common.Device,Device>>
+| repeated
+| デバイスリスト。
 
 // end range fields
 |===
@@ -1917,11 +268,11 @@ Dashboard はダッシュボードに関する情報を操作します。
 
 
 
-[[at_core_service.LeaveRoomRequest]]
+[[at.common.RoomState]]
 
-==== LeaveRoomRequest
+==== RoomState
 
-ルームの退室リクエストを表します。
+ルームの状態を表します。
 
 
 [%autowidth.stretch]
@@ -1935,11 +286,15 @@ Dashboard はダッシュボードに関する情報を操作します。
 | room_id
 | <<int64,int64>>
 | 
-| 退室するルームのルームID。
-| device_id
-| <<int64,int64>>
+| ルームID。
+| name
+| <<string,string>>
 | 
-| 退室するオペレーターデバイスのデバイスID。
+| ルーム名。
+| device_states
+| <<at.common.DeviceState,DeviceState>>
+| repeated
+| デバイスの状態のリスト。
 
 // end range fields
 |===
@@ -1951,11 +306,11 @@ Dashboard はダッシュボードに関する情報を操作します。
 
 
 
-[[at_core_service.PlayAnimationRequest]]
+[[at.common.Team]]
 
-==== PlayAnimationRequest
+==== Team
 
-アニメーション再生のリクエストを表します。
+チームを表します。
 
 
 [%autowidth.stretch]
@@ -1966,14 +321,10 @@ Dashboard はダッシュボードに関する情報を操作します。
 | <<int64,int64>>
 | 
 | チームID。
-| device_id
-| <<int64,int64>>
+| name
+| <<string,string>>
 | 
-| アニメーションを再生するルームに入室しているデバイスのデバイスID。
-| animation_index
-| <<int32,int32>>
-| 
-| 再生するアニメーションのインデックス。
+| チーム名。
 
 // end range fields
 |===
@@ -1985,119 +336,25 @@ Dashboard はダッシュボードに関する情報を操作します。
 
 
 
-[[at_core_service.PlayContentRequest]]
+[[at.common.Token]]
 
-==== PlayContentRequest
+==== Token
 
-コンテンツ再生のリクエストを表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-| device_id
-| <<int64,int64>>
-| 
-| コンテンツを再生するルームに入室しているデバイスのデバイスID。
-| content_id
-| <<int64,int64>>
-| 
-| 再生するコンテンツのコンテンツID。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.StopAnimationRequest]]
-
-==== StopAnimationRequest
-
-アニメーション停止のリクエストを表します。
+各種トークンを表します。
 
 
 [%autowidth.stretch]
 |===
 | Field | Type | Label | Description
 
-| team_id
-| <<int64,int64>>
+| token
+| <<string,string>>
 | 
-| チームID。
-| device_id
-| <<int64,int64>>
+| JWT トークン文字列。
+| expiration_time
+| <<google.protobuf.Timestamp,google.protobuf.Timestamp>>
 | 
-| アニメーションを停止するルームに入室しているデバイスのデバイスID。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.StopContentRequest]]
-
-==== StopContentRequest
-
-コンテンツ停止のリクエストを表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-| device_id
-| <<int64,int64>>
-| 
-| コンテンツを停止するルームに入室しているデバイスのデバイスID。
-
-// end range fields
-|===
-
-// end if has fields
-
-
-// end if has extensions
-
-
-
-[[at_core_service.VideoStreamRequest]]
-
-==== VideoStreamRequest
-
-ビデオストリームを取得するリクエストを表します。
-
-
-[%autowidth.stretch]
-|===
-| Field | Type | Label | Description
-
-| team_id
-| <<int64,int64>>
-| 
-| チームID。
-| room_id
-| <<int64,int64>>
-| 
-| ストリームを取得するルームのルームID。
+| トークンの有効期限。
 
 // end range fields
 |===
@@ -2118,25 +375,73 @@ Dashboard はダッシュボードに関する情報を操作します。
 
 
 
-[[at_core_service.DashboardEventType]]
+[[at.common.ContentType]]
 
-==== DashboardEventType
+==== ContentType
 
-ダッシュボードのイベントのイベントタイプを表します。
+コンテンツのタイプを表します。
 
 [%autowidth.stretch]
 |===
 | Name | Number | Description
 
-| DASHBOARD_NO_EVENT
+| CONTENT_TYPE_IMAGE
 | 0
-| なにもないイベント。
-| DASHBOARD_EVENT_ROOM_EVENT
+| 画像コンテンツ。
+| CONTENT_TYPE_VIDEO
 | 1
-| ルームイベント。
-| DASHBOARD_EVENT_PING
+| ビデオコンテンツ。
+| CONTENT_TYPE_VRM
+| 2
+| アバターVRMコンテンツ。
+| CONTENT_TYPE_ANIMATION
+| 3
+| アニメーションコンテンツ。
+| CONTENT_TYPE_OTHER
 | 999
-| ping
+| その他のコンテンツ。
+
+// end range values
+|===
+
+
+[[at.common.DeviceConnectionState]]
+
+==== DeviceConnectionState
+
+デバイスの接続状態を表します。
+
+[%autowidth.stretch]
+|===
+| Name | Number | Description
+
+| DEVICE_OFFLINE
+| 0
+| デバイスがオフライン。
+| DEVICE_ONLINE
+| 1
+| デバイスがオンライン。
+
+// end range values
+|===
+
+
+[[at.common.DeviceType]]
+
+==== DeviceType
+
+デバイスのタイプを表します。
+
+[%autowidth.stretch]
+|===
+| Name | Number | Description
+
+| DEVICE_TYPE_OPERATOR
+| 0
+| オペレーターデバイスを表します。
+| DEVICE_TYPE_CUSTOMER
+| 1
+| カスタマーデバイスを表します。
 
 // end range values
 |===
@@ -2150,56 +455,2513 @@ Dashboard はダッシュボードに関する情報を操作します。
 // end if has extensions
 
 
+// end if has services
+
+
+
+
+== core/team.proto
+
+Team はチームに関する情報を操作します。
+
+
+=== Messages
+
+
+
+[[at.core.CreateTeamRequest]]
+
+==== CreateTeamRequest
+
+チーム作成リクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| name
+| <<string,string>>
+| 
+| チーム名。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.CreateTeamResponse]]
+
+==== CreateTeamResponse
+
+チーム作成レスポンスを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team
+| <<at.common.Team,at.common.Team>>
+| 
+| チーム。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.DeleteTeamRequest]]
+
+==== DeleteTeamRequest
+
+チーム削除リクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.GetTeamRequest]]
+
+==== GetTeamRequest
+
+チーム取得リクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.GetTeamResponse]]
+
+==== GetTeamResponse
+
+チーム取得リクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team
+| <<at.common.Team,at.common.Team>>
+| 
+| チーム。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.GetTeamsRequest]]
+
+==== GetTeamsRequest
+
+チームリスト取得リクエストを表します。
+
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.GetTeamsResponse]]
+
+==== GetTeamsResponse
+
+チームリスト取得レスポンスを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| teams
+| <<at.common.Team,at.common.Team>>
+| repeated
+| チームのリスト。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.UpdateTeamRequest]]
+
+==== UpdateTeamRequest
+
+チーム更新リクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| name
+| <<string,string>>
+| 
+| チーム名。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.UpdateTeamResponse]]
+
+==== UpdateTeamResponse
+
+チーム更新レスポンスを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team
+| <<at.common.Team,at.common.Team>>
+| 
+| チーム。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+// end range messages
+
+
+// end if has messages
+
+
+// end if has enums
+
+
+// end if has extensions
+
+
 === Services
 
 
 
-[[at_core_service.DashboardService]]
+[[at.core.TeamService]]
 
-==== DashboardService
+==== TeamService
 
-ダッシュボードを操作するAPIを提供します。
+チームを操作するAPIを提供します。
 
 [%autowidth.stretch]
 |===
 | Method Name | Request Type | Response Type | Description
 
-| Get
-| <<at_core_service.DashboardRequest,DashboardRequest>>
-| <<at_core_service.Dashboard,Dashboard>>
-a| ダッシュボード情報を取得します。 取得するダッシュボードのチームIDを指定した DashboardRequest を渡します。 ダッシュボード情報を設定した Dashboard が返ります。
-| EventStream
-| <<at_core_service.DashboardRequest,DashboardRequest>>
-| <<at_core_service.DashboardEvent,DashboardEvent>> stream
-a| ダッシュボードのイベントを取得します。 取得するダッシュボードイベントのチームIDを指定した DashboardRequest を渡します。 イベントが発生する度に、イベントデータを設定した DashboardEvent が返ります。
-| JoinRoom
-| <<at_core_service.JoinRoomRequest,JoinRoomRequest>>
-| <<at_core_service.RoomState,RoomState>>
-a| ルームに入室します。 入室するオエペレーターのデバイスIDとルームIDを指定した JoinRoomRequest を渡します。 JoinRoomRequest の force に True を指定すると、既に入室しているデバイスを強制的に退室させ、入室を行います。 入室したルームのルーム状態を設定した RoomState が返ります。
-| LeaveRoom
-| <<at_core_service.LeaveRoomRequest,LeaveRoomRequest>>
-| <<at_core_service.RoomState,RoomState>>
-a| ルームから退室します。 退室するオエペレーターのデバイスIDとルームIDを指定した LeaveRoomRequest を渡します。 退室したルームのルーム状態を設定した RoomState が返ります。
-| PlayContent
-| <<at_core_service.PlayContentRequest,PlayContentRequest>>
+| GetTeams
+| <<at.core.GetTeamsRequest,GetTeamsRequest>>
+| <<at.core.GetTeamsResponse,GetTeamsResponse>>
+a| チームのリストを取得します。 GetTeamsRequest を渡します。 チーム情報のリストが設定された GetTeamsResponse が返ります。
+| GetTeam
+| <<at.core.GetTeamRequest,GetTeamRequest>>
+| <<at.core.GetTeamResponse,GetTeamResponse>>
+a| チームを取得します。 取得するチームのチームIDを指定した GetTeamRequest を渡します。 チームが存在する場合、チーム情報が設定された GetTeamResponse が返ります。
+| CreateTeam
+| <<at.core.CreateTeamRequest,CreateTeamRequest>>
+| <<at.core.CreateTeamResponse,CreateTeamResponse>>
+a| 新しくチームを作成します。 チーム名を指定した CreateTeamRequest を渡します。 チームの作成に成功すると、作成されたチーム情報が設定さた CreateTeamResponse が返ります。
+| UpdateTeam
+| <<at.core.UpdateTeamRequest,UpdateTeamRequest>>
+| <<at.core.UpdateTeamResponse,UpdateTeamResponse>>
+a| チームを更新します。 更新するチームのチームIDと、新しいチーム名を指定した UpdateTeamRequest を渡します。 チームの更新に成功すると、更新されたチーム情報が設定された UpdateTeamResponse が返ります。
+| DeleteTeam
+| <<at.core.DeleteTeamRequest,DeleteTeamRequest>>
 | <<google.protobuf.Empty,.google.protobuf.Empty>>
-a| コンテンツを再生します。 コンテンツを再生するコンテンツIDとルームに入室しているデバイスのデバイスIDを設定した PlayContentRequest を渡します。
-| StopContent
-| <<at_core_service.StopContentRequest,StopContentRequest>>
+a| チームを削除します。 削除するチームのチームIDを指定した DeleteTeamRequest を渡します。
+
+// end range methods
+|===
+
+// end range services
+
+
+// end if has services
+
+
+
+
+== core/room.proto
+
+Room はルームに関する情報を操作します。
+
+
+=== Messages
+
+
+
+[[at.core.CreateRoomRequest]]
+
+==== CreateRoomRequest
+
+ルーム作成リクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| name
+| <<string,string>>
+| 
+| ルーム名。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.CreateRoomResponse]]
+
+==== CreateRoomResponse
+
+ルーム作成レスポンスを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| room
+| <<at.common.Room,at.common.Room>>
+| 
+| ルーム情報。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.DeleteRoomRequest]]
+
+==== DeleteRoomRequest
+
+ルーム削除リクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| room_id
+| <<int64,int64>>
+| 
+| ルームID。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.GetRoomRequest]]
+
+==== GetRoomRequest
+
+ルーム取得リクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| room_id
+| <<int64,int64>>
+| 
+| ルームID。
+| with_devices
+| <<bool,bool>>
+| 
+| true を指定すると、ルームに入室しているデバイスのリストも取得。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.GetRoomResponse]]
+
+==== GetRoomResponse
+
+ルーム取得レスポンスを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| room
+| <<at.common.Room,at.common.Room>>
+| 
+| ルーム情報。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.GetRoomsRequest]]
+
+==== GetRoomsRequest
+
+ルームリスト取得クエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| with_devices
+| <<bool,bool>>
+| 
+| true を指定すると、ルームに入室しているデバイスのリストも取得。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.GetRoomsResponse]]
+
+==== GetRoomsResponse
+
+ルームリスト取得レスポンスを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| rooms
+| <<at.common.Room,at.common.Room>>
+| repeated
+| ルーム情報のリスト。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.JoinCustomerDeviceRequest]]
+
+==== JoinCustomerDeviceRequest
+
+ルームへのカスタマーデバイス入室リクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| room_id
+| <<int64,int64>>
+| 
+| ルームID。
+| device_id
+| <<int64,int64>>
+| 
+| デバイスID。
+| force
+| <<bool,bool>>
+| 
+| true の場合は入室済のカスタマーデバイスを強制的に退室させ、入室を行います。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.JoinCustomerDeviceResponse]]
+
+==== JoinCustomerDeviceResponse
+
+ルームへのカスタマーデバイス入室レスポンスを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| room
+| <<at.common.Room,at.common.Room>>
+| 
+| ルーム情報。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.LeaveCustomerDeviceRequest]]
+
+==== LeaveCustomerDeviceRequest
+
+ルームからのカスタマーデバイス退室リクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| room_id
+| <<int64,int64>>
+| 
+| ルームID。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.LeaveCustomerDeviceResponse]]
+
+==== LeaveCustomerDeviceResponse
+
+ルームからのカスタマーデバイス退室レスポンスを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| room
+| <<at.common.Room,at.common.Room>>
+| 
+| ルーム情報。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.UpdateRoomRequest]]
+
+==== UpdateRoomRequest
+
+ルーム更新リクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| room_id
+| <<int64,int64>>
+| 
+| ルームID。
+| name
+| <<string,string>>
+| 
+| ルーム名。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.UpdateRoomResponse]]
+
+==== UpdateRoomResponse
+
+ルーム更新レスポンスを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| room
+| <<at.common.Room,at.common.Room>>
+| 
+| ルーム情報。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+// end range messages
+
+
+// end if has messages
+
+
+// end if has enums
+
+
+// end if has extensions
+
+
+=== Services
+
+
+
+[[at.core.RoomService]]
+
+==== RoomService
+
+ルームを操作するAPIを提供します。
+
+[%autowidth.stretch]
+|===
+| Method Name | Request Type | Response Type | Description
+
+| GetRooms
+| <<at.core.GetRoomsRequest,GetRoomsRequest>>
+| <<at.core.GetRoomsResponse,GetRoomsResponse>>
+a| ルームのリストを取得します。 取得するルームのチームIDを指定した GetRoomsRequest を渡します。 指定されたチームIDのルーム情報のリストが設定された GetRoomsResponse が返ります。
+| GetRoom
+| <<at.core.GetRoomRequest,GetRoomRequest>>
+| <<at.core.GetRoomResponse,GetRoomResponse>>
+a| ルームを取得します。 取得するルームのチームIDおよびルームIDを指定した GetRoomRequest を渡します。 ルームが存在する場合、ルーム情報が設定された GetRoomResponse が返ります。
+| CreateRoom
+| <<at.core.CreateRoomRequest,CreateRoomRequest>>
+| <<at.core.CreateRoomResponse,CreateRoomResponse>>
+a| 新しくルームを作成します。 ルーム名とチームIDを指定した CreateRoomRequest を渡します。 ルームの作成に成功すると、作成されたルーム情報が設定された CreateRoomResponse が返ります。
+| UpdateRoom
+| <<at.core.UpdateRoomRequest,UpdateRoomRequest>>
+| <<at.core.UpdateRoomResponse,UpdateRoomResponse>>
+a| ルームを更新します。 更新するルームのルームIDと、新しいルーム名を指定した UpdateRoomRequest を渡します。 ルームの更新に成功すると、更新されたルーム情報が設定された UpdateRoomResponse が返ります。
+| JoinCustomerDevice
+| <<at.core.JoinCustomerDeviceRequest,JoinCustomerDeviceRequest>>
+| <<at.core.JoinCustomerDeviceResponse,JoinCustomerDeviceResponse>>
+a| ルームへのカスタマーデバイスの入室を行います。 入室先のルームのルームIDと、入室を行うカスタマーデバイスのデバイスIDを指定した JoinCustomerDeviceRequest を渡します。 入室先のルームに既にカスタマーデバイスが入室済の場合は、入室を行いません。 ただし、force に true をした場合は入室済のカスタマーデバイスを強制的に退室させ、入室を行います。 カスタマーデバイスの入室に成功すると、入室したルームのルーム情報を設定した JoinCustomerDeviceResponse が返ります。
+| LeaveCustomerDevice
+| <<at.core.LeaveCustomerDeviceRequest,LeaveCustomerDeviceRequest>>
+| <<at.core.LeaveCustomerDeviceResponse,LeaveCustomerDeviceResponse>>
+a| ルームからのカスタマーデバイスの退室を行います。 カスタマーデバイスを退室させるルームのルームIDを指定した LeaveCustomerDeviceRequest を渡します。 カスタマーデバイスの退室に成功すると、退室したルームのルーム情報を設定した LeaveCustomerDeviceResponse が返ります。
+| DeleteRoom
+| <<at.core.DeleteRoomRequest,DeleteRoomRequest>>
 | <<google.protobuf.Empty,.google.protobuf.Empty>>
-a| コンテンツを停止します。 コンテンツを停止するルームに入室しているデバイスのデバイスIDを設定した StopContentRequest を渡します。
-| PlayAnimation
-| <<at_core_service.PlayAnimationRequest,PlayAnimationRequest>>
+a| ルームを削除します。 削除するルームのルームIDを指定した DeleteRoomRequest を渡します。
+
+// end range methods
+|===
+
+// end range services
+
+
+// end if has services
+
+
+
+
+== core/device.proto
+
+Device はデバイスに関する情報を操作します。
+
+
+=== Messages
+
+
+
+[[at.core.AcceptDeviceRegistrationRequest]]
+
+==== AcceptDeviceRegistrationRequest
+
+デバイスの登録受け入れ要求を表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| device_name
+| <<string,string>>
+| 
+| デバイス名。
+| device_registration_token
+| <<string,string>>
+| 
+| デバイス登録トークン。
+| otp
+| <<int32,int32>>
+| 
+| ワンタイムパスワード。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.AcceptDeviceRegistrationResponse]]
+
+==== AcceptDeviceRegistrationResponse
+
+デバイスの登録受け入れ結果を表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| device
+| <<at.common.Device,at.common.Device>>
+| 
+| デバイス情報。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.CancelDeviceRegistrationRequest]]
+
+==== CancelDeviceRegistrationRequest
+
+デバイスの登録結果のキャンセルリクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| device_registration_id
+| <<string,string>>
+| 
+| デバイス登録ID。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.DeleteDeviceRequest]]
+
+==== DeleteDeviceRequest
+
+デバイス削除リクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| device_id
+| <<int64,int64>>
+| 
+| デバイスID。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.GetDeviceRegistrationResultRequest]]
+
+==== GetDeviceRegistrationResultRequest
+
+デバイスの登録結果の取得リクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| device_registration_id
+| <<string,string>>
+| 
+| デバイス登録ID。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.GetDeviceRegistrationResultResponse]]
+
+==== GetDeviceRegistrationResultResponse
+
+デバイスの登録結果の取得レスポンスを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| completed
+| <<bool,bool>>
+| 
+| 登録が完了したかどうか。
+| device
+| <<at.common.Device,at.common.Device>>
+| 
+| デバイス情報。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.GetDeviceRequest]]
+
+==== GetDeviceRequest
+
+デバイス取得リクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| device_id
+| <<int64,int64>>
+| 
+| デバイスID。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.GetDeviceResponse]]
+
+==== GetDeviceResponse
+
+デバイス取得レスポンスを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| device
+| <<at.common.Device,at.common.Device>>
+| 
+| デバイスのリスト。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.GetDevicesRequest]]
+
+==== GetDevicesRequest
+
+デバイスリスト取得リクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| device_types
+| <<at.common.DeviceType,at.common.DeviceType>>
+| repeated
+| デバイスタイプのリスト。
+| with_avatars
+| <<bool,bool>>
+| 
+| true を指定すると、Operator デバイスに設定されているアバター情報も取得します。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.GetDevicesResponse]]
+
+==== GetDevicesResponse
+
+デバイスリスト取得レスポンスを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| devices
+| <<at.common.Device,at.common.Device>>
+| repeated
+| デバイスのリスト。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.RegisterDeviceRequest]]
+
+==== RegisterDeviceRequest
+
+デバイスの登録要求を表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| device_name
+| <<string,string>>
+| 
+| デバイス名。
+| device_type
+| <<at.common.DeviceType,at.common.DeviceType>>
+| 
+| デバイスタイプ。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.RegisterDeviceResponse]]
+
+==== RegisterDeviceResponse
+
+デバイスの登録結果を表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| device
+| <<at.common.Device,at.common.Device>>
+| 
+| デバイス情報。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.RequestDeviceRegistrationRequest]]
+
+==== RequestDeviceRegistrationRequest
+
+デバイスの登録要求を表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| device_type
+| <<at.common.DeviceType,at.common.DeviceType>>
+| 
+| デバイスタイプ。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.RequestDeviceRegistrationResponse]]
+
+==== RequestDeviceRegistrationResponse
+
+デバイスの登録要求結果を表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| device_registration_id
+| <<string,string>>
+| 
+| デバイス登録ID。
+| device_registration_token
+| <<at.common.Token,at.common.Token>>
+| 
+| デバイス登録トークン。
+| otp
+| <<int32,int32>>
+| 
+| ワンタイムパスワード。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.UpdateDeviceRequest]]
+
+==== UpdateDeviceRequest
+
+デバイス更新リクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| device_id
+| <<int64,int64>>
+| 
+| デバイスID。
+| name
+| <<string,string>>
+| 
+| デバイス名。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.UpdateDeviceResponse]]
+
+==== UpdateDeviceResponse
+
+デバイス更新レスポンスを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| device
+| <<at.common.Device,at.common.Device>>
+| 
+| デバイスのリスト。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+// end range messages
+
+
+// end if has messages
+
+
+// end if has enums
+
+
+// end if has extensions
+
+
+=== Services
+
+
+
+[[at.core.DeviceService]]
+
+==== DeviceService
+
+デバイスを操作するAPIを提供します。
+
+[%autowidth.stretch]
+|===
+| Method Name | Request Type | Response Type | Description
+
+| RequestDeviceRegistration
+| <<at.core.RequestDeviceRegistrationRequest,RequestDeviceRegistrationRequest>>
+| <<at.core.RequestDeviceRegistrationResponse,RequestDeviceRegistrationResponse>>
+a| デバイスの登録要求を行います。 デバイスタイプを指定した RequestDeviceRegistrationRequest を渡します。 デバイスの登録要求に成功すると、デバイス登録トークン及びワンタイムパスワードが設定された RequestDeviceRegistrationResponse が返ります。
+| GetDeviceRegistrationResult
+| <<at.core.GetDeviceRegistrationResultRequest,GetDeviceRegistrationResultRequest>>
+| <<at.core.GetDeviceRegistrationResultResponse,GetDeviceRegistrationResultResponse>>
+a| デバイスの登録結果を取得します。 デバイス登録IDを指定した GetDeviceRegistrationResultRequest を渡します。 登録結果を格納した、GetDeviceRegistrationResultResponse が返ります。 デバイスの登録が完了すると登録完了フラグに true に設定され、デバイスIDとデバイス名が設定されます。
+| CancelDeviceRegistration
+| <<at.core.CancelDeviceRegistrationRequest,CancelDeviceRegistrationRequest>>
 | <<google.protobuf.Empty,.google.protobuf.Empty>>
-a| アニメーションを再生します。 再生するアニメーションコンテンツのコンテンツIDとアニメーションのインデックス、ルームに入室しているデバイスのデバイスIDを設定した PlayAnimationRequest を渡します。
-| StopAnimation
-| <<at_core_service.StopAnimationRequest,StopAnimationRequest>>
+a| デバイスの登録のキャンセルを行います。 デバイス登録IDを指定した CancelDeviceRegistrationRequest を渡します。
+| AcceptDeviceRegistration
+| <<at.core.AcceptDeviceRegistrationRequest,AcceptDeviceRegistrationRequest>>
+| <<at.core.AcceptDeviceRegistrationResponse,AcceptDeviceRegistrationResponse>>
+a| デバイス登録を受け入れます。 チームID、デバイス名、デバイス登録トークンまたはワンタイムパスワードを指定した AcceptDeviceRegistrationRequest を渡します。 デバイスの作成に成功すると、登録したデバイス情報が設定された、AcceptDeviceRegistrationResponse が返ります。
+| RegisterDevice
+| <<at.core.RegisterDeviceRequest,RegisterDeviceRequest>>
+| <<at.core.RegisterDeviceResponse,RegisterDeviceResponse>>
+a| 新しくデバイスを登録します。 チームID、デバイス名、デバイスタイプを指定した、RegisterDeviceRequest を渡します。 デバイスの登録に成功すると、登録したデバイス情報が設定された、RegisterDeviceResponse が返ります。 チームID、デバイス名、ワンタイムパスワードを指定した DeviceRegistrationRequest を渡します。
+| GetDevices
+| <<at.core.GetDevicesRequest,GetDevicesRequest>>
+| <<at.core.GetDevicesResponse,GetDevicesResponse>>
+a| デバイスのリストを取得します。 取得するデバイスのチームIDを指定した DeviceListRequest を渡します。 指定されたチームIDのデバイスのリストが設定された Devices が返ります。
+| GetDevice
+| <<at.core.GetDeviceRequest,GetDeviceRequest>>
+| <<at.core.GetDeviceResponse,GetDeviceResponse>>
+a| デバイスを取得します。 取得するデバイスのデバイスIDを指定した DeviceRequest を渡します。 デバイスが存在する場合、Device が返ります。
+| UpdateDevice
+| <<at.core.UpdateDeviceRequest,UpdateDeviceRequest>>
+| <<at.core.UpdateDeviceResponse,UpdateDeviceResponse>>
+a| デバイスを更新します。 更新するデバイスのデバイスIDと、新しいデバイス名を指定した DeviceUpdateRequest を渡します。 デバイスの作成に成功すると、Device が返ります。
+| DeleteDevice
+| <<at.core.DeleteDeviceRequest,DeleteDeviceRequest>>
 | <<google.protobuf.Empty,.google.protobuf.Empty>>
-a| アニメーションを停止します。 アニメーションを停止するルームに入室しているデバイスのデバイスIDを設定した StopAnimationRequest を渡します。
-| VideoStream
-| <<at_core_service.VideoStreamRequest,VideoStreamRequest>>
-| <<at_core_service.VideoFrame,VideoFrame>> stream
-a| ビデオストリームを取得します。 ビデオストリームを取得するルームのルームIDを指定した VideoStreamRequest を渡します。 各フレームを格納した VideoFrame が返ります。
+a| デバイスを削除します。 削除するデバイスのデバイスIDを指定した DeviceRequest を渡します。
+
+// end range methods
+|===
+
+// end range services
+
+
+// end if has services
+
+
+
+
+== core/content.proto
+
+Content はコンテンツに関する情報を操作します。
+
+
+=== Messages
+
+
+
+[[at.core.DeleteContentRequest]]
+
+==== DeleteContentRequest
+
+コンテンツ削除リクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| content_id
+| <<int64,int64>>
+| 
+| コンテンツID。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.DownloadContentRequest]]
+
+==== DownloadContentRequest
+
+コンテンツダウンロード情報取得リクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| content_id
+| <<int64,int64>>
+| 
+| コンテンツID。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.DownloadContentResponse]]
+
+==== DownloadContentResponse
+
+コンテンツダウンロード情報取得レスポンスを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| content
+| <<at.common.Content,at.common.Content>>
+| 
+| コンテンツ。
+| download_url
+| <<string,string>>
+| 
+| ダウンロードURL。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.FinishUploadContentRequest]]
+
+==== FinishUploadContentRequest
+
+コンテンツアップロード終了リクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| content_id
+| <<int64,int64>>
+| 
+| コンテンツID。
+| md5
+| <<bytes,bytes>>
+| 
+| MD5ハッシュ。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.FinishUploadContentResponse]]
+
+==== FinishUploadContentResponse
+
+コンテンツアップロード終了レスポンスを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| content
+| <<at.common.Content,at.common.Content>>
+| 
+| コンテンツ情報。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.GetContentRequest]]
+
+==== GetContentRequest
+
+コンテンツ取得リクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| content_id
+| <<int64,int64>>
+| 
+| コンテンツID。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.GetContentResponse]]
+
+==== GetContentResponse
+
+コンテンツ取得レスポンスを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| content
+| <<at.common.Content,at.common.Content>>
+| 
+| コンテンツ情報。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.GetContentsRequest]]
+
+==== GetContentsRequest
+
+コンテンツリスト取得リクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| content_types
+| <<at.common.ContentType,at.common.ContentType>>
+| repeated
+| コンテンツタイプのリスト。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.GetContentsResponse]]
+
+==== GetContentsResponse
+
+コンテンツリスト取得レスポンスを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| contents
+| <<at.common.Content,at.common.Content>>
+| repeated
+| コンテンツ情報のリスト。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.UpdateContentRequest]]
+
+==== UpdateContentRequest
+
+コンテンツ更新リクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| content_id
+| <<int64,int64>>
+| 
+| コンテンツID。
+| name
+| <<string,string>>
+| 
+| コンテンツ名。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.UpdateContentResponse]]
+
+==== UpdateContentResponse
+
+コンテンツ更新レスポンスを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| content
+| <<at.common.Content,at.common.Content>>
+| 
+| コンテンツ情報。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.UploadContentRequest]]
+
+==== UploadContentRequest
+
+コンテンツアップロードリクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| name
+| <<string,string>>
+| 
+| コンテンツ名。
+| content_type
+| <<at.common.ContentType,at.common.ContentType>>
+| 
+| コンテンツタイプ。
+| file_name
+| <<string,string>>
+| 
+| コンテンツのファイル名。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.UploadContentResponse]]
+
+==== UploadContentResponse
+
+コンテンツアップロードレスポンスを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| content_id
+| <<int64,int64>>
+| 
+| コンテンツID。
+| upload_url
+| <<string,string>>
+| 
+| コンテンツをアップロードするURL。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+// end range messages
+
+
+// end if has messages
+
+
+// end if has enums
+
+
+// end if has extensions
+
+
+=== Services
+
+
+
+[[at.core.ContentService]]
+
+==== ContentService
+
+コンテンツを操作するAPIを提供します。
+
+[%autowidth.stretch]
+|===
+| Method Name | Request Type | Response Type | Description
+
+| GetContents
+| <<at.core.GetContentsRequest,GetContentsRequest>>
+| <<at.core.GetContentsResponse,GetContentsResponse>>
+a| コンテンツのリストを取得します。 取得するコンテンツのチームIDを指定した GetContentsRequest を渡します。 contents_types に1つ以上のコンテンツタイプを指定すると、指定されたコンテンツタイプのコンテンツのみ取得します。 指定されたチームIDのコンテンツ情報のリストが設定された GetContentsResponse が返ります。
+| GetContent
+| <<at.core.GetContentRequest,GetContentRequest>>
+| <<at.core.GetContentResponse,GetContentResponse>>
+a| コンテンツを取得します。 取得するコンテンツのコンテンツIDを指定した GetContentRequest を渡します。 コンテンツが存在する場合、コンテンツ情報が設定された GetContentResponse が返ります。
+| UploadContent
+| <<at.core.UploadContentRequest,UploadContentRequest>>
+| <<at.core.UploadContentResponse,UploadContentResponse>>
+a| コンテンツをアップロードします。 チームID、アップロードするコンテンツのコンテンツ名とコンテンツタイプを指定した UploadContentRequest を渡します。 アップロードを行うための URL が設定された ContentUploadURL が返ります。 このURLにコンテンツデータをHTTP POSTメソッドで転送することで、アップロードが行われます。 アップロード完了後、FinishUpload メソッドでアップロードの完了を登録します。
+| FinishUploadContent
+| <<at.core.FinishUploadContentRequest,FinishUploadContentRequest>>
+| <<at.core.FinishUploadContentResponse,FinishUploadContentResponse>>
+a| コンテンツのアップロード完了を登録します。 チームID、コンテンツID、アップロードしたコンテンツのMD5ハッシュを指定した FinishUploadRequest を渡します。 登録に成功すると Content が返ります。
+| DownloadContent
+| <<at.core.DownloadContentRequest,DownloadContentRequest>>
+| <<at.core.DownloadContentResponse,DownloadContentResponse>>
+a| コンテンツをダウンロードするための情報を取得します。 ダウンロードするコンテンツのチームID、コンテンツIDを指定した、DownloadContentRequest を渡します。 コンテンツが存在する場合、コンテンツ情報とダウンロードURLが設定された DownloadContentResponse が返ります。
+| UpdateContent
+| <<at.core.UpdateContentRequest,UpdateContentRequest>>
+| <<at.core.UpdateContentResponse,UpdateContentResponse>>
+a| コンテンツを更新します。 更新するコンテンツのコンテンツIDと、新しいコンテンツ名を指定した ContentUpdateRequest を渡します。 コンテンツの作成に成功すると、Content が返ります。
+| DeleteContent
+| <<at.core.DeleteContentRequest,DeleteContentRequest>>
+| <<google.protobuf.Empty,.google.protobuf.Empty>>
+a| コンテンツを削除します。 削除するコンテンツのコンテンツIDを指定した ContentRequest を渡します。
+
+// end range methods
+|===
+
+// end range services
+
+
+// end if has services
+
+
+
+
+== core/avatar.proto
+
+Avatar はアバターに関する情報を操作します。
+
+
+=== Messages
+
+
+
+[[at.core.CreateAvatarRequest]]
+
+==== CreateAvatarRequest
+
+アバター作成リクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| name
+| <<string,string>>
+| 
+| アバター名称。
+| avatar_content_id
+| <<int64,int64>>
+| 
+| アバターのコンテンツID。
+| animation_content_id
+| <<int64,int64>>
+| 
+| アニメーションのコンテンツID。
+| animations
+| <<at.common.Animation,at.common.Animation>>
+| repeated
+| アニメーションのリスト。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.CreateAvatarResponse]]
+
+==== CreateAvatarResponse
+
+アバター作成リクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| avatar
+| <<at.common.Avatar,at.common.Avatar>>
+| 
+| アバター情報。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.DeleteAvatarRequest]]
+
+==== DeleteAvatarRequest
+
+アバター削除リクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| avatar_id
+| <<int64,int64>>
+| 
+| アバターID。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.DeleteOperatorAvatarRequest]]
+
+==== DeleteOperatorAvatarRequest
+
+オペレーターデバイスからのアバター削除レスポンスを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| device_id
+| <<int64,int64>>
+| 
+| オペレーターデバイスのデバイスID。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.GetAvatarRequest]]
+
+==== GetAvatarRequest
+
+アバター情報取得リクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| avatar_id
+| <<int64,int64>>
+| 
+| アバターID。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.GetAvatarResponse]]
+
+==== GetAvatarResponse
+
+アバター情報取得レスポンスを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| avatar
+| <<at.common.Avatar,at.common.Avatar>>
+| 
+| アバター情報。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.GetAvatarsRequest]]
+
+==== GetAvatarsRequest
+
+アバター情報リスト取得リクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| used_only
+| <<bool,bool>>
+| 
+| true を指定すると、Operator デバイスに設定されているアバターのみ取得します。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.GetAvatarsResponse]]
+
+==== GetAvatarsResponse
+
+アバター情報リスト取得レスポンスを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| avatars
+| <<at.common.Avatar,at.common.Avatar>>
+| repeated
+| アバターのリスト。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.GetOperatorAvatarRequest]]
+
+==== GetOperatorAvatarRequest
+
+オペレーターアバター取得リクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| device_id
+| <<int64,int64>>
+| 
+| オペレーターデバイスのデバイスID。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.GetOperatorAvatarResponse]]
+
+==== GetOperatorAvatarResponse
+
+オペレーターアバター取得レスポンスを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| device_id
+| <<int64,int64>>
+| 
+| オペレーターデバイスのデバイスID。
+| avatar
+| <<at.common.Avatar,at.common.Avatar>>
+| 
+| アバター情報。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.SetOperatorAvatarRequest]]
+
+==== SetOperatorAvatarRequest
+
+オペレーターデバイスへのアバター設定リクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| device_id
+| <<int64,int64>>
+| 
+| オペレーターデバイスのデバイスID。
+| avatar_id
+| <<int64,int64>>
+| 
+| アバターID。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.SetOperatorAvatarResponse]]
+
+==== SetOperatorAvatarResponse
+
+オペレーターデバイスへのアバター設定レスポンスを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| device_id
+| <<int64,int64>>
+| 
+| オペレーターデバイスのデバイスID。
+| avatar
+| <<at.common.Avatar,at.common.Avatar>>
+| 
+| アバター情報。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.UpdateAvatarRequest]]
+
+==== UpdateAvatarRequest
+
+アバター更新リクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| avatar_id
+| <<int64,int64>>
+| 
+| アバターID。
+| name
+| <<string,string>>
+| 
+| アバター名称。
+| avatar_content_id
+| <<int64,int64>>
+| 
+| アバターのコンテンツID。
+| animation_content_id
+| <<int64,int64>>
+| 
+| アニメーションのコンテンツID。
+| animations
+| <<at.common.Animation,at.common.Animation>>
+| repeated
+| アニメーションのリスト。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.UpdateAvatarResponse]]
+
+==== UpdateAvatarResponse
+
+アバター更新リクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| avatar
+| <<at.common.Avatar,at.common.Avatar>>
+| 
+| アバター情報。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+// end range messages
+
+
+// end if has messages
+
+
+// end if has enums
+
+
+// end if has extensions
+
+
+=== Services
+
+
+
+[[at.core.AvatarService]]
+
+==== AvatarService
+
+アバター設定に関する情報を操作するAPIを提供します。
+
+[%autowidth.stretch]
+|===
+| Method Name | Request Type | Response Type | Description
+
+| GetAvatars
+| <<at.core.GetAvatarsRequest,GetAvatarsRequest>>
+| <<at.core.GetAvatarsResponse,GetAvatarsResponse>>
+a| アバター情報のリストを取得します。 取得するアバターのチームIDを指定した GetAvatarsRequest を渡します。 used_only に true を指定すると、Operator デバイスに設定されているアバターのみ取得します。 指定されたチームIDのアバター情報のリストが設定された GetAvatarsResponse が返ります。
+| GetAvatar
+| <<at.core.GetAvatarRequest,GetAvatarRequest>>
+| <<at.core.GetAvatarResponse,GetAvatarResponse>>
+a| アバター情報を取得します。 取得するアバターのアバターIDとチームIDを指定した GetAvatarRequest を渡します。 アバターが存在する場合、アバター情報が設定された GetAvatarResponse が返ります。
+| CreateAvatar
+| <<at.core.CreateAvatarRequest,CreateAvatarRequest>>
+| <<at.core.CreateAvatarResponse,CreateAvatarResponse>>
+a| 新しくアバターを作成します。 アバター名とアバターのコンテンツID、アニメーションのコンテンツID、チームIDを指定した CreateAvatarRequest を渡します。 アバターの作成に成功すると、作成したアバター情報が設定された CreateAvatarResponse が返ります。
+| UpdateAvatar
+| <<at.core.UpdateAvatarRequest,UpdateAvatarRequest>>
+| <<at.core.UpdateAvatarResponse,UpdateAvatarResponse>>
+a| アバター情報を更新します。 更新するアバターのアバターIDとチームID、新しいアバター名、アバターのコンテンツID、アニメーションのコンテンツIDを指定した UpdateAvatarRequest を渡します。 アバターの更新に成功すると、更新したアバター情報が設定された UpdateAvatarResponse が返ります。
+| DeleteAvatar
+| <<at.core.DeleteAvatarRequest,DeleteAvatarRequest>>
+| <<google.protobuf.Empty,.google.protobuf.Empty>>
+a| アバターを削除します。 削除するアバターのアバターIDとチームIDを指定した DeleteAvatarRequest を渡します。
+| GetOperatorAvatar
+| <<at.core.GetOperatorAvatarRequest,GetOperatorAvatarRequest>>
+| <<at.core.GetOperatorAvatarResponse,GetOperatorAvatarResponse>>
+a| オペレーターデバイスに設定されているアバター情報を取得します。 アバター情報を取得するオペレーターデバイスのデバイスIDとチームIDを指定した GetOperatorAvatarRequest を渡します。 デバイスにオペレーターが設定されている場合、OperatorAvatar が返ります。
+| SetOperatorAvatar
+| <<at.core.SetOperatorAvatarRequest,SetOperatorAvatarRequest>>
+| <<at.core.SetOperatorAvatarResponse,SetOperatorAvatarResponse>>
+a| オペレーターデバイスにアバターを設定します。 設定するアバターのアバターIDと、設定するオペレーターデバイスのデバイスIDとチームIDを指定した SetOperatorAvatarRequest を渡します。 オペレーターデバイスへのアバターの設定に成功すると、オペレーターアバター情報を設定した SetOperatorAvatarResponse が返ります。
+| DeleteOperatorAvatar
+| <<at.core.DeleteOperatorAvatarRequest,DeleteOperatorAvatarRequest>>
+| <<google.protobuf.Empty,.google.protobuf.Empty>>
+a| オペレーターデバイスに設定されたアバターを削除します。 削除するオペレーターデバイスのデバイスIDとチームIDを指定した DeleteOperatorAvatarRequest を渡します。
+
+// end range methods
+|===
+
+// end range services
+
+
+// end if has services
+
+
+
+
+== core/authorization.proto
+
+Authorization は認可トークンを発行する API を提供します。
+
+
+=== Messages
+
+
+
+[[at.core.IssueWebAccessTokenRequest]]
+
+==== IssueWebAccessTokenRequest
+
+Web アクセストークンを発行するためのリクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| refresh_token
+| <<string,string>>
+| 
+| Web リフレッシュトークン。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.IssueWebAccessTokenResponse]]
+
+==== IssueWebAccessTokenResponse
+
+Web アクセストークンを発行したレスポンスを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| token
+| <<at.common.Token,at.common.Token>>
+| 
+| 
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.IssueWebRTCAccessTokenRequest]]
+
+==== IssueWebRTCAccessTokenRequest
+
+WebRTC アクセストークンを発行するためのリクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| refresh_token
+| <<string,string>>
+| 
+| Web リフレッシュトークン。
+| room_id
+| <<int64,int64>>
+| 
+| ルームID。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.IssueWebRTCAccessTokenResponse]]
+
+==== IssueWebRTCAccessTokenResponse
+
+WebRTC アクセストークンを発行したレスポンスを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| token
+| <<at.common.Token,at.common.Token>>
+| 
+| 
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.IssueWebRefreshTokenRequest]]
+
+==== IssueWebRefreshTokenRequest
+
+Web リフレッシュトークンを発行するためのリクエストを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| team_id
+| <<int64,int64>>
+| 
+| チームID。
+| device_id
+| <<int64,int64>>
+| 
+| デバイスID。
+| device_type
+| <<at.common.DeviceType,at.common.DeviceType>>
+| 
+| デバイスタイプ。
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+
+[[at.core.IssueWebRefreshTokenResponse]]
+
+==== IssueWebRefreshTokenResponse
+
+Web リフレッシュトークンを発行したレスポンスを表します。
+
+
+[%autowidth.stretch]
+|===
+| Field | Type | Label | Description
+
+| token
+| <<at.common.Token,at.common.Token>>
+| 
+| 
+
+// end range fields
+|===
+
+// end if has fields
+
+
+// end if has extensions
+
+
+// end range messages
+
+
+// end if has messages
+
+
+// end if has enums
+
+
+// end if has extensions
+
+
+=== Services
+
+
+
+[[at.core.AuthorizationService]]
+
+==== AuthorizationService
+
+認可トークンを発行する API を提供します。
+
+[%autowidth.stretch]
+|===
+| Method Name | Request Type | Response Type | Description
+
+| IssueWebRefreshToken
+| <<at.core.IssueWebRefreshTokenRequest,IssueWebRefreshTokenRequest>>
+| <<at.core.IssueWebRefreshTokenResponse,IssueWebRefreshTokenResponse>>
+a| Web リフレッシュトークンを発行します。
+| IssueWebAccessToken
+| <<at.core.IssueWebAccessTokenRequest,IssueWebAccessTokenRequest>>
+| <<at.core.IssueWebAccessTokenResponse,IssueWebAccessTokenResponse>>
+a| Web アクセストークンを発行します。
+| IssueWebRTCAccessToken
+| <<at.core.IssueWebRTCAccessTokenRequest,IssueWebRTCAccessTokenRequest>>
+| <<at.core.IssueWebRTCAccessTokenResponse,IssueWebRTCAccessTokenResponse>>
+a| WebRTC アクセストークンを発行します。
 
 // end range methods
 |===
@@ -2211,62 +2973,6 @@ a| ビデオストリームを取得します。 ビデオストリームを取�
 
 
 // end range files
-
-== シーケンス図
-
-=== Team
-
-image::images/team_create.png[TeamService.Create]
- 
-image::images/team_get.png[TeamService.Get]
- 
-image::images/team_update.png[TeamService.Update]
- 
-image::images/team_delete.png[TeamService.Delete]
-
-=== Room
-
-image::images/room_create.png[RoomService.Create]
- 
-image::images/room_get.png[RoomService.Get]
- 
-image::images/room_list.png[RoomService.List]
- 
-image::images/room_update.png[RoomService.Update]
-
-image::images/room_set_device.png[RoomService.SetDevice]
- 
-image::images/room_delete.png[RoomService.Delete]
-
-=== Device
-
-image::images/device_register.png[DeviceService.Register]
- 
-image::images/device_get.png[DeviceService.Get]
- 
-image::images/device_list.png[DeviceService.List]
- 
-image::images/device_list_device_type.png[DeviceService.ListDeviceType]
- 
-image::images/device_update.png[DeviceService.Update]
- 
-image::images/device_delete.png[DeviceService.Delete]
-
-=== Content
-
-image::images/content_upload.png[ContentService.Upload]
- 
-image::images/content_get.png[ContentService.Get]
- 
-image::images/content_list.png[ContentService.List]
- 
-image::images/content_list_content_type.png[ContentService.ListContentType]
- 
-image::images/content_update.png[ContentService.Update]
- 
-image::images/content_delete.png[ContentService.Delete]
-
-== Scalar Value Types
 
 [%autowidth.stretch]
 |===
@@ -2413,6 +3119,7 @@ image::images/content_delete.png[ContentService.Delete]
 
 == 改訂履歴
 
+* v3.0, 2022-04-22  Release Candidate 1
 * v2.0, 2021-05-21  Release
 * v1.2, 2021-03-26  Release
 * v1.1, 2021-02-25  Release
