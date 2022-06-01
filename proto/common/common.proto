@@ -100,20 +100,20 @@ message Content {
  * アバターを表します。
  */
 message Avatar {
-  int64    team_id              = 1; // チームID。
-  int64    avatar_id            = 2; // アバターID。
-  string   name                 = 3; // アバター名称。
-  int64    avatar_content_id    = 4; // アバターのコンテンツID。
-  int64    animation_content_id = 5; // アニメーションのコンテンツID。
-  repeated Animation animations = 6; // アニメーションのリスト。
+  int64    team_id              = 1;  // チームID。
+  int64    avatar_id            = 2;  // アバターID。
+  string   name                 = 3;  // アバター名称。
+  int64    content_id           = 4;  // アバターのコンテンツID。
+  repeated Animation animations = 10; // アニメーションのリスト。
 }
 
 /*
  * アバターのアニメーションを表します。
  */
 message Animation {
-  int32  index = 1; // アニメーションインデックス。
-  string name  = 2; // アニメーション名称。
+  int32  index      = 1; // アニメーションインデックス。
+  string name       = 2; // アニメーション名称。
+  int64  content_id = 3; // アニメーションのコンテンツID。
 }
 
 /*

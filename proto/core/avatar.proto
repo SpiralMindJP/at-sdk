@@ -44,11 +44,10 @@ message GetAvatarResponse {
  * アバター作成リクエストを表します。
  */
 message CreateAvatarRequest {
-  int64                        team_id              = 1; // チームID。
-  string                       name                 = 2; // アバター名称。
-  int64                        avatar_content_id    = 3; // アバターのコンテンツID。
-  int64                        animation_content_id = 4; // アニメーションのコンテンツID。
-  repeated at.common.Animation animations           = 5; // アニメーションのリスト。
+  int64                        team_id    = 1;  // チームID。
+  string                       name       = 2;  // アバター名称。
+  int64                        content_id = 3;  // アバターのコンテンツID。
+  repeated at.common.Animation animations = 10; // アニメーションのリスト。
 }
 
 /*
@@ -62,12 +61,11 @@ message CreateAvatarResponse {
  * アバター更新リクエストを表します。
  */
 message UpdateAvatarRequest {
-  int64                        team_id              = 1; // チームID。
-  int64                        avatar_id            = 2; // アバターID。
-  string                       name                 = 3; // アバター名称。
-  int64                        avatar_content_id    = 4; // アバターのコンテンツID。
-  int64                        animation_content_id = 5; // アニメーションのコンテンツID。
-  repeated at.common.Animation animations           = 6; // アニメーションのリスト。
+  int64                        team_id    = 1;  // チームID。
+  int64                        avatar_id  = 2;  // アバターID。
+  string                       name       = 3;  // アバター名称。
+  int64                        content_id = 4;  // アバターのコンテンツID。
+  repeated at.common.Animation animations = 10; // アニメーションのリスト。
 }
 
 /*
