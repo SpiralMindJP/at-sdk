@@ -84,6 +84,15 @@ message Device {
 }
 
 /*
+ * コンテンツリストを表します。
+ */
+message ContentList {
+  int64            team_id         = 1; // チームID。
+  int64            content_list_id = 2; // コンテンツID。
+  string           name            = 3; // コンテンツリスト名。
+}
+
+/*
  * コンテンツのタイプを表します。
  */
 enum ContentType {

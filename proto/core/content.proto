@@ -11,9 +11,105 @@ import "common/common.proto";
 import "google/protobuf/empty.proto";
 
 /*
+ * コンテンツリストのリスト取得クエストを表します。
+ */
+message GetContentListsRequest {
+  int64 team_id = 1; // チームID。
+}
+
+/*
+ * コンテンツリストのリスト取得レスポンスを表します。
+ */
+message GetContentListsResponse {
+  repeated at.common.ContentList content_lists = 1; // コンテンツリストのリスト。
+}
+
+/*
  * コンテンツリスト取得リクエストを表します。
  */
-message GetContentsRequest {
+message GetContentListRequest {
+  int64 team_id         = 1; // チームID。
+  int64 content_list_id = 2; // コンテンツリストID。
+}
+
+/*
+ * コンテンツリスト取得レスポンスを表します。
+ */
+message GetContentListResponse {
+  at.common.ContentList content_list = 1; // コンテンツリスト。
+}
+
+/*
+ * コンテンツリスト作成リクエストを表します。
+ */
+message CreateContentListRequest {
+  int64  team_id = 1; // チームID。
+  string name    = 2; // コンテンツリスト名。
+}
+
+/*
+ * コンテンツリスト作成レスポンスを表します。
+ */
+message CreateContentListResponse {
+  at.common.ContentList content_list = 1; // コンテンツリスト。
+}
+
+/*
+ * コンテンツリスト更新リクエストを表します。
+ */
+message UpdateContentListRequest {
+  int64  team_id         = 1; // チームID。
+  int64  content_list_id = 2; // コンテンツリストID。
+  string name            = 3; // コンテンツリスト名。
+}
+
+/*
+ * コンテンツリスト更新レスポンスを表します。
+ */
+message UpdateContentListResponse {
+  at.common.ContentList content_list = 1; // コンテンツリスト。
+}
+
+/*
+ * コンテンツリスト削除リクエストを表します。
+ */
+message DeleteContentListRequest {
+  int64 team_id         = 1; // チームID。
+  int64 content_list_id = 2; // コンテンツリストID。
+}
+
+/*
+ * コンテンツリストへのコンテンツ追加リクエストを表します。
+ */
+message AddContentToContentListRequest {
+  int64 team_id         = 1; // チームID。
+  int64 content_list_id = 2; // コンテンツリストID。
+  int64 content_id      = 3; // コンテンツID。
+}
+
+/*
+ * コンテンツリストからのコンテンツ削除リクエストを表します。
+ */
+message RemoveContentFromContentListRequest {
+  int64 team_id         = 1; // チームID。
+  int64 content_list_id = 2; // コンテンツリストID。
+  int64 content_id      = 3; // コンテンツID。
+}
+
+/*
+ * コンテンツリスト内ののコンテンツ移動リクエストを表します。
+ */
+message MoveContentInContentListRequest {
+  int64 team_id         = 1; // チームID。
+  int64 content_list_id = 2; // コンテンツリストID。
+  int64 content_id      = 3; // コンテンツID。
+  int32 index           = 4; // 移動先のインデックス。
+}
+
+/*
+ * 全コンテンツリスト取得リクエストを表します。
+ */
+message GetAllContentsRequest {
   int64                          team_id       = 1; // チームID。
   repeated at.common.ContentType content_types = 2; // コンテンツタイプのリスト。
 }
@@ -21,8 +117,24 @@ message GetContentsRequest {
 /*
  * コンテンツリスト取得レスポンスを表します。
  */
+message GetAllContentsResponse {
+  repeated at.common.Content contents = 1; // コンテンツのリスト。
+}
+
+/*
+ * コンテンツリスト取得リクエストを表します。
+ */
+message GetContentsRequest {
+  int64                          team_id         = 1; // チームID。
+  int64                          content_list_id = 2; // コンテンツリストID。
+  repeated at.common.ContentType content_types   = 3; // コンテンツタイプのリスト。
+}
+
+/*
+ * コンテンツリスト取得レスポンスを表します。
+ */
 message GetContentsResponse {
-  repeated at.common.Content contents = 1; // コンテンツ情報のリスト。
+  repeated at.common.Content contents = 1; // コンテンツのリスト。
 }
 
 /*
@@ -37,7 +149,7 @@ message GetContentRequest {
  * コンテンツ取得レスポンスを表します。
  */
 message GetContentResponse {
-  at.common.Content content = 1; // コンテンツ情報。
+  at.common.Content content = 1; // コンテンツ。
 }
 
 /*
@@ -71,11 +183,11 @@ message FinishUploadContentRequest {
  * コンテンツアップロード終了レスポンスを表します。
  */
 message FinishUploadContentResponse {
-  at.common.Content content = 1; // コンテンツ情報。
+  at.common.Content content = 1; // コンテンツ。
 }
 
 /*
- * コンテンツダウンロード情報取得リクエストを表します。
+ * コンテンツダウンロード取得リクエストを表します。
  */
 message DownloadContentRequest {
   int64 team_id    = 1; // チームID。
@@ -83,7 +195,7 @@ message DownloadContentRequest {
 }
 
 /*
- * コンテンツダウンロード情報取得レスポンスを表します。
+ * コンテンツダウンロード取得レスポンスを表します。
  */
 message DownloadContentResponse {
   at.common.Content content      = 1; // コンテンツ。
@@ -103,7 +215,7 @@ message UpdateContentRequest {
  * コンテンツ更新レスポンスを表します。
  */
 message UpdateContentResponse {
-  at.common.Content content = 1; // コンテンツ情報。
+  at.common.Content content = 1; // コンテンツ。
 }
 
 /*
@@ -118,15 +230,49 @@ message DeleteContentRequest {
  * コンテンツを操作するAPIを提供します。
  */
 service ContentService {
-  // コンテンツのリストを取得します。
-  // 取得するコンテンツのチームIDを指定した GetContentsRequest を渡します。
-  // contents_types に1つ以上のコンテンツタイプを指定すると、指定されたコンテンツタイプのコンテンツのみ取得します。
-  // 指定されたチームIDのコンテンツ情報のリストが設定された GetContentsResponse が返ります。
-  rpc GetContents(GetContentsRequest) returns (GetContentsResponse);
+  // コンテンツリストのリストを取得します。
+  // 取得するコンテンツリストのチームIDを指定した GetContentListsRequest を渡します。
+  // 指定されたチームIDのコンテンツリストのリストが設定された GetContentListsResponse が返ります。
+  rpc GetContentLists(GetContentListsRequest) returns (GetContentListsResponse);
+  // コンテンツリストを取得します。
+  // 取得するコンテンツリストのコンテンツリストIDを指定した GetContentListRequest を渡します。
+  // コンテンツリストが存在する場合、コンテンツリストが設定された GetContentListResponse が返ります。
+  rpc GetContentList(GetContentListRequest) returns (GetContentListResponse);
+  // 新しくコンテンツリストを作成します。
+  // コンテンツリスト名とチームIDを指定した CreateContentListRequest を渡します。
+  // コンテンツリストの作成に成功すると、作成されたコンテンツリストが設定された CreateContentListResponse が返ります。
+  rpc CreateContentList(CreateContentListRequest) returns (CreateContentListResponse);
+  // コンテンツリストを更新します。
+  // 更新するコンテンツリストのコンテンツリストIDと、新しいコンテンツリスト名を指定した ContentListUpdateRequest を渡します。
+  // コンテンツリストの作成に成功すると、ContentList が返ります。
+  rpc UpdateContentList(UpdateContentListRequest) returns (UpdateContentListResponse);
+  // コンテンツリストを削除します。
+  // 削除するコンテンツリストのコンテンツリストIDを指定した ContentListRequest を渡します。
+  rpc DeleteContentList(DeleteContentListRequest) returns (google.protobuf.Empty);
 
+  // コンテンツをコンテンツリストに追加します。
+  // チームIDと追加するコンテンツのコンテンツID、追加先のコンテンツリストのコンテンツリストIDを指定した AddContentToContentListRequest を渡します。
+  rpc AddContentToContentList(AddContentToContentListRequest) returns (google.protobuf.Empty);
+  // コンテンツをコンテンツリストから削除します。
+  // チームIDと削除するコンテンツのコンテンツID、削除元のコンテンツリストのコンテンツリストIDを指定した RemoveContentFromContentListRequest を渡します。
+  rpc RemoveContentFromContentList(RemoveContentFromContentListRequest) returns (google.protobuf.Empty);
+  // コンテンツリスト内のコンテンツを移動します。
+  // チームIDと移動するコンテンツのコンテンツID、移動するコンテンツリストのコンテンツリストID、移動先のインデックスを指定した MoveContentInContentListRequest を渡します。
+  rpc MoveContentInContentList(MoveContentInContentListRequest) returns (google.protobuf.Empty);
+
+  // 全てのコンテンツのリストを取得します。
+  // 取得するコンテンツのチームIDを指定した GetAllContentsRequest を渡します。
+  // contents_types に1つ以上のコンテンツタイプを指定すると、指定されたコンテンツタイプのコンテンツのみ取得します。
+  // 取得したコンテンツのリストが設定された GetAllContentsResponse が返ります。
+  rpc GetAllContents(GetAllContentsRequest) returns (GetAllContentsResponse);
+  // 指定されたコンテンツリストに追加されているコンテンツのリストを取得します。
+  // 取得するコンテンツのチームIDとコンテンツリストIDを指定した GetContentsRequest を渡します。
+  // contents_types に1つ以上のコンテンツタイプを指定すると、指定されたコンテンツタイプのコンテンツのみ取得します。
+  // 取得したコンテンツのリストが設定された GetContentsResponse が返ります。
+  rpc GetContents(GetContentsRequest) returns (GetContentsResponse);
   // コンテンツを取得します。
   // 取得するコンテンツのコンテンツIDを指定した GetContentRequest を渡します。
-  // コンテンツが存在する場合、コンテンツ情報が設定された GetContentResponse が返ります。
+  // コンテンツが存在する場合、コンテンツが設定された GetContentResponse が返ります。
   rpc GetContent(GetContentRequest) returns (GetContentResponse);
 
   // コンテンツをアップロードします。
@@ -139,9 +285,9 @@ service ContentService {
   // チームID、コンテンツID、アップロードしたコンテンツのMD5ハッシュを指定した FinishUploadRequest を渡します。
   // 登録に成功すると Content が返ります。
   rpc FinishUploadContent(FinishUploadContentRequest) returns (FinishUploadContentResponse);
-  // コンテンツをダウンロードするための情報を取得します。
+  // コンテンツをダウンロードするためのを取得します。
   // ダウンロードするコンテンツのチームID、コンテンツIDを指定した、DownloadContentRequest を渡します。
-  // コンテンツが存在する場合、コンテンツ情報とダウンロードURLが設定された DownloadContentResponse が返ります。
+  // コンテンツが存在する場合、コンテンツとダウンロードURLが設定された DownloadContentResponse が返ります。
   rpc DownloadContent(DownloadContentRequest) returns (DownloadContentResponse);
 
   // コンテンツを更新します。
