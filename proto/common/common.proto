@@ -24,9 +24,10 @@ enum DeviceConnectionState {
 
 // ルームの状態を表します。
 message RoomState {
-  int64  team_id = 1; // チームID。
-  int64  room_id = 2; // ルームID。
-  string name    = 3; // ルーム名。
+  int64  team_id       = 1; // チームID。
+  int64  room_id       = 2; // ルームID。
+  string name          = 3; // ルーム名。
+  int64  room_group_id = 4; // ルームグループID。
 
   repeated DeviceState device_states = 11; // デバイスの状態のリスト。
 }
@@ -48,12 +49,23 @@ message Team {
 }
 
 /*
+ * ルームグループを表します。
+ */
+message RoomGroup {
+  int64  team_id              = 1; // チームID。
+  int64  room_group_id        = 2; // ルームグループID。
+  int64  parent_room_group_id = 3; // 親ルームグループID。
+  string name                 = 4; // ルームグループ名。
+}
+
+/*
  * ルームを表します。
  */
 message Room {
-  int64  team_id = 1; // チームID。
-  int64  room_id = 2; // ルームID。
-  string name    = 3; // ルーム名。
+  int64  team_id       = 1; // チームID。
+  int64  room_id       = 2; // ルームID。
+  string name          = 3; // ルーム名。
+  int64  room_group_id = 4; // ルームグループID。
 
   repeated Device devices = 11; // デバイスリスト。
 }

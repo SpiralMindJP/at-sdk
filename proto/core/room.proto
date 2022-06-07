@@ -11,10 +11,112 @@ import "common/common.proto";
 import "google/protobuf/empty.proto";
 
 /*
+ * 全ルームグループリスト取得クエストを表します。
+ */
+message GetAllRoomGroupsRequest {
+  int64 team_id = 1; // チームID。
+}
+
+/*
+ * 全ルームグループリスト取得レスポンスを表します。
+ */
+message GetAllRoomGroupsResponse {
+  repeated at.common.RoomGroup room_groups = 1; // ルームグループ情報のリスト。
+}
+
+/*
+ * ルームグループリスト取得クエストを表します。
+ */
+message GetRoomGroupsRequest {
+  int64 team_id              = 1; // チームID。
+  int64 parent_room_group_id = 2; // 親ルームグループID。0 は未指定。
+}
+
+/*
+ * ルームグループリスト取得レスポンスを表します。
+ */
+message GetRoomGroupsResponse {
+  repeated at.common.RoomGroup room_groups = 1; // ルームグループ情報のリスト。
+}
+
+/*
+ * ルームグループ取得リクエストを表します。
+ */
+message GetRoomGroupRequest {
+  int64 team_id       = 1; // チームID。
+  int64 room_group_id = 2; // ルームグループID。
+}
+
+/*
+ * ルームグループ取得レスポンスを表します。
+ */
+message GetRoomGroupResponse {
+  at.common.RoomGroup room_group = 1; // ルームグループ情報。
+}
+
+/*
+ * ルームグループ作成リクエストを表します。
+ */
+message CreateRoomGroupRequest {
+  int64  team_id              = 1; // チームID。
+  string name                 = 2; // ルームグループ名。
+  int64  parent_room_group_id = 3; // 親ルームグループID。0 は未指定。
+}
+
+/*
+ * ルームグループ作成レスポンスを表します。
+ */
+message CreateRoomGroupResponse {
+  at.common.RoomGroup room_group = 1; // ルームグループ情報。
+}
+
+/*
+ * ルームグループ更新リクエストを表します。
+ */
+message UpdateRoomGroupRequest {
+  int64  team_id              = 1; // チームID。
+  int64  room_group_id        = 2; // ルームグループID。
+  string name                 = 3; // ルームグループ名。
+  int64  parent_room_group_id = 4; // 親ルームグループID。0 は未指定。
+}
+
+/*
+ * ルームグループ更新レスポンスを表します。
+ */
+message UpdateRoomGroupResponse {
+  at.common.RoomGroup room_group = 1; // ルームグループ情報。
+}
+
+/*
+ * ルームグループ削除リクエストを表します。
+ */
+message DeleteRoomGroupRequest {
+  int64 team_id       = 1; // チームID。
+  int64 room_group_id = 2; // ルームグループID。
+}
+
+/*
+ * 全ルームリスト取得クエストを表します。
+ */
+message GetAllRoomsRequest {
+  int64 team_id = 1; // チームID。
+
+  bool with_devices = 11; // true を指定すると、ルームに入室しているデバイスのリストも取得。
+}
+
+/*
+ * 全ルームリスト取得レスポンスを表します。
+ */
+message GetAllRoomsResponse {
+  repeated at.common.Room rooms = 1; // ルーム情報のリスト。
+}
+
+/*
  * ルームリスト取得クエストを表します。
  */
 message GetRoomsRequest {
-  int64 team_id = 1; // チームID。
+  int64 team_id       = 1; // チームID。
+  int64 room_group_id = 2; // ルームグループID。0 は未指定。
 
   bool with_devices = 11; // true を指定すると、ルームに入室しているデバイスのリストも取得。
 }
@@ -47,8 +149,9 @@ message GetRoomResponse {
  * ルーム作成リクエストを表します。
  */
 message CreateRoomRequest {
-  int64  team_id = 1; // チームID。
-  string name    = 2; // ルーム名。
+  int64  team_id       = 1; // チームID。
+  string name          = 2; // ルーム名。
+  int64  room_group_id = 3; // ルームグループID。0 は未指定。
 }
 
 /*
@@ -62,9 +165,10 @@ message CreateRoomResponse {
  * ルーム更新リクエストを表します。
  */
 message UpdateRoomRequest {
-  int64  team_id = 1; // チームID。
-  int64  room_id = 2; // ルームID。
-  string name    = 3; // ルーム名。
+  int64  team_id       = 1; // チームID。
+  int64  room_id       = 2; // ルームID。
+  string name          = 3; // ルーム名。
+  int64  room_group_id = 4; // ルームグループID。0 は未指定。
 }
 
 /*
@@ -72,6 +176,14 @@ message UpdateRoomRequest {
  */
 message UpdateRoomResponse {
   at.common.Room room = 1; // ルーム情報。
+}
+
+/*
+ * ルーム削除リクエストを表します。
+ */
+message DeleteRoomRequest {
+  int64 team_id = 1; // チームID。
+  int64 room_id = 2; // ルームID。
 }
 
 /*
@@ -108,36 +220,68 @@ message LeaveCustomerDeviceResponse {
 }
 
 /*
- * ルーム削除リクエストを表します。
- */
-message DeleteRoomRequest {
-  int64 team_id = 1; // チームID。
-  int64 room_id = 2; // ルームID。
-}
-
-/*
  * ルームを操作するAPIを提供します。
  */
 service RoomService {
+  // 全てのルームグループのリストを取得します。
+  // 取得するルームグループのチームIDを指定した GetAllRoomGroupsRequest を渡します。
+  // 取得したルームグループ情報のリストが設定された GetAllRoomGroupsResponse が返ります。
+  rpc GetAllRoomGroups(GetAllRoomGroupsRequest) returns (GetAllRoomGroupsResponse);
+  // ルームグループのリストを取得します。
+  // 取得するルームのチームIDを指定した GetRoomGroupsRequest を渡します。
+  // 親ルームグループIDを指定した場合は、そのルームグループに所属するルームグループのリストを取得します。
+  // 親ルームグループIDに 0 を指定した場合は、ルームグループに所属していないルームグループのリストを取得します。
+  // 取得したルームグループのリストが設定された GetRoomGroupsResponse が返ります。
+  rpc GetRoomGroups(GetRoomGroupsRequest) returns (GetRoomGroupsResponse);
+  // ルームグループを取得します。
+  // 取得するルームグループのチームIDおよびルームグループIDを指定した GetRoomGroupRequest を渡します。
+  // ルームグループが存在する場合、ルームグループ情報が設定された GetRoomGroupResponse が返ります。
+  rpc GetRoomGroup(GetRoomGroupRequest) returns (GetRoomGroupResponse);
+  // 新しくルームグループを作成します。
+  // ルームグループ名とチームIDを指定した CreateRoomGroupRequest を渡します。
+  // ルームグループをルームグループに所属させる場合は、親ルームグループIDを指定します。
+  // ルームグループをルームグループに所属させない場合は、親ルームグループIDに 0 を指定します。
+  // ルームグループの作成に成功すると、作成されたルームグループ情報が設定された CreateRoomGroupResponse が返ります。
+  rpc CreateRoomGroup(CreateRoomGroupRequest) returns (CreateRoomGroupResponse);
+  // ルームグループを更新します。
+  // 更新するルームグループのルームグループIDと、新しいルームグループ名を指定した UpdateRoomGroupRequest を渡します。
+  // ルームグループをルームグループに所属させる場合は、親ルームグループIDを指定します。
+  // ルームグループをルームグループに所属させない場合は、親ルームグループIDに 0 を指定します。
+  // ルームグループの更新に成功すると、更新されたルームグループ情報が設定された UpdateRoomGroupResponse が返ります。
+  rpc UpdateRoomGroup(UpdateRoomGroupRequest) returns (UpdateRoomGroupResponse);
+  // ルームグループを削除します。
+  // 削除するルームグループのルームグループIDを指定した DeleteRoomGroupRequest を渡します。
+  rpc DeleteRoomGroup(DeleteRoomGroupRequest) returns (google.protobuf.Empty);
+
+  // 全てのルームのリストを取得します。
+  // 取得するルームのチームIDを指定した GetAllRoomsRequest を渡します。
+  // 取得したルーム情報のリストが設定された GetAllRoomsResponse が返ります。
+  rpc GetAllRooms(GetAllRoomsRequest) returns (GetAllRoomsResponse);
   // ルームのリストを取得します。
   // 取得するルームのチームIDを指定した GetRoomsRequest を渡します。
-  // 指定されたチームIDのルーム情報のリストが設定された GetRoomsResponse が返ります。
+  // ルームグループIDを指定した場合は、そのルームグループに所属するルームのリストを取得します。
+  // ルームグループIDに 0 を指定した場合は、ルームグループに所属していないルームのリストを取得します。
+  // 取得したルーム情報のリストが設定された GetRoomsResponse が返ります。
   rpc GetRooms(GetRoomsRequest) returns (GetRoomsResponse);
-
   // ルームを取得します。
   // 取得するルームのチームIDおよびルームIDを指定した GetRoomRequest を渡します。
   // ルームが存在する場合、ルーム情報が設定された GetRoomResponse が返ります。
   rpc GetRoom(GetRoomRequest) returns (GetRoomResponse);
-
   // 新しくルームを作成します。
   // ルーム名とチームIDを指定した CreateRoomRequest を渡します。
+  // ルームをルームグループに所属させる場合は、ルームグループIDを指定します。
+  // ルームをルームグループに所属させない場合は、ルームグループIDに 0 を指定します。
   // ルームの作成に成功すると、作成されたルーム情報が設定された CreateRoomResponse が返ります。
   rpc CreateRoom(CreateRoomRequest) returns (CreateRoomResponse);
-
   // ルームを更新します。
   // 更新するルームのルームIDと、新しいルーム名を指定した UpdateRoomRequest を渡します。
+  // ルームをルームグループに所属させる場合は、ルームグループIDを指定します。
+  // ルームをルームグループに所属させない場合は、ルームグループIDに 0 を指定します。
   // ルームの更新に成功すると、更新されたルーム情報が設定された UpdateRoomResponse が返ります。
   rpc UpdateRoom(UpdateRoomRequest) returns (UpdateRoomResponse);
+  // ルームを削除します。
+  // 削除するルームのルームIDを指定した DeleteRoomRequest を渡します。
+  rpc DeleteRoom(DeleteRoomRequest) returns (google.protobuf.Empty);
 
   // ルームへのカスタマーデバイスの入室を行います。
   // 入室先のルームのルームIDと、入室を行うカスタマーデバイスのデバイスIDを指定した JoinCustomerDeviceRequest を渡します。
@@ -149,8 +293,4 @@ service RoomService {
   // カスタマーデバイスを退室させるルームのルームIDを指定した LeaveCustomerDeviceRequest を渡します。
   // カスタマーデバイスの退室に成功すると、退室したルームのルーム情報を設定した LeaveCustomerDeviceResponse が返ります。
   rpc LeaveCustomerDevice(LeaveCustomerDeviceRequest) returns (LeaveCustomerDeviceResponse);
-
-  // ルームを削除します。
-  // 削除するルームのルームIDを指定した DeleteRoomRequest を渡します。
-  rpc DeleteRoom(DeleteRoomRequest) returns (google.protobuf.Empty);
 }
