@@ -144,3 +144,12 @@ message Token {
   string                    token                     = 1; // JWT トークン文字列。
   google.protobuf.Timestamp expiration_time           = 2; // トークンの有効期限。
 }
+
+/*
+ * チーム設定を表します。
+ */
+message TeamSetting {
+  int64 team_id              = 1; // チームID。
+
+  int32 call_request_timeout = 10; // 通話リクエストタイムアウト（秒）
+}

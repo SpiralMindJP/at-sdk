@@ -1,0 +1,57 @@
+/*
+ * Setting は設定に関する情報を操作します。
+ */
+syntax = "proto3";
+
+option go_package = "github.com/SpiralMindJP/at-server/pb/core";
+
+package at.core;
+
+import "common/common.proto";
+import "google/protobuf/empty.proto";
+
+/*
+ * チーム設定取得リクエストを表します。
+ */
+message GetTeamSettingRequest {
+  int64 team_id = 1; // チームID。
+}
+
+/*
+ * チーム設定取得レスポンスを表します。
+ */
+message GetTeamSettingResponse {
+  common.TeamSetting setting = 1; // チーム設定。
+}
+
+/*
+ * チーム設定の設定リクエストを表します。
+ */
+message SetTeamSettingRequest {
+  common.TeamSetting setting = 1; // チーム設定。
+}
+
+/*
+ * チーム設定削除リクエストを表します。
+ */
+message DeleteTeamSettingRequest {
+  int64 team_id = 1; // チームID。
+}
+
+/*
+ * 設定を操作するAPIを提供します。
+ */
+service SettingService {
+  // チーム設定を取得します。
+  // 取得するチーム設定のチームIDを指定した、GetTeamSettingRequest を渡します。
+  // チーム設定がセットされた GetTeamSettingResponse が帰ります。
+  rpc GetTeamSetting(GetTeamSettingRequest) returns (GetTeamSettingResponse);
+
+  // チーム設定を設定します。
+  // チーム設定を指定した SetTeamSettingRequest を渡します。
+  rpc SetTeamSetting(SetTeamSettingRequest) returns (google.protobuf.Empty);
+
+  // チーム設定を削除します。
+  // 削除するチーム設定のチームIDを指定した、DeleteTeamSettingRequest を渡します。
+  rpc DeleteTeamSetting(DeleteTeamSettingRequest) returns (google.protobuf.Empty);
+}
