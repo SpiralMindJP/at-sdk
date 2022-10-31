@@ -11,6 +11,76 @@ import "common/common.proto";
 import "google/protobuf/empty.proto";
 
 /*
+ * 設定リスト取得クエストを表します。
+ */
+message GetSettingsRequest {
+  int64 team_id = 1; // チームID。
+}
+
+/*
+ * 設定リスト取得レスポンスを表します。
+ */
+message GetSettingsResponse {
+  repeated at.common.Setting settings = 1; // 設定情報のリスト。
+}
+
+/*
+ * 設定取得リクエストを表します。
+ */
+message GetSettingRequest {
+  int64 team_id    = 1; // チームID。
+  int64 setting_id = 2; // 設定ID。
+}
+
+/*
+ * 設定取得レスポンスを表します。
+ */
+message GetSettingResponse {
+  at.common.Setting setting = 1; // 設定情報。
+}
+
+/*
+ * 設定作成リクエストを表します。
+ */
+message CreateSettingRequest {
+  int64  team_id    = 1; // チームID。
+  string name       = 2; // 設定名。
+  string attributes = 3; // 属性。
+}
+
+/*
+ * 設定作成レスポンスを表します。
+ */
+message CreateSettingResponse {
+  at.common.Setting setting = 1; // 設定情報。
+}
+
+/*
+ * 設定更新リクエストを表します。
+ */
+message UpdateSettingRequest {
+  int64  team_id    = 1; // チームID。
+  int64  setting_id = 2; // 設定ID。
+  string name       = 3; // 設定名。
+  string attributes = 4; // 属性。
+}
+
+/*
+ * 設定更新レスポンスを表します。
+ */
+message UpdateSettingResponse {
+  at.common.Setting setting = 1; // 設定情報。
+}
+
+/*
+ * 設定削除リクエストを表します。
+ */
+message DeleteSettingRequest {
+  int64 team_id    = 1; // チームID。
+  int64 setting_id = 2; // 設定ID。
+}
+
+/*
  * チーム設定取得リクエストを表します。
  */
 message GetTeamSettingRequest {
@@ -42,15 +112,33 @@ message DeleteTeamSettingRequest {
  * 設定を操作するAPIを提供します。
  */
 service SettingService {
+  // 設定のリストを取得します。
+  // チームIDを指定した、GetSettingsRequest を渡します。
+  // 取得した設定のリストがセットされた GetSettingsResponse が帰ります。
+  rpc GetSettings(GetSettingsRequest) returns (GetSettingsResponse);
+  // 設定を取得します。
+  // 取得する設定のチームIDと設定IDを指定した、GetSettingRequest を渡します。
+  // 取得した設定がセットされた GetSettingResponse が帰ります。
+  rpc GetSetting(GetSettingRequest) returns (GetSettingResponse);
+  // 新しく設定を作成します。
+  // 設定名と属性、チームIDを指定した CreateSettingRequest を渡します。
+  // 設定の作成に成功すると、作成された設定情報が設定された CreateSettingResponse が返ります。
+  rpc CreateSetting(CreateSettingRequest) returns (CreateSettingResponse);
+  // 設定を更新します。
+  // 更新する設定のチームID、設定ID、設定名、属性を指定した UpdateSettingRequest を渡します。
+  // 設定の更新に成功すると、更新された設定情報が設定された UpdateSettingResponse が返ります。
+  rpc UpdateSetting(UpdateSettingRequest) returns (UpdateSettingResponse);
+  // 設定を削除します。
+  // 削除する設定のチームIDと設定IDを指定した DeleteSettingRequest を渡します。
+  rpc DeleteSetting(DeleteSettingRequest) returns (google.protobuf.Empty);
+
   // チーム設定を取得します。
   // 取得するチーム設定のチームIDを指定した、GetTeamSettingRequest を渡します。
   // チーム設定がセットされた GetTeamSettingResponse が帰ります。
   rpc GetTeamSetting(GetTeamSettingRequest) returns (GetTeamSettingResponse);
-
   // チーム設定を設定します。
   // チーム設定を指定した SetTeamSettingRequest を渡します。
   rpc SetTeamSetting(SetTeamSettingRequest) returns (google.protobuf.Empty);
-
   // チーム設定を削除します。
   // 削除するチーム設定のチームIDを指定した、DeleteTeamSettingRequest を渡します。
   rpc DeleteTeamSetting(DeleteTeamSettingRequest) returns (google.protobuf.Empty);

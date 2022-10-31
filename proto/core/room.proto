@@ -61,6 +61,7 @@ message CreateRoomGroupRequest {
   int64  team_id              = 1; // チームID。
   string name                 = 2; // ルームグループ名。
   int64  parent_room_group_id = 3; // 親ルームグループID。0 は未指定。
+  int64  setting_id           = 4; // ルームグループと関連する設定の設定ID。0 は未指定。
 }
 
 /*
@@ -78,6 +79,7 @@ message UpdateRoomGroupRequest {
   int64  room_group_id        = 2; // ルームグループID。
   string name                 = 3; // ルームグループ名。
   int64  parent_room_group_id = 4; // 親ルームグループID。0 は未指定。
+  int64  setting_id           = 5; // ルームグループと関連する設定の設定ID。0 は未指定。
 }
 
 /*

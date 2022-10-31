@@ -23,6 +23,25 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SettingServiceClient interface {
+	// 設定のリストを取得します。
+	// チームIDを指定した、GetSettingsRequest を渡します。
+	// 取得した設定のリストがセットされた GetSettingsResponse が帰ります。
+	GetSettings(ctx context.Context, in *GetSettingsRequest, opts ...grpc.CallOption) (*GetSettingsResponse, error)
+	// 設定を取得します。
+	// 取得する設定のチームIDと設定IDを指定した、GetSettingRequest を渡します。
+	// 取得した設定がセットされた GetSettingResponse が帰ります。
+	GetSetting(ctx context.Context, in *GetSettingRequest, opts ...grpc.CallOption) (*GetSettingResponse, error)
+	// 新しく設定を作成します。
+	// 設定名と属性、チームIDを指定した CreateSettingRequest を渡します。
+	// 設定の作成に成功すると、作成された設定情報が設定された CreateSettingResponse が返ります。
+	CreateSetting(ctx context.Context, in *CreateSettingRequest, opts ...grpc.CallOption) (*CreateSettingResponse, error)
+	// 設定を更新します。
+	// 更新する設定のチームID、設定ID、設定名、属性を指定した UpdateSettingRequest を渡します。
+	// 設定の更新に成功すると、更新された設定情報が設定された UpdateSettingResponse が返ります。
+	UpdateSetting(ctx context.Context, in *UpdateSettingRequest, opts ...grpc.CallOption) (*UpdateSettingResponse, error)
+	// 設定を削除します。
+	// 削除する設定のチームIDと設定IDを指定した DeleteSettingRequest を渡します。
+	DeleteSetting(ctx context.Context, in *DeleteSettingRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// チーム設定を取得します。
 	// 取得するチーム設定のチームIDを指定した、GetTeamSettingRequest を渡します。
 	// チーム設定がセットされた GetTeamSettingResponse が帰ります。
@@ -41,6 +60,51 @@ type settingServiceClient struct {
 
 func NewSettingServiceClient(cc grpc.ClientConnInterface) SettingServiceClient {
 	return &settingServiceClient{cc}
+}
+
+func (c *settingServiceClient) GetSettings(ctx context.Context, in *GetSettingsRequest, opts ...grpc.CallOption) (*GetSettingsResponse, error) {
+	out := new(GetSettingsResponse)
+	err := c.cc.Invoke(ctx, "/at.core.SettingService/GetSettings", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *settingServiceClient) GetSetting(ctx context.Context, in *GetSettingRequest, opts ...grpc.CallOption) (*GetSettingResponse, error) {
+	out := new(GetSettingResponse)
+	err := c.cc.Invoke(ctx, "/at.core.SettingService/GetSetting", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *settingServiceClient) CreateSetting(ctx context.Context, in *CreateSettingRequest, opts ...grpc.CallOption) (*CreateSettingResponse, error) {
+	out := new(CreateSettingResponse)
+	err := c.cc.Invoke(ctx, "/at.core.SettingService/CreateSetting", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *settingServiceClient) UpdateSetting(ctx context.Context, in *UpdateSettingRequest, opts ...grpc.CallOption) (*UpdateSettingResponse, error) {
+	out := new(UpdateSettingResponse)
+	err := c.cc.Invoke(ctx, "/at.core.SettingService/UpdateSetting", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *settingServiceClient) DeleteSetting(ctx context.Context, in *DeleteSettingRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/at.core.SettingService/DeleteSetting", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *settingServiceClient) GetTeamSetting(ctx context.Context, in *GetTeamSettingRequest, opts ...grpc.CallOption) (*GetTeamSettingResponse, error) {
@@ -74,6 +138,25 @@ func (c *settingServiceClient) DeleteTeamSetting(ctx context.Context, in *Delete
 // All implementations must embed UnimplementedSettingServiceServer
 // for forward compatibility
 type SettingServiceServer interface {
+	// 設定のリストを取得します。
+	// チームIDを指定した、GetSettingsRequest を渡します。
+	// 取得した設定のリストがセットされた GetSettingsResponse が帰ります。
+	GetSettings(context.Context, *GetSettingsRequest) (*GetSettingsResponse, error)
+	// 設定を取得します。
+	// 取得する設定のチームIDと設定IDを指定した、GetSettingRequest を渡します。
+	// 取得した設定がセットされた GetSettingResponse が帰ります。
+	GetSetting(context.Context, *GetSettingRequest) (*GetSettingResponse, error)
+	// 新しく設定を作成します。
+	// 設定名と属性、チームIDを指定した CreateSettingRequest を渡します。
+	// 設定の作成に成功すると、作成された設定情報が設定された CreateSettingResponse が返ります。
+	CreateSetting(context.Context, *CreateSettingRequest) (*CreateSettingResponse, error)
+	// 設定を更新します。
+	// 更新する設定のチームID、設定ID、設定名、属性を指定した UpdateSettingRequest を渡します。
+	// 設定の更新に成功すると、更新された設定情報が設定された UpdateSettingResponse が返ります。
+	UpdateSetting(context.Context, *UpdateSettingRequest) (*UpdateSettingResponse, error)
+	// 設定を削除します。
+	// 削除する設定のチームIDと設定IDを指定した DeleteSettingRequest を渡します。
+	DeleteSetting(context.Context, *DeleteSettingRequest) (*emptypb.Empty, error)
 	// チーム設定を取得します。
 	// 取得するチーム設定のチームIDを指定した、GetTeamSettingRequest を渡します。
 	// チーム設定がセットされた GetTeamSettingResponse が帰ります。
@@ -91,6 +174,21 @@ type SettingServiceServer interface {
 type UnimplementedSettingServiceServer struct {
 }
 
+func (UnimplementedSettingServiceServer) GetSettings(context.Context, *GetSettingsRequest) (*GetSettingsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSettings not implemented")
+}
+func (UnimplementedSettingServiceServer) GetSetting(context.Context, *GetSettingRequest) (*GetSettingResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSetting not implemented")
+}
+func (UnimplementedSettingServiceServer) CreateSetting(context.Context, *CreateSettingRequest) (*CreateSettingResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateSetting not implemented")
+}
+func (UnimplementedSettingServiceServer) UpdateSetting(context.Context, *UpdateSettingRequest) (*UpdateSettingResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateSetting not implemented")
+}
+func (UnimplementedSettingServiceServer) DeleteSetting(context.Context, *DeleteSettingRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteSetting not implemented")
+}
 func (UnimplementedSettingServiceServer) GetTeamSetting(context.Context, *GetTeamSettingRequest) (*GetTeamSettingResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTeamSetting not implemented")
 }
@@ -111,6 +209,96 @@ type UnsafeSettingServiceServer interface {
 
 func RegisterSettingServiceServer(s grpc.ServiceRegistrar, srv SettingServiceServer) {
 	s.RegisterService(&SettingService_ServiceDesc, srv)
+}
+
+func _SettingService_GetSettings_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSettingsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SettingServiceServer).GetSettings(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/at.core.SettingService/GetSettings",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SettingServiceServer).GetSettings(ctx, req.(*GetSettingsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SettingService_GetSetting_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSettingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SettingServiceServer).GetSetting(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/at.core.SettingService/GetSetting",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SettingServiceServer).GetSetting(ctx, req.(*GetSettingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SettingService_CreateSetting_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateSettingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SettingServiceServer).CreateSetting(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/at.core.SettingService/CreateSetting",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SettingServiceServer).CreateSetting(ctx, req.(*CreateSettingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SettingService_UpdateSetting_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateSettingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SettingServiceServer).UpdateSetting(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/at.core.SettingService/UpdateSetting",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SettingServiceServer).UpdateSetting(ctx, req.(*UpdateSettingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SettingService_DeleteSetting_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteSettingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SettingServiceServer).DeleteSetting(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/at.core.SettingService/DeleteSetting",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SettingServiceServer).DeleteSetting(ctx, req.(*DeleteSettingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _SettingService_GetTeamSetting_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -174,6 +362,26 @@ var SettingService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "at.core.SettingService",
 	HandlerType: (*SettingServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetSettings",
+			Handler:    _SettingService_GetSettings_Handler,
+		},
+		{
+			MethodName: "GetSetting",
+			Handler:    _SettingService_GetSetting_Handler,
+		},
+		{
+			MethodName: "CreateSetting",
+			Handler:    _SettingService_CreateSetting_Handler,
+		},
+		{
+			MethodName: "UpdateSetting",
+			Handler:    _SettingService_UpdateSetting_Handler,
+		},
+		{
+			MethodName: "DeleteSetting",
+			Handler:    _SettingService_DeleteSetting_Handler,
+		},
 		{
 			MethodName: "GetTeamSetting",
 			Handler:    _SettingService_GetTeamSetting_Handler,

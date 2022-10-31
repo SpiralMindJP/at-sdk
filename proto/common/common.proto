@@ -57,6 +57,7 @@ message RoomGroup {
   int64  parent_room_group_id = 3; // 親ルームグループID。
   string name                 = 4; // ルームグループ名。
   string kind                 = 5; // ルームグループの種類。
+  int64  setting_id           = 6; // ルームグループと関連する設定の設定ID。
 }
 
 /*
@@ -144,6 +145,16 @@ message Animation {
 message Token {
   string                    token                     = 1; // JWT トークン文字列。
   google.protobuf.Timestamp expiration_time           = 2; // トークンの有効期限。
+}
+
+/*
+ * 設定を表します。
+ */
+message Setting {
+  int64  team_id              = 1;  // チームID。
+  int64  setting_id           = 2;  // 設定ID。
+  string name                 = 3;  // 設定名。
+  string attributes           = 4;  // 設定の各属性を表す文字列（JSON など）。
 }
 
 /*
