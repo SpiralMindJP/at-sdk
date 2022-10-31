@@ -56,6 +56,7 @@ message RoomGroup {
   int64  room_group_id        = 2; // ルームグループID。
   int64  parent_room_group_id = 3; // 親ルームグループID。
   string name                 = 4; // ルームグループ名。
+  string kind                 = 5; // ルームグループの種類。
 }
 
 /*
