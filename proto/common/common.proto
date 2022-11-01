@@ -76,13 +76,14 @@ message Room {
  * デバイスを表します。
  */
 message Device {
-  int64      team_id     = 1; // チームID。
-  int64      device_id   = 2; // デバイスID。
-  string     name        = 3; // デバイス名。
-  DeviceType device_type = 4; // デバイスのタイプ。
-  int64      room_id     = 5; // デバイスが入室しているルームID。
+  int64                     team_id      = 1; // チームID。
+  int64                     device_id    = 2; // デバイスID。
+  string                    name         = 3; // デバイス名。
+  DeviceType                device_type  = 4; // デバイスのタイプ。
+  int64                     room_id      = 5; // デバイスが入室しているルームID。
+  google.protobuf.Timestamp activated_at = 6; // デバイスがアクティブになった時刻。
 
-  Avatar     avatar      = 11; // オペレーターデバイスに設定されているアバター情報。
+  Avatar avatar = 11; // オペレーターデバイスに設定されているアバター情報。
 }
 
 /*

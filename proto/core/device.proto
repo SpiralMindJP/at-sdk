@@ -88,7 +88,8 @@ message GetDevicesRequest {
   int64                         team_id      = 1; // チームID。
   repeated at.common.DeviceType device_types = 2; // デバイスタイプのリスト。
 
-  bool with_avatars = 11; // true を指定すると、Operator デバイスに設定されているアバター情報も取得します。
+  bool with_avatars     = 11; // true を指定すると、Operator デバイスに設定されているアバター情報も取得します。
+  bool without_inactive = 12; // true を指定すると、非アクティブなデバイスを除外します。
 }
 
 /*
@@ -111,6 +112,36 @@ message GetDeviceRequest {
  */
 message GetDeviceResponse {
   at.common.Device device = 1; // デバイスのリスト。
+}
+
+/*
+ * デバイスアクティブ化リクエストを表します。
+ */
+message ActivateDeviceRequest {
+  int64 team_id   = 1; // チームID。
+  int64 device_id = 2; // デバイスID。
+}
+
+/*
+ * デバイスアクティブ化レスポンスを表します。
+ */
+message ActivateDeviceResponse {
+  at.common.Device device = 1; // デバイス。
+}
+
+/*
+ * デバイス非アクティブ化リクエストを表します。
+ */
+message DeactivateDeviceRequest {
+  int64 team_id   = 1; // チームID。
+  int64 device_id = 2; // デバイスID。
+}
+
+/*
+ * デバイス非アクティブ化レスポンスを表します。
+ */
+message DeactivateDeviceResponse {
+  at.common.Device device = 1; // デバイス。
 }
 
 /*
@@ -172,6 +203,15 @@ service DeviceService {
   // 取得するデバイスのデバイスIDを指定した DeviceRequest を渡します。
   // デバイスが存在する場合、Device が返ります。
   rpc GetDevice(GetDeviceRequest) returns (GetDeviceResponse);
+
+  // デバイスをアクティブにします。
+  // アクティブにするデバイスのデバイスIDとチームIDを指定した ActivateDeviceRequest を渡します。
+  // アクティブにしたデバイスの Device を設定した ActivateDeviceResponse を返します。
+  rpc ActivateDevice(ActivateDeviceRequest) returns (ActivateDeviceResponse);
+  // デバイスを非アクティブにします。
+  // 非アクティブにするデバイスのデバイスIDとチームIDを指定した DeactivateDeviceRequest を渡します。
+  // 非アクティブにしたデバイスの Device を設定した DeactivateDeviceResponse を返します。
+  rpc DeactivateDevice(DeactivateDeviceRequest) returns (DeactivateDeviceResponse);
 
   // デバイスを更新します。
   // 更新するデバイスのデバイスIDと、新しいデバイス名を指定した DeviceUpdateRequest を渡します。
