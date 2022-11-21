@@ -49,6 +49,32 @@ message Team {
 }
 
 /*
+ * チームの契約を表します。
+ */
+message Contract {
+  int64  team_id                   = 1; // チームID。
+  int32  max_operator_device_count = 2; // 最大オペレーターデバイス数。
+  int32  max_customer_device_count = 3; // 最大カスタマーデバイス数。
+  int64  max_total_content_size    = 4; // 最大合計コンテンツサイズ。
+  int32  operator_device_count     = 5; // オペレーターデバイス数。
+  int32  customer_device_count     = 6; // カスタマーデバイス数。
+  int64  total_content_size        = 7; // 合計コンテンツサイズ。
+}
+
+/*
+ * チームの契約月次実績を表します。
+ */
+message ContractMonthlyResult {
+  int64  team_id                   = 1; // チームID。
+  string team_name                 = 2; // チーム名。
+  int32  year                      = 3; // 実績年。
+  int32  month                     = 4; // 実績月。
+  int32  max_operator_device_count = 5; // 最大オペレーターデバイス数。
+  int32  max_customer_device_count = 6; // 最大カスタマーデバイス数。
+  int64  max_total_content_size    = 7; // 最大合計コンテンツサイズ。
+}
+
+/*
  * ルームグループを表します。
  */
 message RoomGroup {

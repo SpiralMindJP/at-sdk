@@ -74,6 +74,66 @@ message DeleteTeamRequest {
 }
 
 /*
+ * チーム契約リスト取得リクエストを表します。
+ */
+message GetContractsRequest {
+}
+
+/*
+ * チーム契約リスト取得レスポンスを表します。
+ */
+message GetContractsResponse {
+  repeated at.common.Contract contracts = 1; // チーム契約のリスト。
+}
+
+/*
+ * チーム契約取得リクエストを表します。
+ */
+message GetContractRequest {
+  int64 team_id = 1; // チームID。
+}
+
+/*
+ * チーム契約取得リクエストを表します。
+ */
+message GetContractResponse {
+  at.common.Contract contract = 1; // チーム契約。
+}
+
+/*
+ * チーム契約更新リクエストを表します。
+ */
+message UpdateContractRequest {
+  int64  team_id                   = 1; // チームID。
+  int32  max_operator_device_count = 2; // 最大オペレーターデバイス数。
+  int32  max_customer_device_count = 3; // 最大カスタマーデバイス数。
+  int64  max_total_content_size    = 4; // 最大合計コンテンツサイズ。
+}
+
+/*
+ * チーム契約更新レスポンスを表します。
+ */
+message UpdateContractResponse {
+  at.common.Contract contract = 1; // チーム契約。
+}
+
+/*
+ * チーム契約月次実績リスト取得リクエストを表します。
+ */
+message GetContractMonthlyResultsRequest {
+  int64 team_id = 1; // チームID。0 は未指定。
+  int32 year    = 2; // 実績年。0 は未指定。
+  int32 mohth   = 3; // 実績月。0 は未指定。
+}
+
+/*
+ * チーム契約月次実績リスト取得レスポンスを表します。
+ */
+message GetContractMonthlyResultsResponse {
+  repeated at.common.ContractMonthlyResult results = 1; // チーム契約月次実績のリスト。
+}
+
+/*
  * チームを操作するAPIを提供します。
  */
 service TeamService {
@@ -81,23 +141,37 @@ service TeamService {
   // GetTeamsRequest を渡します。
   // チーム情報のリストが設定された GetTeamsResponse が返ります。
   rpc GetTeams(GetTeamsRequest) returns (GetTeamsResponse);
-
   // チームを取得します。
   // 取得するチームのチームIDを指定した GetTeamRequest を渡します。
   // チームが存在する場合、チーム情報が設定された GetTeamResponse が返ります。
   rpc GetTeam(GetTeamRequest) returns (GetTeamResponse);
-
   // 新しくチームを作成します。
   // チーム名を指定した CreateTeamRequest を渡します。
   // チームの作成に成功すると、作成されたチーム情報が設定さた CreateTeamResponse が返ります。
   rpc CreateTeam(CreateTeamRequest) returns (CreateTeamResponse);
-
   // チームを更新します。
   // 更新するチームのチームIDと、新しいチーム名を指定した UpdateTeamRequest を渡します。
   // チームの更新に成功すると、更新されたチーム情報が設定された UpdateTeamResponse が返ります。
   rpc UpdateTeam(UpdateTeamRequest) returns (UpdateTeamResponse);
-
   // チームを削除します。
   // 削除するチームのチームIDを指定した DeleteTeamRequest を渡します。
   rpc DeleteTeam(DeleteTeamRequest) returns (google.protobuf.Empty);
+
+  // チーム契約のリストを取得します。
+  // GetContractsRequest を渡します。
+  // チーム契約情報のリストが設定された GetContractsResponse が返ります。
+  rpc GetContracts(GetContractsRequest) returns (GetContractsResponse);
+  // チーム契約を取得します。
+  // 取得するチーム契約のチーム契約IDを指定した GetContractRequest を渡します。
+  // チーム契約が存在する場合、チーム契約情報が設定された GetContractResponse が返ります。
+  rpc GetContract(GetContractRequest) returns (GetContractResponse);
+  // チーム契約を更新します。
+  // 更新するチーム契約のチームIDと、新しいチーム契約内容を指定した UpdateContractRequest を渡します。
+  // チーム契約の更新に成功すると、更新されたチーム契約情報が設定された UpdateContractResponse が返ります。
+  rpc UpdateContract(UpdateContractRequest) returns (UpdateContractResponse);
+
+  // チーム契約の月次実績の一覧を取得します。
+  // 取得する条件を指定した GetContractMonthlyResultsRequest を渡します。
+  // チーム契約月次実績の一覧が設定された GetContractMonthlyResultsResponse が返ります。
+  rpc GetContractMonthlyResults(GetContractMonthlyResultsRequest) returns (GetContractMonthlyResultsResponse);
 }
