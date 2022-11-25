@@ -41,7 +41,10 @@ message GetTeamResponse {
  * チーム作成リクエストを表します。
  */
 message CreateTeamRequest {
-  string name = 1; // チーム名。
+  string name                      = 1; // チーム名。
+  int32  max_operator_device_count = 2; // 最大オペレーターデバイス数。0 は未指定。
+  int32  max_customer_device_count = 3; // 最大カスタマーデバイス数。0 は未指定。
+  int64  max_total_content_size    = 4; // 最大合計コンテンツサイズ。0 は未指定。
 }
 
 /*
