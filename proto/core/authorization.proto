@@ -8,6 +8,7 @@ option go_package = "github.com/SpiralMindJP/at-sdk/go/pb/core";
 package at.core;
 
 import "common/common.proto";
+import "google/protobuf/empty.proto";
 
 /*
  * Web リフレッシュトークンを発行するためのリクエストを表します。
@@ -23,6 +24,13 @@ message IssueWebRefreshTokenRequest {
  */
 message IssueWebRefreshTokenResponse {
   at.common.Token token = 1;
+}
+
+/*
+ * Web リフレッシュトークンの有効性を検証するためのリクエストを表します。
+ */
+message ValidateWebRefreshTokenRequest {
+  string refresh_token = 1; // Web リフレッシュトークン。
 }
 
 /*
@@ -60,6 +68,8 @@ message IssueWebRTCAccessTokenResponse {
 service AuthorizationService {
   // Web リフレッシュトークンを発行します。
   rpc IssueWebRefreshToken(IssueWebRefreshTokenRequest) returns (IssueWebRefreshTokenResponse);
+  // Web リフレッシュトークンが有効かどうか検証します。
+  rpc ValidateWebRefreshToken(ValidateWebRefreshTokenRequest) returns (google.protobuf.Empty);
   // Web アクセストークンを発行します。
   rpc IssueWebAccessToken(IssueWebAccessTokenRequest) returns (IssueWebAccessTokenResponse);
   // WebRTC アクセストークンを発行します。
