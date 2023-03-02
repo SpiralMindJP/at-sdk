@@ -147,13 +147,26 @@ message Content {
 }
 
 /*
+ * 3次元ベイクトルを表します。
+ */
+message Vector3 {
+  double x = 1;
+  double y = 2;
+  double z = 3;
+}
+
+/*
  * アバターを表します。
  */
 message Avatar {
-  int64    team_id              = 1;  // チームID。
-  int64    avatar_id            = 2;  // アバターID。
-  string   name                 = 3;  // アバター名称。
-  int64    content_id           = 4;  // アバターのコンテンツID。
+  int64            team_id         = 1;  // チームID。
+  int64            avatar_id       = 2;  // アバターID。
+  string           name            = 3;  // アバター名称。
+  int64            content_id      = 4;  // アバターのコンテンツID。
+  optional Vector3 camera_position = 5; // カメラの位置。
+  optional Vector3 camera_rotation = 6; // カメラの回転。
+  optional double  camera_fov      = 7; // カメラの画角。
+
   repeated Animation animations = 10; // アニメーションのリスト。
 }
 
