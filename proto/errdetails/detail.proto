@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+option go_package = "go/errors/errdetails";
+
+package at.errdetails;
+
+/*
+ * エラー情報を表します。
+ */
+message ErrorInfo {
+  string reason = 1; // エラーが発生した理由。
+}
+
+/*
+ * フィールドの違反を表します。
+ */
+message BadRequestFieldViolation {
+  string field       = 1; // フィールドの名前。
+  string description = 2; // 違反の内容。
+}
+
+/*
+ * 不正なリクエストの詳細を表します。
+ */
+message BadRequest {
+  repeated BadRequestFieldViolation field_violations = 1; // フィールド違反のリスト。
+}
+
+/*
+ * 必要条件の違反を表します。
+ */
+message PreconditionFailureViolation {
+  string type        = 1; // 必要条件のタイプ。
+  string subject     = 2; // タイプに対する相対的な対象。
+  string description = 3; // 違反の内容。
+}
+
+/*
+ * 必要条件の不足を表わします。
+ */
+message PreconditionFailure {
+  repeated PreconditionFailureViolation violations = 1; // 必要条件の違反のリスト。
+}
+
+/*
+ * 割り当ての違反を表します。
+ */
+message QuotaFailureViolation {
+  string subject     = 1; // 違反の対象。
+  string description = 2; // 違反の内容。
+}
+
+/*
+ * 割り当ての失敗を表します。
+ */
+message QuotaFailure {
+  repeated QuotaFailureViolation violations = 1; // 割り当ての違反のリスト。
+}
