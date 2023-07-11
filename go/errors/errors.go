@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"runtime"
 
 	"golang.org/x/exp/slog"
 	"google.golang.org/grpc/codes"
@@ -127,39 +128,49 @@ type Error struct {
 	// 内部エラー。
 	Err error
 
-	// エラーソース。
-	Source *Source
-
 	// ログ出力用の属性。
 	Attrs []slog.Attr
 
 	// エラーの詳細。
 	Details []proto.Message
+
+	// プログラムカウンター。
+	pc uintptr
 }
 
 var (
 	_ json.Marshaler = (*Error)(nil)
 )
 
-func New(text string) *Error {
+func newError(code ErrorCode, skip int, msg string) *Error {
+	var pcs [1]uintptr
+
+	runtime.Callers(
+		skip+2,
+		pcs[:],
+	)
+
 	return &Error{
-		Code:    Unknown,
-		Message: text,
+		Code:    code,
+		Message: msg,
+		pc:      pcs[0],
 	}
+}
+
+func newErrorf(code ErrorCode, skip int, format string, a ...any) *Error {
+	return newError(code, skip+1, fmt.Sprintf(format, a...))
+}
+
+func New(text string) *Error {
+	return newError(Unknown, 1, text)
 }
 
 func Newf(format string, a ...any) *Error {
-	return &Error{
-		Code:    Unknown,
-		Message: fmt.Sprintf(format, a...),
-	}
+	return newErrorf(Unknown, 1, format, a...)
 }
 
 func FromGRPCStatus(s *status.Status) *Error {
-	err := &Error{
-		Code:    newErrorCodeFromGRPCCode(s.Code()),
-		Message: s.Message(),
-	}
+	err := newError(newErrorCodeFromGRPCCode(s.Code()), 1, s.Message())
 
 	ps := s.Proto()
 	if len(ps.Details) > 0 {
@@ -286,11 +297,6 @@ func (err *Error) WithError(inner error) *Error {
 	return err
 }
 
-func (err *Error) WithSource() *Error {
-	err.Source = CaptureSource(1)
-	return err
-}
-
 func (err *Error) WithAttrs(attrs ...slog.Attr) *Error {
 	err.Attrs = attrs
 	return err
@@ -306,64 +312,68 @@ func (err *Error) WithDetails(details ...proto.Message) *Error {
 	return err
 }
 
+func (err *Error) PC() uintptr {
+	return err.pc
+}
+
 func (err *Error) MarshalJSON() ([]byte, error) {
 	return json.Marshal(newJSONError(err))
 }
 
 func NewNotFound(text string) *Error {
-	return New(text).WithCode(NotFound)
+	return newError(NotFound, 1, text)
 }
 
 func NewNotFoundf(format string, a ...any) *Error {
-	return Newf(format, a...).WithCode(NotFound)
+	return newErrorf(NotFound, 1, format, a...)
 }
 
 func NewInvalidArgument(text string) *Error {
-	return New(text).WithCode(InvalidArgument)
+	return newError(InvalidArgument, 1, text)
 }
 
 func NewInvalidArgumentf(format string, a ...any) *Error {
-	return Newf(format, a...).WithCode(InvalidArgument)
+	return newErrorf(InvalidArgument, 1, format, a...)
 }
 
 func NewFailedPrecondition(text string) *Error {
-	return New(text).WithCode(FailedPrecondition)
+	return newError(FailedPrecondition, 1, text)
 }
 
 func NewFailedPreconditionf(format string, a ...any) *Error {
-	return Newf(format, a...).WithCode(FailedPrecondition)
+	return newErrorf(FailedPrecondition, 1, format, a...)
 }
 
 func NewAborted(text string) *Error {
-	return New(text).WithCode(Aborted)
+	return newError(Aborted, 1, text)
 }
 
 func NewAbortedf(format string, a ...any) *Error {
-	return Newf(format, a...).WithCode(Aborted)
+	return newErrorf(Aborted, 1, format, a...)
 }
 
 func NewAlreadyExists(text string) *Error {
-	return New(text).WithCode(AlreadyExists)
+	return newError(AlreadyExists, 1, text)
 }
 
 func NewAlreadyExistsf(format string, a ...any) *Error {
-	return Newf(format, a...).WithCode(AlreadyExists)
+	return newErrorf(AlreadyExists, 1, format, a...)
 }
 
 func NewUnauthenticated(text string) *Error {
-	return New(text).WithCode(Unauthenticated)
+	return newError(Unauthenticated, 1, text)
 }
 
 func NewUnauthenticatedf(format string, a ...any) *Error {
-	return Newf(format, a...).WithCode(Unauthenticated)
+	return newErrorf(Unauthenticated, 1, format, a...)
 }
 
 func NewPermissionDenied(text string) *Error {
-	return New(text).WithCode(PermissionDenied)
+	return newError(PermissionDenied, 1, text)
 }
 
 func NewPermissionDeniedf(format string, a ...any) *Error {
-	return Newf(format, a...).WithCode(PermissionDenied)
+	return newErrorf(PermissionDenied, 1, format, a...)
 }
 
 func IsErrorCode(err error, code ErrorCode) bool {

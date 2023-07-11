@@ -113,6 +113,9 @@ func TestNew(t *testing.T) {
 	if code := err1.Code; code != Unknown {
 		t.Errorf("Error.Code: got %v, want %v", code, Unknown)
 	}
+	if pc := err1.PC(); pc == 0 {
+		t.Error("Error.PC(): should not return 0")
+	}
 	if code := err1.HTTPStatusCode(); code != http.StatusInternalServerError {
 		t.Errorf("Error.HTTPStatusCode(): got %v, want %v", code, http.StatusInternalServerError)
 	}
@@ -126,6 +129,9 @@ func TestNew(t *testing.T) {
 	}
 	if code := err2.Code; code != Unknown {
 		t.Errorf("Error.Code: got %v, want %v", code, Unknown)
+	}
+	if pc := err2.PC(); pc == 0 {
+		t.Error("Error.PC(): should not return 0")
 	}
 	if code := err2.HTTPStatusCode(); code != http.StatusInternalServerError {
 		t.Errorf("Error.HTTPStatusCode(): got %v, want %v", code, http.StatusInternalServerError)
@@ -147,11 +153,6 @@ func TestConnection(t *testing.T) {
 	}
 	if err := err.Unwrap(); err != innerErr {
 		t.Errorf("Error.Unwrap(): got %v, want %v", err, innerErr)
-	}
-
-	err = err.WithSource()
-	if err.Source == nil {
-		t.Fatal("Error.Source: should not be nil")
 	}
 
 	var testAttrs = []slog.Attr{
