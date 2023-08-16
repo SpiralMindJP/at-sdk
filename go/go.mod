@@ -1,10 +1,9 @@
 module github.com/SpiralMindJP/at-sdk/go
 
-go 1.18
+go 1.21
 
 require (
 	github.com/google/go-cmp v0.5.9
-	golang.org/x/exp v0.0.0-20230522175609-2e198f4a06a1
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20230530153820-e85fd2cbaebc
 	google.golang.org/grpc v1.56.0
 	google.golang.org/protobuf v1.30.0

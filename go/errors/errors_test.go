@@ -3,6 +3,7 @@ package errors
 import (
 	"errors"
 	"fmt"
+	"log/slog"
 	"net/http"
 	"reflect"
 	"testing"
@@ -10,7 +11,6 @@ import (
 	"github.com/SpiralMindJP/at-sdk/go/errors/errdetails"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
-	"golang.org/x/exp/slog"
 	spb "google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
