@@ -44,10 +44,13 @@ message GetAvatarResponse {
  * アバター作成リクエストを表します。
  */
 message CreateAvatarRequest {
-  int64                        team_id    = 1;  // チームID。
-  string                       name       = 2;  // アバター名称。
-  int64                        content_id = 3;  // アバターのコンテンツID。
-  repeated at.common.Animation animations = 10; // アニメーションのリスト。
+  int64                        team_id         = 1;  // チームID。
+  string                       name            = 2;  // アバター名称。
+  int64                        content_id      = 3;  // アバターのコンテンツID。
+  optional at.common.Vector3   camera_position = 4; // カメラの位置。
+  optional at.common.Vector3   camera_rotation = 5; // カメラの回転。
+  optional double              camera_fov      = 6; // カメラの画角。
+  repeated at.common.Animation animations      = 10; // アニメーションのリスト。
 }
 
 /*
@@ -61,11 +64,14 @@ message CreateAvatarResponse {
  * アバター更新リクエストを表します。
  */
 message UpdateAvatarRequest {
-  int64                        team_id    = 1;  // チームID。
-  int64                        avatar_id  = 2;  // アバターID。
-  string                       name       = 3;  // アバター名称。
-  int64                        content_id = 4;  // アバターのコンテンツID。
-  repeated at.common.Animation animations = 10; // アニメーションのリスト。
+  int64                        team_id         = 1;  // チームID。
+  int64                        avatar_id       = 2;  // アバターID。
+  string                       name            = 3;  // アバター名称。
+  int64                        content_id      = 4;  // アバターのコンテンツID。
+  optional at.common.Vector3   camera_position = 5; // カメラの位置。
+  optional at.common.Vector3   camera_rotation = 6; // カメラの回転。
+  optional double              camera_fov      = 7; // カメラの画角。
+  repeated at.common.Animation animations      = 10; // アニメーションのリスト。
 }
 
 /*
